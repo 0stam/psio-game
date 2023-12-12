@@ -4,6 +4,8 @@ import map.Map;
 public class GameManager {
     private static GameManager gameManager;
 
+    private Map map;
+
     private GameManager() {
     }
 
@@ -15,9 +17,6 @@ public class GameManager {
     }
 
     public void startGame() {}
-    public void getMap() {
-        System.out.println("Map is loading...");
-    }
 
     // should have input parameters
     public void startTurn() {
@@ -32,4 +31,11 @@ public class GameManager {
         System.out.println("Level is finished...");
     }
 
+    public Map getMap() {
+        return this.map;
+    }
+    public GameManager setMap(Map map) {
+        this.map = map;
+        return this;
+    }
 }

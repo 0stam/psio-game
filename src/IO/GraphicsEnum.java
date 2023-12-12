@@ -1,0 +1,15 @@
+package IO;
+
+public enum GraphicsEnum {
+	DEFAULT,
+	FLOOR,
+	WALL,
+	BOX,
+	PLAYER,
+	ENEMY,
+	BUTTON_PRESSED,
+	BUTTON_RELEASED,
+	DOOR_OPEN,
+	DOOR_CLOSED,
+	GOAL
+}

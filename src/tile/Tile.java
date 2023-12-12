@@ -1,5 +1,8 @@
 package tile;
+import javax.lang.model.element.ModuleElement.Directive;
+
 import enterablestrategy.EnterableStrategy;
+import enums.Direction;
 public abstract class Tile {
 	private int x;
 	private int y;
@@ -46,11 +49,11 @@ public abstract class Tile {
 	{
 		return enterableStrategy.isEnterable();
 	}
-	public void onEntered(String direction, Tile tile)
+	public void onEntered(Direction direction, Tile tile)
 	{
-		enterableStrategy.onEntered(direction,tile);
+		enterableStrategy.onEntered(direction, tile);
 	}
-	public void onExited(String direction, Tile tile)
+	public void onExited(Direction direction, Tile tile)
 	{
 		enterableStrategy.onExited(direction,tile);
 	}

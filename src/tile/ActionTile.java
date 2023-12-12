@@ -1,6 +1,7 @@
 package tile;
 import enterablestrategy.*;
 import turnstrategy.*;
+import enums.Direction;
 
 public class ActionTile extends Tile implements Comparable<ActionTile> {
 	private TurnStrategy turnStrategy;
@@ -26,7 +27,7 @@ public class ActionTile extends Tile implements Comparable<ActionTile> {
 	
 	//metody wywołujące metody z interfejsu
 	
-	public void onTurn(String direction)
+	public void onTurn(Direction direction)
 	{
 		turnStrategy.onTurn(direction);
 	}

@@ -1,4 +1,5 @@
 package gamemanager;
+import enums.Direction;
 import map.Map;
 
 public class GameManager {
@@ -29,11 +30,14 @@ public class GameManager {
     }
 
     // should have input parameters
-    public void startTurn() {
-        //direction = input;
-        this.map.startTurn();
+    public void startTurn(Direction input) {
+        Direction direction = input;
+        this.map.startTurn(direction);
     }
 
-
+    public void onInput() {
+        //Do argumentu dac input z IOManager,
+        /* tutaj bedzie jakis switch zalezny od inputu */
+    }
 
 }

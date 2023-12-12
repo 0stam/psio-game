@@ -1,14 +1,20 @@
 package map;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import enums.Direction;
 import tile.*;
 
 public class Map {
     private final int x, y;
     private Tile[][] bottomLayer;
     private Tile[][] upperLayer;
-    private List<ActionTile> actionTiles;
+
+    private List<ActionTile> actionTiles = new ArrayList<>();
+
+
     public Map(int x, int y) {
         this.x = x;
         this.y = y;
@@ -69,11 +75,15 @@ public class Map {
     }
 
     public void startTurn(Direction direction) {
+        actionTiles.add(new ActionTile(0, 0, 0));
         Collections.sort(actionTiles);
-        // nie wiem czy ta petla nie bierze by value zamiast by reference
-        for (ActionTile actionTile : actionTiles) {
+
+        for (int i = 0; i < actionTiles.size(); i++) {
+            ActionTile actionTile = actionTiles.get(i);
             actionTile.onTurn(direction);
+            i--; //po usunieciu elementu nastepny bedzie mial indeks tego poprzedniego
         }
+        System.out.println(actionTiles.size());
     }
 }
 

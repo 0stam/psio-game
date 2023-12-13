@@ -3,6 +3,7 @@ package map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import enums.Direction;
 import tile.*;
@@ -20,6 +21,28 @@ public class Map {
         this.y = y;
         bottomLayer = new Tile[x][y];
         upperLayer = new Tile[x][y];
+    }
+
+    public void setupMap() {
+        Random rand = new Random();
+        for (int i = 0; i < y; i++) {
+            for (int j = 0; j < x; j++) {
+                bottomLayer[i][j] = new Floor(i, j);
+                if (rand.nextInt(100) > 90) {
+                    upperLayer[i][j] = new Box(i, j);
+                }
+                if (rand.nextInt(100) > 90) {
+                    upperLayer[i][j] = new Wall(i, j);
+                }
+                if (rand.nextInt(100) > 90) {
+                    bottomLayer[i][j] = new Button(i, j);
+                }
+            }
+        }
+
+        int goalX = rand.nextInt(x);
+        int goalY = rand.nextInt(y);
+        upperLayer[goalX][goalY] = new Goal(goalX, goalY);
     }
 
     public int getWidth() {

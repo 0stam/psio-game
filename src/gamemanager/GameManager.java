@@ -1,4 +1,7 @@
 package gamemanager;
+import IO.ConsoleIO;
+import IO.GraphicIO;
+import IO.IOManager;
 import enums.Direction;
 import map.Map;
 
@@ -17,8 +20,15 @@ public class GameManager {
     }
 
     public void startGame() {
-        // TODO: connect to IOManager and get level
-        //this.map = IOManager.getInstance().getLevel().getMap(); nwm
+        Map map = new Map(10, 10);
+        map.setupMap();
+
+        this.map = map;
+
+        IOManager io = IOManager.getInstance(new ConsoleIO());
+        //IOManager io = IOManager.getInstance(new GraphicIO());
+
+        io.draw();
     }
 
     public void setMap(Map map) {

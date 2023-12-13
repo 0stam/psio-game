@@ -1,0 +1,15 @@
+package enums;
+
+public enum Graphics {
+	DEFAULT,
+	FLOOR,
+	WALL,
+	BOX,
+	PLAYER,
+	ENEMY,
+	BUTTON_PRESSED,
+	BUTTON_RELEASED,
+	DOOR_OPEN,
+	DOOR_CLOSED,
+	GOAL
+}

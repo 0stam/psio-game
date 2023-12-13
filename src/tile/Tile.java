@@ -3,10 +3,12 @@ import javax.lang.model.element.ModuleElement.Directive;
 
 import enterablestrategy.EnterableStrategy;
 import enums.Direction;
+import enums.Graphics;
+
 public abstract class Tile {
 	private int x;
 	private int y;
-	private String graphicsID;
+	private Graphics graphicsID;
 	private EnterableStrategy enterableStrategy;
 	
 	//konstruktor, by w dziedziczących można było używać super(x,y);
@@ -35,11 +37,11 @@ public abstract class Tile {
 		this.y = y;
 	}
 
-	public String getGraphicsID() {
+	public Graphics getGraphicsID() {
 		return graphicsID;
 	}
 
-	public void setGraphicsID(String graphicsID) {
+	public void setGraphicsID(Graphics graphicsID) {
 		this.graphicsID = graphicsID;
 	}
 	

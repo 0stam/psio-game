@@ -1,6 +1,8 @@
 package IO;
 
-import gameManager.GameManager;
+import enums.Graphics;
+import enums.Direction;
+import gamemanager.GameManager;
 import map.Map;
 
 import java.util.Scanner;
@@ -13,39 +15,39 @@ public class ConsoleIO implements IOStrategy {
 		this.gameManager = GameManager.getInstance();
 		this.map = this.gameManager.getMap();
 
-		char[][] screenBuffer = new char[this.map.getX()][this.map.getY()];
+		char[][] screenBuffer = new char[this.map.getWidth()][this.map.getHeight()];
 
-		for (int i = 0;i < this.map.getX();i++) {
-			for (int j = 0;j < this.map.getY();j++) {
-				switch (this.map.getBottomLayer()[i][j].getGraphicsId()) {
-					case GraphicsEnum.FLOOR:
+		for (int i = 0;i < this.map.getWidth();i++) {
+			for (int j = 0;j < this.map.getHeight();j++) {
+				switch (this.map.getBottomLayer(i, j).getGraphicsID()) {
+					case Graphics.FLOOR:
 						screenBuffer[i][j] = '_';
 						break;
-					case GraphicsEnum.WALL:
+					case Graphics.WALL:
 						screenBuffer[i][j] = '#';
 						break;
-					case GraphicsEnum.BOX:
+					case Graphics.BOX:
 						screenBuffer[i][j] = 'O';
 						break;
-					case GraphicsEnum.PLAYER:
+					case Graphics.PLAYER:
 						screenBuffer[i][j] = 'X';
 						break;
-					case GraphicsEnum.ENEMY:
+					case Graphics.ENEMY:
 						screenBuffer[i][j] = 'Y';
 						break;
-					case GraphicsEnum.BUTTON_PRESSED:
+					case Graphics.BUTTON_PRESSED:
 						screenBuffer[i][j] = 'v';
 						break;
-					case GraphicsEnum.BUTTON_RELEASED:
+					case Graphics.BUTTON_RELEASED:
 						screenBuffer[i][j] = '^';
 						break;
-					case GraphicsEnum.DOOR_OPEN:
+					case Graphics.DOOR_OPEN:
 						screenBuffer[i][j] = 'u';
 						break;
-					case GraphicsEnum.DOOR_CLOSED:
+					case Graphics.DOOR_CLOSED:
 						screenBuffer[i][j] = 'n';
 						break;
-					case GraphicsEnum.GOAL:
+					case Graphics.GOAL:
 						screenBuffer[i][j] = 'P';
 						break;
 					default:
@@ -55,38 +57,38 @@ public class ConsoleIO implements IOStrategy {
 			}
 		}
 
-		for (int i = 0;i < this.map.getX();i++) {
-			for (int j = 0;j < this.map.getY();j++) {
-				if (this.map.getFrontLayer()[i][j] != null) {
-					switch (this.map.getFrontLayer()[i][j].getGraphicsId()) {
-						case GraphicsEnum.FLOOR:
+		for (int i = 0;i < this.map.getWidth();i++) {
+			for (int j = 0;j < this.map.getHeight();j++) {
+				if (this.map.getUpperLayer(i, j) != null) {
+					switch (this.map.getUpperLayer(i, j).getGraphicsID()) {
+						case Graphics.FLOOR:
 							screenBuffer[i][j] = '_';
 							break;
-						case GraphicsEnum.WALL:
+						case Graphics.WALL:
 							screenBuffer[i][j] = '#';
 							break;
-						case GraphicsEnum.BOX:
+						case Graphics.BOX:
 							screenBuffer[i][j] = 'O';
 							break;
-						case GraphicsEnum.PLAYER:
+						case Graphics.PLAYER:
 							screenBuffer[i][j] = 'X';
 							break;
-						case GraphicsEnum.ENEMY:
+						case Graphics.ENEMY:
 							screenBuffer[i][j] = 'Y';
 							break;
-						case GraphicsEnum.BUTTON_PRESSED:
+						case Graphics.BUTTON_PRESSED:
 							screenBuffer[i][j] = 'v';
 							break;
-						case GraphicsEnum.BUTTON_RELEASED:
+						case Graphics.BUTTON_RELEASED:
 							screenBuffer[i][j] = '^';
 							break;
-						case GraphicsEnum.DOOR_OPEN:
+						case Graphics.DOOR_OPEN:
 							screenBuffer[i][j] = 'u';
 							break;
-						case GraphicsEnum.DOOR_CLOSED:
+						case Graphics.DOOR_CLOSED:
 							screenBuffer[i][j] = 'n';
 							break;
-						case GraphicsEnum.GOAL:
+						case Graphics.GOAL:
 							screenBuffer[i][j] = 'P';
 							break;
 						default:
@@ -97,8 +99,8 @@ public class ConsoleIO implements IOStrategy {
 			}
 		}
 
-		for (int i = 0;i < this.map.getX();i++) {
-			for (int j = 0;j < this.map.getY();j++) {
+		for (int i = 0;i < this.map.getWidth();i++) {
+			for (int j = 0;j < this.map.getHeight();j++) {
 				System.out.print(screenBuffer[i][j]);
 			}
 			System.out.println();
@@ -108,7 +110,7 @@ public class ConsoleIO implements IOStrategy {
 
 		boolean inputError = true;
 		char move = ' ';
-		DirectionsEnum direction = DirectionsEnum.DEFAULT;
+		Direction direction = Direction.DEFAULT;
 
 		while (inputError) {
 			inputError = false;
@@ -118,28 +120,28 @@ public class ConsoleIO implements IOStrategy {
 
 			switch (move) {
 				case 'w':
-					direction = DirectionsEnum.UP;
+					direction = Direction.UP;
 					break;
 				case 'W':
-					direction = DirectionsEnum.UP;
+					direction = Direction.UP;
 					break;
 				case 'a':
-					direction = DirectionsEnum.LEFT;
+					direction = Direction.LEFT;
 					break;
 				case 'A':
-					direction = DirectionsEnum.LEFT;
+					direction = Direction.LEFT;
 					break;
 				case 's':
-					direction = DirectionsEnum.DOWN;
+					direction = Direction.DOWN;
 					break;
 				case 'S':
-					direction = DirectionsEnum.DOWN;
+					direction = Direction.DOWN;
 					break;
 				case 'd':
-					direction = DirectionsEnum.RIGHT;
+					direction = Direction.RIGHT;
 					break;
 				case 'D':
-					direction = DirectionsEnum.RIGHT;
+					direction = Direction.RIGHT;
 					break;
 				default:
 					inputError = true;

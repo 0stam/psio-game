@@ -29,7 +29,7 @@ public class ActionTile extends Tile implements Comparable<ActionTile> {
 	
 	public void onTurn(Direction direction)
 	{
-		turnStrategy.onTurn(direction);
+		//turnStrategy.onTurn(direction);
 	}
 	
 	//compare

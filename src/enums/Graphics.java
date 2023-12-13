@@ -1,6 +1,6 @@
-package IO;
+package enums;
 
-public enum GraphicsEnum {
+public enum Graphics {
 	DEFAULT,
 	FLOOR,
 	WALL,

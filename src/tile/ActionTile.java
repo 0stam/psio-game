@@ -37,6 +37,6 @@ public class ActionTile extends Tile implements Comparable<ActionTile> {
 	public int compareTo(ActionTile tile2)
 	{
 		Integer temp = this.getPriority();
-		return temp.compareTo(tile2.priority);
+		return temp.compareTo(tile2.getPriority());
 	}
 }

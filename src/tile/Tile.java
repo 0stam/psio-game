@@ -37,17 +37,13 @@ public abstract class Tile {
 		this.y = y;
 	}
 
-	public Graphics getGraphicsID() {
-		return graphicsID;
-	}
+	public Graphics getGraphicsID() {return graphicsID;}
 
-	public void setGraphicsID(Graphics graphicsID) {
-		this.graphicsID = graphicsID;
-	}
+	public void setGraphicsID(Graphics graphicsID) {this.graphicsID = graphicsID;}
 	
 	//metody wywołujące metody z interfejsów
 	
-	public Boolean isEnterable()
+	public boolean isEnterable(Direction direction, Tile tile)
 	{
 		return enterableStrategy.isEnterable();
 	}

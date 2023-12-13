@@ -64,10 +64,16 @@ public class Map {
         upperLayer[x][y] = tile;
     }
     public void deleteBottomLayer(int x, int y) {
-        bottomLayer[x][y] = null;
+        if (bottomLayer[x][y] != null) {
+            actionTiles.remove(bottomLayer[x][y]);
+            bottomLayer[x][y] = null;
+        }
     }
     public void deleteUpperLayer(int x, int y) {
-        upperLayer[x][y] = null;
+        if (bottomLayer[x][y] != null) {
+            actionTiles.remove(upperLayer[x][y]);
+            upperLayer[x][y] = null;
+        }
     }
     public void deleteActionTile(ActionTile actionTile) {
         actionTiles.remove(actionTile);

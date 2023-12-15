@@ -24,6 +24,7 @@ public class Map {
         upperLayer = new Tile[x][y];
     }
 
+    // TODO: remove after testing
     public void setupMap() {
         Random rand = new Random();
         for (int i = 0; i < y; i++) {
@@ -58,7 +59,6 @@ public class Map {
     public int getHeight() {
         return y;
     }
-    //a co gdy poza tablica????
     public Tile getBottomLayer(int x, int y) {
         return bottomLayer[x][y];
     }
@@ -72,18 +72,18 @@ public class Map {
         upperLayer[x][y] = tile;
     }
     public void deleteBottomLayer(int x, int y) {
-        if (bottomLayer[x][y] != null) {
-            actionTiles.remove(bottomLayer[x][y]);
-            bottomLayer[x][y] = null;
+        if (bottomLayer[x][y] != null && bottomLayer[x][y] instanceof ActionTile) {
+            actionTiles.remove((ActionTile) bottomLayer[x][y]);
         }
+
+        bottomLayer[x][y] = null;
     }
     public void deleteUpperLayer(int x, int y) {
-        if (bottomLayer[x][y] != null) {
-            //niekoniecznie powinnismy to robic - co jesli tajlem jest gracz? Nie chcemy usuwac gracza
-            //z listy actionTiles, dodatkowo po co funkcja deleteActionTile jak uzywamy remove?
-            //actionTiles.remove(upperLayer[x][y]);
-            upperLayer[x][y] = null;
+        if (upperLayer[x][y] != null && upperLayer[x][y] instanceof ActionTile) {
+            actionTiles.remove((ActionTile) upperLayer[x][y]);
         }
+
+        upperLayer[x][y] = null;
     }
     public void deleteActionTile(ActionTile actionTile) {
         actionTiles.remove(actionTile);
@@ -97,54 +97,42 @@ public class Map {
         Tile destinationTileBottom = getBottomLayer(x + direction.x, y + direction.y);
         Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
 
-        // is upper null? is upper pushable? is bottom enterable?
+        // Is field enterable
         if (destinationTileBottom.isEnterable(direction, movedTile))
         {
-
-            //and sie przerwie jak upper bedzie nullem - tak dziala java
-            if (destinationTileUpper!=null && destinationTileUpper.isEnterable(direction, movedTile)) {
-
+            if (destinationTileUpper==null || destinationTileUpper.isEnterable(direction, movedTile)) {
+                // Trigger onEntered methods
                 destinationTileBottom.onEntered(direction, movedTile);
+
+                if (destinationTileUpper != null) {
+                    destinationTileUpper.onEntered(direction, movedTile);
+                }
+
+                // In case we are moving on an object, delete it
+                deleteUpperLayer(x + direction.x, y + direction.y);
+
+                // Trigger onExited method
                 emptiedTile.onExited(direction, movedTile);
-                //chyba tak
+
+                // Move tile
                 setUpperLayer(x + direction.x, y + direction.y, movedTile);
                 movedTile.setX(x + direction.x);
                 movedTile.setY(y + direction.y);
-
-                deleteUpperLayer(x, y);
+                upperLayer[x][y] = null; // Do not use deleteUpperLayer, we don't want to lose reference to the object in actionTiles
             }
-            else {
-                // move the tile and delete the reference to it on a previous position
-                destinationTileBottom.onEntered(direction, movedTile);
-                emptiedTile.onExited(direction, movedTile);
-
-                setUpperLayer(x + direction.x, y + direction.y, movedTile);
-                movedTile.setX(x + direction.x);
-                movedTile.setY(y + direction.y);
-
-                deleteUpperLayer(x, y);
-            }
-
-
         }
         else {
+            // TODO: remove after testing
             System.out.println("Can't move there");
         }
     }
 
     public void startTurn(Direction direction) {
-        //zgaduje ze to bylo do testow?
-        //actionTiles.add(new ActionTile(0, 0, 0));
         Collections.sort(actionTiles);
 
-        for (int i = 0; i < actionTiles.size(); i++) {
-            ActionTile actionTile = actionTiles.get(i);
+        for (ActionTile actionTile : actionTiles) {
             actionTile.onTurn(direction);
-            //petla sie zapetla?
-            //i--; //po usunieciu elementu nastepny bedzie mial indeks tego poprzedniego
         }
         System.out.println(actionTiles.size());
     }
 }
-
-

@@ -27,9 +27,10 @@ public class GameManager {
 
         IOManager io = IOManager.getInstance(new ConsoleIO());
         //IOManager io = IOManager.getInstance(new GraphicIO());
+
+        // TODO: change after testing
         while (true) {
             io.draw();
-            //moim zdaniem to powinno byc tu a nie w draw -> startTurn(direction);
         }
     }
 
@@ -50,6 +51,4 @@ public class GameManager {
         //Do argumentu dac input z IOManager,
         /* tutaj bedzie jakis switch zalezny od inputu */
     }
-
-
 }

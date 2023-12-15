@@ -4,6 +4,7 @@ import IO.GraphicIO;
 import IO.IOManager;
 import enums.Direction;
 import map.Map;
+import event.*;
 
 public class GameManager {
     private static GameManager gameManager;
@@ -47,8 +48,9 @@ public class GameManager {
         this.map.startTurn(input);
     }
 
-    public void onInput() {
-        //Do argumentu dac input z IOManager,
-        /* tutaj bedzie jakis switch zalezny od inputu */
+    public void onInput(Event event) {
+        if (event instanceof InputEvent inputEvent) {
+            startTurn(inputEvent.getDirection());
+        }
     }
 }

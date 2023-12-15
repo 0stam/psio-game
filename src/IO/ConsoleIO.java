@@ -2,6 +2,7 @@ package IO;
 
 import enums.Graphics;
 import enums.Direction;
+import event.InputEvent;
 import gamemanager.GameManager;
 import map.Map;
 
@@ -151,7 +152,7 @@ public class ConsoleIO implements IOStrategy {
 		}
 
 		System.out.println(direction + " koniec rysowania");
-		GameManager.getInstance().startTurn(direction);
+		GameManager.getInstance().onInput(new InputEvent(direction));
 		return;
 	}
 }

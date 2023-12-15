@@ -31,6 +31,9 @@ public class GameManager {
         io.draw();
     }
 
+    public void endLevel{
+        //tutaj endLevel
+    }
     public void setMap(Map map) {
         this.map = map;
     }

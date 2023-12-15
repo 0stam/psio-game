@@ -88,7 +88,7 @@ public class Map {
         Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
 
         // is upper null? is upper pushable? is bottom enterable?
-        if (destinationTileBottom.isEnterable() && destinationTileUpper.isEnterable()) {
+        if (destinationTileBottom.isEnterable(direction, destinationTileBottom) && destinationTileUpper.isEnterable(direction, destinationTileUpper)) {
             if (destinationTileUpper != null) {
                 // implement the code for pushable tiles here
             }
@@ -96,7 +96,7 @@ public class Map {
             setUpperLayer(x + direction.x, y + direction.y, movedTile);
             deleteUpperLayer(x, y);
             emptiedTile.onExited(direction, movedTile);
-            destinationTileBottom.onEntered(direction, movedTile);
+            destinationTileBottom.onEntered(direction, movedTile, ActionTile actionTile);
         }
         else {
             System.out.println("Can't move there");

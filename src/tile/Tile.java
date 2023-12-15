@@ -45,11 +45,11 @@ public abstract class Tile {
 	
 	public boolean isEnterable(Direction direction, Tile tile)
 	{
-		return enterableStrategy.isEnterable();
+		return enterableStrategy.isEnterable(direction, tile);
 	}
-	public void onEntered(Direction direction, Tile tile)
+	public void onEntered(Direction direction, Tile tile, ActionTile actionTile)
 	{
-		enterableStrategy.onEntered(direction, tile);
+		enterableStrategy.onEntered(direction, tile, actionTile);
 	}
 	public void onExited(Direction direction, Tile tile)
 	{

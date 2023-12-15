@@ -7,6 +7,7 @@ import java.util.Random;
 
 import enums.Direction;
 import tile.*;
+import turnstrategy.PlayerFollower;
 
 public class Map {
     private final int x, y;
@@ -37,6 +38,12 @@ public class Map {
                 if (rand.nextInt(100) > 90) {
                     bottomLayer[i][j] = new Button(i, j);
                 }
+                if (rand.nextInt(100) > 98)
+                {
+                    PlayerCharacter toAdd = new PlayerCharacter(i, j, 100);
+                    upperLayer[i][j] = toAdd;
+                    actionTiles.add(toAdd);
+                }
             }
         }
 
@@ -51,6 +58,7 @@ public class Map {
     public int getHeight() {
         return y;
     }
+    //a co gdy poza tablica????
     public Tile getBottomLayer(int x, int y) {
         return bottomLayer[x][y];
     }
@@ -71,7 +79,9 @@ public class Map {
     }
     public void deleteUpperLayer(int x, int y) {
         if (bottomLayer[x][y] != null) {
-            actionTiles.remove(upperLayer[x][y]);
+            //niekoniecznie powinnismy to robic - co jesli tajlem jest gracz? Nie chcemy usuwac gracza
+            //z listy actionTiles, dodatkowo po co funkcja deleteActionTile jak uzywamy remove?
+            //actionTiles.remove(upperLayer[x][y]);
             upperLayer[x][y] = null;
         }
     }
@@ -88,15 +98,34 @@ public class Map {
         Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
 
         // is upper null? is upper pushable? is bottom enterable?
-        if (destinationTileBottom.isEnterable() && destinationTileUpper.isEnterable()) {
-            if (destinationTileUpper != null) {
-                // implement the code for pushable tiles here
+        if (destinationTileBottom.isEnterable(direction, movedTile))
+        {
+
+            //and sie przerwie jak upper bedzie nullem - tak dziala java
+            if (destinationTileUpper!=null && destinationTileUpper.isEnterable(direction, movedTile)) {
+
+                destinationTileBottom.onEntered(direction, movedTile);
+                emptiedTile.onExited(direction, movedTile);
+                //chyba tak
+                setUpperLayer(x + direction.x, y + direction.y, movedTile);
+                movedTile.setX(x + direction.x);
+                movedTile.setY(y + direction.y);
+
+                deleteUpperLayer(x, y);
             }
-            // move the tile and delete the reference to it on a previous position
-            setUpperLayer(x + direction.x, y + direction.y, movedTile);
-            deleteUpperLayer(x, y);
-            emptiedTile.onExited(direction, movedTile);
-            destinationTileBottom.onEntered(direction, movedTile);
+            else {
+                // move the tile and delete the reference to it on a previous position
+                destinationTileBottom.onEntered(direction, movedTile);
+                emptiedTile.onExited(direction, movedTile);
+
+                setUpperLayer(x + direction.x, y + direction.y, movedTile);
+                movedTile.setX(x + direction.x);
+                movedTile.setY(y + direction.y);
+
+                deleteUpperLayer(x, y);
+            }
+
+
         }
         else {
             System.out.println("Can't move there");
@@ -104,13 +133,15 @@ public class Map {
     }
 
     public void startTurn(Direction direction) {
-        actionTiles.add(new ActionTile(0, 0, 0));
+        //zgaduje ze to bylo do testow?
+        //actionTiles.add(new ActionTile(0, 0, 0));
         Collections.sort(actionTiles);
 
         for (int i = 0; i < actionTiles.size(); i++) {
             ActionTile actionTile = actionTiles.get(i);
             actionTile.onTurn(direction);
-            i--; //po usunieciu elementu nastepny bedzie mial indeks tego poprzedniego
+            //petla sie zapetla?
+            //i--; //po usunieciu elementu nastepny bedzie mial indeks tego poprzedniego
         }
         System.out.println(actionTiles.size());
     }

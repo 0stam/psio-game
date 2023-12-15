@@ -6,4 +6,8 @@ public class ButtonEvent extends Event {
     public ButtonEvent(boolean pressed) {
         this.pressed = pressed;
     }
+
+    public boolean isPressed() {
+        return pressed;
+    }
 }

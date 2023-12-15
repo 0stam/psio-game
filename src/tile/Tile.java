@@ -40,12 +40,19 @@ public abstract class Tile {
 	public Graphics getGraphicsID() {return graphicsID;}
 
 	public void setGraphicsID(Graphics graphicsID) {this.graphicsID = graphicsID;}
-	
+
+	public EnterableStrategy getEnterableStrategy() {
+		return enterableStrategy;
+	}
+
+	public void setEnterableStrategy(EnterableStrategy enterableStrategy) {
+		this.enterableStrategy = enterableStrategy;
+	}
 	//metody wywołujące metody z interfejsów
 	
 	public boolean isEnterable(Direction direction, Tile tile)
 	{
-		return enterableStrategy.isEnterable();
+		return enterableStrategy.isEnterable(direction, tile);
 	}
 	public void onEntered(Direction direction, Tile tile)
 	{

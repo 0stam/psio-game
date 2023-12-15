@@ -24,12 +24,20 @@ public class ActionTile extends Tile implements Comparable<ActionTile> {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	
+
+	public TurnStrategy getTurnStrategy() {
+		return turnStrategy;
+	}
+
+	public void setTurnStrategy(TurnStrategy turnStrategy) {
+		this.turnStrategy = turnStrategy;
+	}
+
 	//metody wywołujące metody z interfejsu
 	
 	public void onTurn(Direction direction)
 	{
-		//turnStrategy.onTurn(direction);
+		turnStrategy.onTurn(direction, this);
 	}
 	
 	//compare

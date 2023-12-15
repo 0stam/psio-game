@@ -32,34 +32,34 @@ public class GraphicIO extends JPanel implements IOStrategy {
 			for (int j = 0; j < map.getHeight(); j++) {
 				try {
 					switch (this.map.getBottomLayer(i, j).getGraphicsID()) {
-						case Graphics.FLOOR:
+						case FLOOR:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\floor.png"));
 							break;
-						case Graphics.WALL:
+						case WALL:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\wall.png"));
 							break;
-						case Graphics.BOX:
+						case BOX:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\box.png"));
 							break;
-						case Graphics.PLAYER:
+						case PLAYER:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\player.png"));
 							break;
-						case Graphics.ENEMY:
+						case ENEMY:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\enemy.png"));
 							break;
-						case Graphics.BUTTON_PRESSED:
+						case BUTTON_PRESSED:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\button_pressed.png"));
 							break;
-						case Graphics.BUTTON_RELEASED:
+						case BUTTON_RELEASED:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\button_released.png"));
 							break;
-						case Graphics.DOOR_OPEN:
+						case DOOR_OPEN:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\door_open.png"));
 							break;
-						case Graphics.DOOR_CLOSED:
+						case DOOR_CLOSED:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\door_closed.png"));
 							break;
-						case Graphics.GOAL:
+						case GOAL:
 							images[i][j] = ImageIO.read(new File("src\\graphics\\goal.png"));
 							break;
 						default:
@@ -77,34 +77,34 @@ public class GraphicIO extends JPanel implements IOStrategy {
 				if (map.getUpperLayer(i, j) != null) {
 					try {
 						switch (this.map.getUpperLayer(i, j).getGraphicsID()) {
-							case Graphics.FLOOR:
+							case FLOOR:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\floor.png"));
 								break;
-							case Graphics.WALL:
+							case WALL:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\wall.png"));
 								break;
-							case Graphics.BOX:
+							case BOX:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\box.png"));
 								break;
-							case Graphics.PLAYER:
+							case PLAYER:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\player.png"));
 								break;
-							case Graphics.ENEMY:
+							case ENEMY:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\enemy.png"));
 								break;
-							case Graphics.BUTTON_PRESSED:
+							case BUTTON_PRESSED:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\button_pressed.png"));
 								break;
-							case Graphics.BUTTON_RELEASED:
+							case BUTTON_RELEASED:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\button_released.png"));
 								break;
-							case Graphics.DOOR_OPEN:
+							case DOOR_OPEN:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\door_open.png"));
 								break;
-							case Graphics.DOOR_CLOSED:
+							case DOOR_CLOSED:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\door_closed.png"));
 								break;
-							case Graphics.GOAL:
+							case GOAL:
 								images2[i][j] = ImageIO.read(new File("src\\graphics\\goal.png"));
 								break;
 							default:

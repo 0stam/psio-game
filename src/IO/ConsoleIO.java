@@ -20,34 +20,34 @@ public class ConsoleIO implements IOStrategy {
 		for (int i = 0;i < this.map.getWidth();i++) {
 			for (int j = 0;j < this.map.getHeight();j++) {
 				switch (this.map.getBottomLayer(i, j).getGraphicsID()) {
-					case Graphics.FLOOR:
+					case FLOOR:
 						screenBuffer[i][j] = '_';
 						break;
-					case Graphics.WALL:
+					case WALL:
 						screenBuffer[i][j] = '#';
 						break;
-					case Graphics.BOX:
+					case BOX:
 						screenBuffer[i][j] = 'O';
 						break;
-					case Graphics.PLAYER:
+					case PLAYER:
 						screenBuffer[i][j] = 'X';
 						break;
-					case Graphics.ENEMY:
+					case ENEMY:
 						screenBuffer[i][j] = 'Y';
 						break;
-					case Graphics.BUTTON_PRESSED:
+					case BUTTON_PRESSED:
 						screenBuffer[i][j] = 'v';
 						break;
-					case Graphics.BUTTON_RELEASED:
+					case BUTTON_RELEASED:
 						screenBuffer[i][j] = '^';
 						break;
-					case Graphics.DOOR_OPEN:
+					case DOOR_OPEN:
 						screenBuffer[i][j] = 'u';
 						break;
-					case Graphics.DOOR_CLOSED:
+					case DOOR_CLOSED:
 						screenBuffer[i][j] = 'n';
 						break;
-					case Graphics.GOAL:
+					case GOAL:
 						screenBuffer[i][j] = 'P';
 						break;
 					default:
@@ -61,34 +61,34 @@ public class ConsoleIO implements IOStrategy {
 			for (int j = 0;j < this.map.getHeight();j++) {
 				if (this.map.getUpperLayer(i, j) != null) {
 					switch (this.map.getUpperLayer(i, j).getGraphicsID()) {
-						case Graphics.FLOOR:
+						case FLOOR:
 							screenBuffer[i][j] = '_';
 							break;
-						case Graphics.WALL:
+						case WALL:
 							screenBuffer[i][j] = '#';
 							break;
-						case Graphics.BOX:
+						case BOX:
 							screenBuffer[i][j] = 'O';
 							break;
-						case Graphics.PLAYER:
+						case PLAYER:
 							screenBuffer[i][j] = 'X';
 							break;
-						case Graphics.ENEMY:
+						case ENEMY:
 							screenBuffer[i][j] = 'Y';
 							break;
-						case Graphics.BUTTON_PRESSED:
+						case BUTTON_PRESSED:
 							screenBuffer[i][j] = 'v';
 							break;
-						case Graphics.BUTTON_RELEASED:
+						case BUTTON_RELEASED:
 							screenBuffer[i][j] = '^';
 							break;
-						case Graphics.DOOR_OPEN:
+						case DOOR_OPEN:
 							screenBuffer[i][j] = 'u';
 							break;
-						case Graphics.DOOR_CLOSED:
+						case DOOR_CLOSED:
 							screenBuffer[i][j] = 'n';
 							break;
-						case Graphics.GOAL:
+						case GOAL:
 							screenBuffer[i][j] = 'P';
 							break;
 						default:
@@ -99,13 +99,14 @@ public class ConsoleIO implements IOStrategy {
 			}
 		}
 
-		for (int i = 0;i < this.map.getWidth();i++) {
-			for (int j = 0;j < this.map.getHeight();j++) {
+		for (int j = 0;j < this.map.getHeight();j++) {
+			for (int i = 0;i < this.map.getWidth();i++) {
 				System.out.print(screenBuffer[i][j]);
 			}
 			System.out.println();
 		}
 
+		//chyba to powinna robic inna klasa
 		Scanner inputListener = new Scanner(System.in);
 
 		boolean inputError = true;
@@ -149,8 +150,8 @@ public class ConsoleIO implements IOStrategy {
 			}
 		}
 
-		System.out.println(direction);
-
+		System.out.println(direction + " koniec rysowania");
+		GameManager.getInstance().startTurn(direction);
 		return;
 	}
 }

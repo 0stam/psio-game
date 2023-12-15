@@ -28,7 +28,10 @@ public class GameManager {
         IOManager io = IOManager.getInstance(new ConsoleIO());
         //IOManager io = IOManager.getInstance(new GraphicIO());
 
-        io.draw();
+        // TODO: change after testing
+        while (true) {
+            io.draw();
+        }
     }
 
     public void setMap(Map map) {
@@ -41,13 +44,11 @@ public class GameManager {
 
     // should have input parameters
     public void startTurn(Direction input) {
-        Direction direction = input;
-        this.map.startTurn(direction);
+        this.map.startTurn(input);
     }
 
     public void onInput() {
         //Do argumentu dac input z IOManager,
         /* tutaj bedzie jakis switch zalezny od inputu */
     }
-
 }

@@ -7,7 +7,7 @@ public class Empty implements EnterableStrategy{
         return true;
     }
 
-    public void onEntered(Direction direction, Tile tile, ActionTile actionTile){
+    public void onEntered(Direction direction, Tile tile){
         return;
     }
 

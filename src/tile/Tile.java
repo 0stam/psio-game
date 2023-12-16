@@ -47,9 +47,9 @@ public abstract class Tile {
 	{
 		return enterableStrategy.isEnterable(direction, tile);
 	}
-	public void onEntered(Direction direction, Tile tile, ActionTile actionTile)
+	public void onEntered(Direction direction, Tile tile)
 	{
-		enterableStrategy.onEntered(direction, tile, actionTile);
+		enterableStrategy.onEntered(direction, tile);
 	}
 	public void onExited(Direction direction, Tile tile)
 	{

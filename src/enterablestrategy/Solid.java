@@ -7,7 +7,7 @@ public class Solid implements EnterableStrategy{
         return false;
     }
 
-    public onEntered(Direction direction, Tile tile, ActionTile actionTile){
+    public onEntered(Direction direction, Tile tile){
         return;
     }
 

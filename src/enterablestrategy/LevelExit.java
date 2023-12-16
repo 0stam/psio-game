@@ -4,14 +4,7 @@ import enums.Direction;
 
 public class LevelExit implements EnterableStrategy{
     public boolean isEnterable(Direction direction, Tile tile){
-        Tile tileUpper = map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y);
-
-        if(tileUpper.isEnterable(direction, tileUpper)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return true;
     }
 
     public void onEntered(Direction direction, Tile tile, ActionTile actionTile){

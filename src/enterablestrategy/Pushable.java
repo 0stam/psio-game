@@ -7,7 +7,7 @@ public class Pushable implements EnterableStrategy{
         Tile coveredTileBottom = (map.getBottomLayer(tile.getX()+direction.x, tile.getY()+direction.y));
         Tile coveredTileUpper = (map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y));
 
-        if(coveredTileBottom.isEnterable(direction, coveredTileBottom) && coveredTileUpper!=null && !(coveredTileUpper instanceof Pushable) && coveredTileUpper.isEnterable(direction, coveredTileUpper) ){
+        if(coveredTileBottom.isEnterable(direction, coveredTileBottom) && coveredTileUpper instanceof Empty){
             return true;
         }
         else{

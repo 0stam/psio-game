@@ -96,7 +96,7 @@ public class Map {
             setUpperLayer(x + direction.x, y + direction.y, movedTile);
             deleteUpperLayer(x, y);
             emptiedTile.onExited(direction, movedTile);
-            destinationTileBottom.onEntered(direction, movedTile, ActionTile actionTile);
+            destinationTileBottom.onEntered(direction, movedTile, null);
         }
         else {
             System.out.println("Can't move there");

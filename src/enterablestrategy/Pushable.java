@@ -1,9 +1,13 @@
 package enterablestrategy;
+import gamemanager.GameManager;
+import map.Map;
 import tile.*;
 import enums.Direction;
 
 public class Pushable implements EnterableStrategy{
     public boolean isEnterable(Direction direction, Tile tile){
+        Map map = GameManager.getInstance().getMap();
+
         Tile pushedTile = (map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y));
         Tile coveredTileUpper = (map.getUpperLayer(pushedTile.getX()+direction.x, pushedTile.getY()+direction.y));
         Tile coveredTileBottom = (map.getBottomLayer(pushedTile.getX()+direction.x, pushedTile.getY()+direction.y));
@@ -17,12 +21,14 @@ public class Pushable implements EnterableStrategy{
     }
 
     public void onEntered(Direction direction, Tile tile){
+        Map map = GameManager.getInstance().getMap();
+
         Tile pushedTile = (map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y));
         Tile coveredTileUpper = (map.getUpperLayer(pushedTile.getX()+direction.x, pushedTile.getY()+direction.y));
 
-        setUpperLayer(coveredTileUpper.getX(), coveredTileUpper.getY(), pushedTile);
-        psuhedTile.setX(coveredTileUpper.getX());
-        movedTile.setY(coveredTileUpper.getY());
+        map.setUpperLayer(coveredTileUpper.getX(), coveredTileUpper.getY(), pushedTile);
+        pushedTile.setX(coveredTileUpper.getX());
+        pushedTile.setY(coveredTileUpper.getY());
     }
 
     public void onExited(Direction direction, Tile tile){

@@ -35,6 +35,9 @@ public class GameManager {
         }
     }
 
+    public void endLevel{
+        //tutaj endLevel
+    }
     public void setMap(Map map) {
         this.map = map;
     }

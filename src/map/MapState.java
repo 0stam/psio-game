@@ -37,6 +37,15 @@ public class MapState {
     public Tile getUpperLayer(int x, int y) {
         return upperLayer[x][y];
     }
+
+    public Tile[][] getBottomLayer() {
+        return bottomLayer;
+    }
+
+    public Tile[][] getUpperLayer() {
+        return upperLayer;
+    }
+
     public void setBottomLayer(int x, int y, Tile tile) {
         if (bottomLayer[x][y] instanceof ActionTile) {
             deleteActionTile((ActionTile) bottomLayer[x][y]);
@@ -86,11 +95,8 @@ public class MapState {
         Tile emptiedTile = getBottomLayer(x, y);
 
         boolean destinationOutOfBounds = x + direction.x < 0 || x + direction.x >= this.x || y + direction.y < 0 || y + direction.y >= this.y;
-        if (movedTile instanceof PlayerCharacter && destinationOutOfBounds) {
-            doUpdate = false;
-            return;
-        }
-        else if (destinationOutOfBounds) { // if moving into a map border equals to moving into a wall this condition would be enough
+        // here was code to not compute next turn if the player tried to go out of map bounds
+        if (destinationOutOfBounds) { // if moving into a map border equals to moving into a wall this condition would be enough
             return;
         }
 
@@ -128,6 +134,7 @@ public class MapState {
         }
     }
     public boolean update(Direction direction) {
+        doUpdate = true;
         for (ActionTile actionTile : actionTiles) {
             //check if actionTile is not in actionTilesToRemove
             if (!actionTilesToRemove.contains(actionTile)) {

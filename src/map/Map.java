@@ -46,15 +46,17 @@ public class Map {
                 }
             }
         }
+
+        int goalX = rand.nextInt(x);
+        int goalY = rand.nextInt(y);
+        bottomLayer[goalX][goalY] = new Goal(goalX, goalY);
+        upperLayer[goalX][goalY] = null;
+
         int playerX = rand.nextInt(x);
         int playerY = rand.nextInt(y);
         player = new PlayerCharacter(playerX, playerY, 100);
         upperLayer[playerX][playerY] = player;
         actionTiles.add(player);
-
-        int goalX = rand.nextInt(x);
-        int goalY = rand.nextInt(y);
-        bottomLayer[goalX][goalY] = new Goal(goalX, goalY);
     }
 
     public void pushMapState(MapState mapState) {
@@ -63,9 +65,9 @@ public class Map {
         mapState.setUpperLayer(upperLayer);
     }
     public void pullMapState(MapState mapState) {
-        mapState.setActionTiles(actionTiles);
-        mapState.setBottomLayer(bottomLayer);
-        mapState.setUpperLayer(upperLayer);
+        bottomLayer = mapState.getBottomLayer();
+        upperLayer = mapState.getUpperLayer();
+        actionTiles = mapState.getActionTiles();
     }
     public int getWidth() {
         return x;
@@ -102,13 +104,6 @@ public class Map {
         nextMapState.move(x, y, direction);
     }
 
-    public boolean checkWinCondition() {
-        if (bottomLayer[player.getX()][player.getY()] instanceof Goal) {
-            return true;
-        }
-        return false;
-    }
-
     public void startTurn(Direction direction) {
       currentMapState = new MapState(x, y);
       pushMapState(currentMapState);
@@ -120,9 +115,6 @@ public class Map {
       else {
           // this should call some IO function to print to the screen
           System.out.println("Invalid move. Turn skipped.");
-      }
-      if (checkWinCondition()) {
-          GameManager.getInstance().endLevel();
       }
     }
 }

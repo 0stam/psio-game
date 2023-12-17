@@ -1,6 +1,5 @@
 package tile;
 
-import enterablestrategy.Dummy;
 import enterablestrategy.LevelExit;
 import enums.Graphics;
 

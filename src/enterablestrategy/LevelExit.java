@@ -8,17 +8,10 @@ public class LevelExit implements EnterableStrategy{
         return true;
     }
 
-    public void onEntered(Direction direction, Tile tile, ActionTile actionTile){
-        if(actionTile instanceof PlayerCharacter){ // Trzeba napisac PlayerCharacter
+    public void onEntered(Direction direction, Tile tile) {
+        if (tile instanceof PlayerCharacter) {
             GameManager.getInstance().endLevel();
         }
-        else{
-            return;
-        }
-    }
-
-    public void onEntered(Direction direction, Tile tile) {
-        return;
     }
 
     public void onExited(Direction direction, Tile tile){

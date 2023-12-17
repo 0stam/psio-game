@@ -36,7 +36,7 @@ public class GameManager {
     }
 
     public void endLevel(){
-        //tutaj endLevel
+        System.out.println("Essa zwyciężyłeś");
     }
     public void setMap(Map map) {
         this.map = map;

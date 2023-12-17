@@ -30,10 +30,16 @@ public class Pushable implements EnterableStrategy{
     public void onEntered(Direction direction, Tile tile){
         Map map = GameManager.getInstance().getMap();
 
+        int x = tile.getX() + direction.x;
+        int y = tile.getY() + direction.y;
+
         int coveredX = tile.getX() + direction.x * 2;
         int coveredY = tile.getY() + direction.y * 2;
 
-        Tile pushedTile = map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y);
+        Tile pushedTile = map.getUpperLayer(x, y);
+        Tile coveredTile = map.getBottomLayer(coveredX, coveredY);
+
+        coveredTile.onEntered(direction, pushedTile);
 
         map.setUpperLayer(coveredX, coveredY, pushedTile);
         pushedTile.setX(coveredX);

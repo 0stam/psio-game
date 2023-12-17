@@ -1,6 +1,6 @@
 package tile;
 
-import enterablestrategy.Dummy;
+import enterablestrategy.Empty;
 import enums.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class Button extends Tile {
 
     public Button(int x, int y) {
         super(x, y);
-        this.setEnterableStrategy(new Dummy());
+        this.setEnterableStrategy(new Empty());
         this.setGraphicsID(Graphics.BUTTON_RELEASED);
     }
 

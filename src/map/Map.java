@@ -54,7 +54,7 @@ public class Map {
 
         int playerX = rand.nextInt(x);
         int playerY = rand.nextInt(y);
-        player = new PlayerCharacter(playerX, playerY, 100);
+        player = new PlayerCharacter(playerX, playerY);
         upperLayer[playerX][playerY] = player;
         actionTiles.add(player);
     }

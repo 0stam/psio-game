@@ -9,6 +9,7 @@ import event.*;
 public class GameManager {
     private static GameManager gameManager;
     private Map map;
+    private boolean levelCompleted;
 
     private GameManager() {
     }
@@ -22,6 +23,7 @@ public class GameManager {
 
     public void startGame() {
         Map map = new Map(10, 10);
+        levelCompleted = false;
         map.setupMap();
 
         this.map = map;
@@ -29,13 +31,17 @@ public class GameManager {
         IOManager io = IOManager.getInstance(new ConsoleIO());
         //IOManager io = IOManager.getInstance(new GraphicIO());
 
-        // TODO: change after testing
         while (true) {
             io.draw();
+
+            if (levelCompleted) {
+                break;
+            }
         }
     }
 
     public void endLevel(){
+        levelCompleted = true;
         System.out.println("Essa zwyciężyłeś");
     }
     public void setMap(Map map) {

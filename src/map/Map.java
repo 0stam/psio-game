@@ -96,9 +96,9 @@ public class Map {
 
         // Create an enemy
         // TODO: fix player follower
-        // ChasingEnemy chasingEnemy = new ChasingEnemy(0, 9, playerCharacter);
-        // upperLayer[0][9] = chasingEnemy;
-        // actionTiles.add(chasingEnemy);
+        ChasingEnemy chasingEnemy = new ChasingEnemy(0, 9, playerCharacter);
+        upperLayer[0][9] = chasingEnemy;
+        actionTiles.add(chasingEnemy);
     }
 
     public void pushMapState(MapState mapState) {

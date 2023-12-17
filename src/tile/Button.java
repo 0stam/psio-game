@@ -2,10 +2,10 @@ package tile;
 
 import enterablestrategy.Dummy;
 import enums.Graphics;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import observers.ButtonObserver;
+import enums.Direction;
 
 public class Button extends Tile {
 	private final List<ButtonObserver> observers = new ArrayList<>();
@@ -26,14 +26,13 @@ public class Button extends Tile {
     }
 
     private void notifyObservers() {
-        ButtonEvent event = new ButtonEvent(isPressed);
         for (ButtonObserver observer : observers) {
-            observer.onButtonEvent(event);
+            observer.onButtonEvent(isPressed);
         }
     }
 
     @Override
-    public void onEntered(Direction direction, Tile tile, ActionTile actionTile) {
+    public void onEntered(Direction direction, Tile tile) {
         isPressed = true;
         this.setGraphicsID(Graphics.BUTTON_PRESSED);
         notifyObservers();

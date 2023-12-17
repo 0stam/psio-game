@@ -1,27 +1,32 @@
 package map;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import enums.Direction;
+import gamemanager.GameManager;
 import tile.*;
-import turnstrategy.PlayerFollower;
 
 public class Map {
     private final int x, y;
     private Tile[][] bottomLayer;
     private Tile[][] upperLayer;
 
-    private List<ActionTile> actionTiles = new ArrayList<>();
+    private PlayerCharacter player;
+    private Goal goal;
 
+    private List<ActionTile> actionTiles = new ArrayList<>();
+    private MapState currentMapState, nextMapState;
 
     public Map(int x, int y) {
         this.x = x;
         this.y = y;
         bottomLayer = new Tile[x][y];
         upperLayer = new Tile[x][y];
+        currentMapState = new MapState(x, y);
+        pushMapState(currentMapState);
+        nextMapState = currentMapState;
     }
 
     // TODO: remove after testing
@@ -43,14 +48,27 @@ public class Map {
         }
         int playerX = rand.nextInt(x);
         int playerY = rand.nextInt(y);
-        upperLayer[playerX][playerY] = new PlayerCharacter(playerX, playerY, 100);
+        player = new PlayerCharacter(playerX, playerY, 100);
+        upperLayer[playerX][playerY] = player;
         actionTiles.add((PlayerCharacter) upperLayer[playerX][playerY]);
 
         int goalX = rand.nextInt(x);
         int goalY = rand.nextInt(y);
-        upperLayer[goalX][goalY] = new Goal(goalX, goalY);
+        goal = new Goal(goalX, goalY);
+        upperLayer[goalX][goalY] = goal;
     }
 
+
+    public void pushMapState(MapState mapState) {
+        mapState.setActionTiles(actionTiles);
+        mapState.setBottomLayer(bottomLayer);
+        mapState.setUpperLayer(upperLayer);
+    }
+    public void pullMapState(MapState mapState) {
+        mapState.setActionTiles(actionTiles);
+        mapState.setBottomLayer(bottomLayer);
+        mapState.setUpperLayer(upperLayer);
+    }
     public int getWidth() {
         return x;
     }
@@ -58,92 +76,53 @@ public class Map {
         return y;
     }
     public Tile getBottomLayer(int x, int y) {
-        return bottomLayer[x][y];
+        return nextMapState.getBottomLayer(x, y);
     }
     public Tile getUpperLayer(int x, int y) {
-        return upperLayer[x][y];
-    }
-    public void setBottomLayer(int x, int y, Tile tile) {
-        if (bottomLayer[x][y] instanceof ActionTile) {
-            deleteActionTile((ActionTile) bottomLayer[x][y]);
-        }
-        if (tile instanceof ActionTile) {
-            actionTiles.add((ActionTile) tile);
-        }
-        bottomLayer[x][y] = tile;
+        return nextMapState.getUpperLayer(x, y);
     }
     public void setUpperLayer(int x, int y, Tile tile) {
-        if (upperLayer[x][y] instanceof ActionTile) {
-            deleteActionTile((ActionTile) upperLayer[x][y]);
-        }
-        if (tile instanceof ActionTile) {
-            actionTiles.add((ActionTile) tile);
-        }
-        upperLayer[x][y] = tile;
+        nextMapState.setUpperLayer(x, y, tile);
+    }
+    public void setBottomLayer(int x, int y, Tile tile) {
+        nextMapState.setBottomLayer(x, y, tile);
     }
     public void deleteBottomLayer(int x, int y) {
-        if (bottomLayer[x][y] instanceof ActionTile) {
-            deleteActionTile((ActionTile) bottomLayer[x][y]);
-        }
-
-        bottomLayer[x][y] = null;
+        nextMapState.deleteBottomLayer(x, y);
     }
     public void deleteUpperLayer(int x, int y) {
-        if (upperLayer[x][y] instanceof ActionTile) {
-            deleteActionTile((ActionTile) upperLayer[x][y]);
-        }
-
-        upperLayer[x][y] = null;
+        nextMapState.deleteUpperLayer(x, y);
     }
     public void deleteActionTile(ActionTile actionTile) {
-        actionTiles.remove(actionTile);
+        nextMapState.deleteActionTile(actionTile);
+    }
+    public void addActionTile(ActionTile actionTile) {
+        nextMapState.addActionTile(actionTile);
     }
 
     public void move(int x, int y, Direction direction) {
-        Tile movedTile = getUpperLayer(x, y);
-        Tile emptiedTile = getBottomLayer(x, y);
+        nextMapState.move(x, y, direction);
+    }
 
-        // layers of a tile we want to move onto
-        Tile destinationTileBottom = getBottomLayer(x + direction.x, y + direction.y);
-        Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
+    public boolean checkWinCondition() {
+        return (player.getX() == goal.getX() && player.getY() == goal.getY());
 
-        // Is field enterable
-        if (destinationTileBottom.isEnterable(direction, movedTile))
-        {
-            if (destinationTileUpper==null || destinationTileUpper.isEnterable(direction, movedTile)) {
-                // Trigger onEntered methods
-                destinationTileBottom.onEntered(direction, movedTile);
-
-                if (destinationTileUpper != null) {
-                    destinationTileUpper.onEntered(direction, movedTile);
-                }
-
-                // In case we are moving on an object, delete it
-                deleteUpperLayer(x + direction.x, y + direction.y);
-
-                // Trigger onExited method
-                emptiedTile.onExited(direction, movedTile);
-
-                // Move tile
-                setUpperLayer(x + direction.x, y + direction.y, movedTile);
-                movedTile.setX(x + direction.x);
-                movedTile.setY(y + direction.y);
-                upperLayer[x][y] = null; // Do not use deleteUpperLayer, we don't want to lose reference to the object in actionTiles
-            }
-        }
-        else {
-            // TODO: remove after testing
-            System.out.println("Can't move there");
-        }
     }
 
     public void startTurn(Direction direction) {
-        Collections.sort(actionTiles);
-
-        // Would throw a ConcurrentModificationException when an element is removed or added
-//        for (ActionTile actionTile : actionTiles) {
-//            actionTile.onTurn(direction);
-//        }
-        System.out.println(actionTiles.size());
+      currentMapState = new MapState(x, y);
+      pushMapState(currentMapState);
+      nextMapState = currentMapState;
+      if (nextMapState.update(direction)) {
+          currentMapState = nextMapState;
+          pullMapState(currentMapState);
+      }
+      else {
+          // this should call some IO function to print to the screen
+          System.out.println("Invalid move. Turn skipped.");
+      }
+      if (checkWinCondition()) {
+          GameManager.getInstance().endLevel();
+      }
     }
 }

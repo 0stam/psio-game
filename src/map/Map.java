@@ -39,14 +39,12 @@ public class Map {
                 if (rand.nextInt(100) > 90) {
                     bottomLayer[i][j] = new Button(i, j);
                 }
-                if (rand.nextInt(100) > 98)
-                {
-                    PlayerCharacter toAdd = new PlayerCharacter(i, j, 100);
-                    upperLayer[i][j] = toAdd;
-                    actionTiles.add(toAdd);
-                }
             }
         }
+        int playerX = rand.nextInt(x);
+        int playerY = rand.nextInt(y);
+        upperLayer[playerX][playerY] = new PlayerCharacter(playerX, playerY, 100);
+        actionTiles.add((PlayerCharacter) upperLayer[playerX][playerY]);
 
         int goalX = rand.nextInt(x);
         int goalY = rand.nextInt(y);
@@ -66,21 +64,33 @@ public class Map {
         return upperLayer[x][y];
     }
     public void setBottomLayer(int x, int y, Tile tile) {
+        if (bottomLayer[x][y] instanceof ActionTile) {
+            deleteActionTile((ActionTile) bottomLayer[x][y]);
+        }
+        if (tile instanceof ActionTile) {
+            actionTiles.add((ActionTile) tile);
+        }
         bottomLayer[x][y] = tile;
     }
     public void setUpperLayer(int x, int y, Tile tile) {
+        if (upperLayer[x][y] instanceof ActionTile) {
+            deleteActionTile((ActionTile) upperLayer[x][y]);
+        }
+        if (tile instanceof ActionTile) {
+            actionTiles.add((ActionTile) tile);
+        }
         upperLayer[x][y] = tile;
     }
     public void deleteBottomLayer(int x, int y) {
-        if (bottomLayer[x][y] != null && bottomLayer[x][y] instanceof ActionTile) {
-            actionTiles.remove((ActionTile) bottomLayer[x][y]);
+        if (bottomLayer[x][y] instanceof ActionTile) {
+            deleteActionTile((ActionTile) bottomLayer[x][y]);
         }
 
         bottomLayer[x][y] = null;
     }
     public void deleteUpperLayer(int x, int y) {
-        if (upperLayer[x][y] != null && upperLayer[x][y] instanceof ActionTile) {
-            actionTiles.remove((ActionTile) upperLayer[x][y]);
+        if (upperLayer[x][y] instanceof ActionTile) {
+            deleteActionTile((ActionTile) upperLayer[x][y]);
         }
 
         upperLayer[x][y] = null;
@@ -130,9 +140,10 @@ public class Map {
     public void startTurn(Direction direction) {
         Collections.sort(actionTiles);
 
-        for (ActionTile actionTile : actionTiles) {
-            actionTile.onTurn(direction);
-        }
+        // Would throw a ConcurrentModificationException when an element is removed or added
+//        for (ActionTile actionTile : actionTiles) {
+//            actionTile.onTurn(direction);
+//        }
         System.out.println(actionTiles.size());
     }
 }

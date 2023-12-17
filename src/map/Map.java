@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import enterablestrategy.LevelExit;
 import enums.Direction;
 import gamemanager.GameManager;
 import tile.*;
@@ -12,9 +13,6 @@ public class Map {
     private final int x, y;
     private Tile[][] bottomLayer;
     private Tile[][] upperLayer;
-
-    private PlayerCharacter player;
-    private Goal goal;
 
     private List<ActionTile> actionTiles = new ArrayList<>();
     private MapState currentMapState, nextMapState;
@@ -30,33 +28,77 @@ public class Map {
     }
 
     // TODO: remove after testing
+//    public void setupMap() {
+//        Random rand = new Random();
+//        for (int i = 0; i < y; i++) {
+//            for (int j = 0; j < x; j++) {
+//                bottomLayer[i][j] = new Floor(i, j);
+//                if (rand.nextInt(100) > 90) {
+//                    upperLayer[i][j] = new Box(i, j);
+//                }
+//                if (rand.nextInt(100) > 90) {
+//                    upperLayer[i][j] = new Wall(i, j);
+//                }
+//                if (rand.nextInt(100) > 90) {
+//                    bottomLayer[i][j] = new Button(i, j);
+//                }
+//            }
+//        }
+//
+//        int goalX = rand.nextInt(x);
+//        int goalY = rand.nextInt(y);
+//        bottomLayer[goalX][goalY] = new Goal(goalX, goalY);
+//        upperLayer[goalX][goalY] = null;
+//
+//        int playerX = rand.nextInt(x);
+//        int playerY = rand.nextInt(y);
+//        PlayerCharacter player = new PlayerCharacter(playerX, playerY);
+//        upperLayer[playerX][playerY] = player;
+//        actionTiles.add(player);
+//    }
+
     public void setupMap() {
-        Random rand = new Random();
-        for (int i = 0; i < y; i++) {
-            for (int j = 0; j < x; j++) {
+        // Create floor
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
                 bottomLayer[i][j] = new Floor(i, j);
-                if (rand.nextInt(100) > 90) {
-                    upperLayer[i][j] = new Box(i, j);
-                }
-                if (rand.nextInt(100) > 90) {
-                    upperLayer[i][j] = new Wall(i, j);
-                }
-                if (rand.nextInt(100) > 90) {
-                    bottomLayer[i][j] = new Button(i, j);
-                }
             }
         }
 
-        int goalX = rand.nextInt(x);
-        int goalY = rand.nextInt(y);
-        bottomLayer[goalX][goalY] = new Goal(goalX, goalY);
-        upperLayer[goalX][goalY] = null;
+        // Make a horizontal wall
+        for (int i = 0; i < 10; i++) {
+            bottomLayer[i][4] = new Wall(i, 4);
+        }
 
-        int playerX = rand.nextInt(x);
-        int playerY = rand.nextInt(y);
-        player = new PlayerCharacter(playerX, playerY);
-        upperLayer[playerX][playerY] = player;
-        actionTiles.add(player);
+        // Create door in the wall
+        Door door1 = new Door(5, 4);
+        bottomLayer[5][4] = door1;
+        Door door2 = new Door(6, 4);
+        bottomLayer[6][4] = door2;
+
+        // Create button
+        Button button = new Button(9, 2);
+        button.addObserver(door1);
+        button.addObserver(door2);
+        bottomLayer[9][2] = button;
+
+        // Create boxes
+        upperLayer[1][2] = new Box(1, 2);
+        upperLayer[1][1] = new Box(1, 1);
+
+        // Create an exit
+        bottomLayer[6][8] = new Goal(6, 8);
+
+        // Create player
+        PlayerCharacter playerCharacter = new PlayerCharacter(2, 2);
+        upperLayer[2][2] = playerCharacter;
+        actionTiles.add(playerCharacter);
+
+        // Create an enemy
+        // TODO: fix player follower
+        // ChasingEnemy chasingEnemy = new ChasingEnemy(0, 9, playerCharacter);
+        // upperLayer[0][9] = chasingEnemy;
+        // actionTiles.add(chasingEnemy);
     }
 
     public void pushMapState(MapState mapState) {

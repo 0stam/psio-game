@@ -50,14 +50,12 @@ public class Map {
         int playerY = rand.nextInt(y);
         player = new PlayerCharacter(playerX, playerY, 100);
         upperLayer[playerX][playerY] = player;
-        actionTiles.add((PlayerCharacter) upperLayer[playerX][playerY]);
+        actionTiles.add(player);
 
         int goalX = rand.nextInt(x);
         int goalY = rand.nextInt(y);
-        goal = new Goal(goalX, goalY);
-        upperLayer[goalX][goalY] = goal;
+        bottomLayer[goalX][goalY] = new Goal(goalX, goalY);
     }
-
 
     public void pushMapState(MapState mapState) {
         mapState.setActionTiles(actionTiles);
@@ -105,8 +103,10 @@ public class Map {
     }
 
     public boolean checkWinCondition() {
-        return (player.getX() == goal.getX() && player.getY() == goal.getY());
-
+        if (bottomLayer[player.getX()][player.getY()] instanceof Goal) {
+            return true;
+        }
+        return false;
     }
 
     public void startTurn(Direction direction) {

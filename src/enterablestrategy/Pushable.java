@@ -8,9 +8,16 @@ public class Pushable implements EnterableStrategy{
     public boolean isEnterable(Direction direction, Tile tile){
         Map map = GameManager.getInstance().getMap();
 
-        Tile pushedTile = (map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y));
-        Tile coveredTileUpper = (map.getUpperLayer(pushedTile.getX()+direction.x, pushedTile.getY()+direction.y));
-        Tile coveredTileBottom = (map.getBottomLayer(pushedTile.getX()+direction.x, pushedTile.getY()+direction.y));
+        int coveredX = tile.getX() + direction.x * 2;
+        int coveredY = tile.getY() + direction.y * 2;
+
+        if (coveredX < 0 || coveredY < 0 || coveredX >= map.getWidth() || coveredY >= map.getHeight()) {
+            return false;
+        }
+
+        Tile pushedTile = map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y);
+        Tile coveredTileUpper = map.getUpperLayer(coveredX, coveredY);
+        Tile coveredTileBottom = map.getBottomLayer(pushedTile.getX()+direction.x, pushedTile.getY()+direction.y);
 
         if(coveredTileUpper==null && coveredTileBottom.isEnterable(direction, pushedTile)){
             return true;
@@ -23,12 +30,14 @@ public class Pushable implements EnterableStrategy{
     public void onEntered(Direction direction, Tile tile){
         Map map = GameManager.getInstance().getMap();
 
-        Tile pushedTile = (map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y));
-        Tile coveredTileUpper = (map.getUpperLayer(pushedTile.getX()+direction.x, pushedTile.getY()+direction.y));
+        int coveredX = tile.getX() + direction.x * 2;
+        int coveredY = tile.getY() + direction.y * 2;
 
-        map.setUpperLayer(coveredTileUpper.getX(), coveredTileUpper.getY(), pushedTile);
-        pushedTile.setX(coveredTileUpper.getX());
-        pushedTile.setY(coveredTileUpper.getY());
+        Tile pushedTile = map.getUpperLayer(tile.getX()+direction.x, tile.getY()+direction.y);
+
+        map.setUpperLayer(coveredX, coveredY, pushedTile);
+        pushedTile.setX(coveredX);
+        pushedTile.setY(coveredY);
     }
 
     public void onExited(Direction direction, Tile tile){

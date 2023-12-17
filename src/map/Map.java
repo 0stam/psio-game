@@ -82,8 +82,9 @@ public class Map {
         button.addObserver(door2);
         bottomLayer[9][2] = button;
 
-        // Create box
+        // Create boxes
         upperLayer[1][2] = new Box(1, 2);
+        upperLayer[1][1] = new Box(1, 1);
 
         // Create an exit
         bottomLayer[6][8] = new Goal(6, 8);

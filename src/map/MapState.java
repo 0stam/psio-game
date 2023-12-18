@@ -1,8 +1,8 @@
 package map;
 
 import enums.Direction;
+import gamemanager.GameManager;
 import tile.ActionTile;
-import tile.PlayerCharacter;
 import tile.Tile;
 
 import java.util.ArrayList;
@@ -105,6 +105,32 @@ public class MapState {
         Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
 
         // Is field enterable
+        if (GameManager.getInstance().getMap().checkEnterable(x+ direction.x, y + direction.y, direction, movedTile))
+        {
+            destinationTileBottom.onEntered(direction, movedTile);
+            if (destinationTileUpper != null)
+            {
+                destinationTileUpper.onEntered(direction, movedTile);
+            }
+            deleteUpperLayer(x + direction.x, y + direction.y);
+
+            // In case we are moving on an object, delete it
+            deleteUpperLayer(x + direction.x, y + direction.y);
+
+            // Trigger onExited method
+            emptiedTile.onExited(direction, movedTile);
+
+            // Move tile
+            setUpperLayer(x + direction.x, y + direction.y, movedTile);
+            movedTile.setX(x + direction.x);
+            movedTile.setY(y + direction.y);
+            upperLayer[x][y] = null; // Do not use deleteUpperLayer, we don't want to lose reference to the object in actionTiles
+        }
+        else {
+            // TODO: remove after testing
+            System.out.println("Can't move there");
+        }
+        /*
         if (destinationTileBottom.isEnterable(direction, movedTile))
         {
             if (destinationTileUpper==null || destinationTileUpper.isEnterable(direction, movedTile)) {
@@ -131,7 +157,7 @@ public class MapState {
         else {
             // TODO: remove after testing
             System.out.println("Can't move there");
-        }
+        }*/
     }
     public boolean update(Direction direction) {
         doUpdate = true;

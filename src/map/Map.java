@@ -2,11 +2,8 @@ package map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import enterablestrategy.LevelExit;
 import enums.Direction;
-import gamemanager.GameManager;
 import tile.*;
 
 public class Map {
@@ -158,5 +155,20 @@ public class Map {
           // this should call some IO function to print to the screen
           System.out.println("Invalid move. Turn skipped.");
       }
+    }
+    public boolean checkEnterable(int x, int y, Direction direction, Tile tile)
+    {
+        if ((0<=x)&&(x<this.x)&&(0<=y)&&(y<this.y))
+        {
+            if (bottomLayer[x][y].isEnterable(direction, tile))
+            {
+                if (upperLayer[x][y] == null)
+                {
+                    return true;
+                }
+                else return upperLayer[x][y].isEnterable(direction, tile);
+            }
+        }
+        return false;
     }
 }

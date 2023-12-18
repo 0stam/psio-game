@@ -20,14 +20,10 @@ public class ConsoleIO implements IOStrategy {
 
 		for (int i = 0;i < this.map.getWidth();i++) {
 			for (int j = 0;j < this.map.getHeight();j++) {
-				screenBuffer[i][j] = idToChar(map.getBottomLayer(i, j).getGraphicsID());
-			}
-		}
-
-		for (int i = 0;i < this.map.getWidth();i++) {
-			for (int j = 0;j < this.map.getHeight();j++) {
 				if (this.map.getUpperLayer(i, j) != null) {
 					screenBuffer[i][j] = idToChar(map.getUpperLayer(i, j).getGraphicsID());
+				} else {
+					screenBuffer[i][j] = idToChar(map.getBottomLayer(i, j).getGraphicsID());
 				}
 			}
 		}

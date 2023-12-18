@@ -64,14 +64,19 @@ public class Map {
 
         // Make a horizontal wall
         for (int i = 0; i < 10; i++) {
-            bottomLayer[i][4] = new Wall(i, 4);
+            bottomLayer[i][5] = new Wall(i, 5);
+        }
+
+        // Make a wall island for enemy avoidance
+        for (int i = 0; i < 2; i++) {
+            bottomLayer[5 + i][3] = new Wall(5 + i, 3);
         }
 
         // Create door in the wall
-        Door door1 = new Door(5, 4);
-        bottomLayer[5][4] = door1;
-        Door door2 = new Door(6, 4);
-        bottomLayer[6][4] = door2;
+        Door door1 = new Door(5, 5);
+        bottomLayer[5][5] = door1;
+        Door door2 = new Door(6, 5);
+        bottomLayer[6][5] = door2;
 
         // Create button
         Button button = new Button(9, 2);

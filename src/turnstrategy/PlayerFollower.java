@@ -20,21 +20,66 @@ public class PlayerFollower implements TurnStrategy{
     {
         //Metoda bedzie wyszukiwac sciezke naiwna - w zaleznosci od kata gracza od followera
         //bedzie szla w ta strone
-        //mozliwosci tworzenia wlasnych klas wyjatkow i gdzie moga wystapic
         //przy y musi byc minus - bo y jest od 0 w gorze do wysokosci planszy na dole
-        //jakis zly czlowiek stwierdzil ze pierwszym argumentem jest y a nie x
         double angle = atan2(-(target.getY() - follower.getY()), target.getX() - follower.getX());
-        //matematyka... Dzielimy mape na 4 czesci. 1 - od -45 stopni do 45 st, druga 45, 135 itd
+        //matematycznie: Dzielimy mape na 4 czesci. 1 - od -45 stopni do 45 st, druga 45, 135 itd
         //wtedy -45 45 - idz do przodu, 45 135 - idz do gory itd. Ponizej zamienione na radiany
         //atan2 zwraca kat miedzy PI a -PI
-        if ((angle <= PI*0.25d)&&(angle >= -PI*0.25d))
+        //przypadki specjalne
+        if (angle == PI*0.25d)
+        {
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + UP.x, follower.getY() + UP.y, UP, follower))
+            {
+                return UP;
+            }
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + RIGHT.x, follower.getY() + RIGHT.y, RIGHT, follower))
+            {
+                return RIGHT;
+            }
+            return DEFAULT;
+        }
+        if (angle == -PI*0.25d)
+        {
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + RIGHT.x, follower.getY() + RIGHT.y, RIGHT, follower))
+            {
+                return RIGHT;
+            }
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + DOWN.x, follower.getY() + DOWN.y, DOWN, follower))
+            {
+                return DOWN;
+            }
+            return DEFAULT;
+        }
+        if (angle == PI*0.75d)
+        {
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + LEFT.x, follower.getY() + LEFT.y, LEFT, follower))
+            {
+                return LEFT;
+            }
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + UP.x, follower.getY() + UP.y, UP, follower))
+            {
+                return UP;
+            }
+            return DEFAULT;
+        }
+        if (angle == -PI*0.75d)
+        {
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + DOWN.x, follower.getY() + DOWN.y, DOWN, follower))
+            {
+                return DOWN;
+            }
+            if (GameManager.getInstance().getMap().checkEnterable(follower.getX() + LEFT.x, follower.getY() + LEFT.y, LEFT, follower))
+            {
+                return LEFT;
+            }
+            return DEFAULT;
+        }
+        if ((angle < PI*0.25d)&&(angle > -PI*0.25d))
             return RIGHT;
-        if ((angle <= PI*0.75d)&&(angle >= PI*0.25d))
+        if ((angle < PI*0.75d)&&(angle > PI*0.25d))
             return UP;
-        if ((angle <= -PI*0.25d)&&(angle >= -PI*0.75))
+        if ((angle < -PI*0.25d)&&(angle > -PI*0.75))
             return DOWN;
-        //jaja z przechodzeniem przez kat PI (tam granicza PI i -PI) dlatego lewo jest w else
-        //bez ifa (najwygodniej zeby left byl wlasnie tu)
         return LEFT;
     }
 

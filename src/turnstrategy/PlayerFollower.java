@@ -23,7 +23,7 @@ public class PlayerFollower implements TurnStrategy{
         //przy y musi byc minus - bo y jest od 0 w gorze do wysokosci planszy na dole
         double angle = atan2(-(target.getY() - follower.getY()), target.getX() - follower.getX());
         //matematycznie: Dzielimy mape na 4 czesci. 1 - od -45 stopni do 45 st, druga 45, 135 itd
-        //wtedy -45 45 - idz do przodu, 45 135 - idz do gory itd. Ponizej zamienione na radiany
+        //wtedy -45 45 - idz dogit fetch przodu, 45 135 - idz do gory itd. Ponizej zamienione na radiany
         //atan2 zwraca kat miedzy PI a -PI
         //przypadki specjalne
         if (angle == PI*0.25d)

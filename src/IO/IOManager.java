@@ -28,7 +28,10 @@ public class IOManager {
 		return instance;
 	}
 
-	public void draw () {
-		this.strategy.draw();
+	public void drawGame () {
+		this.strategy.drawGame();
+	}
+	public void drawEditor () {
+		this.strategy.drawEditor();
 	}
 }

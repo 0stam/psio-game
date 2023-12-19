@@ -28,16 +28,11 @@ public class GameManager {
 
         this.map = map;
 
-        IOManager io = IOManager.getInstance(new ConsoleIO());
-        //IOManager io = IOManager.getInstance(new GraphicIO());
+        //IOManager io = IOManager.getInstance(new ConsoleIO());
+        IOManager io = IOManager.getInstance(new GraphicIO());
 
-        while (true) {
-            io.draw();
-
-            if (levelCompleted) {
-                break;
-            }
-        }
+        io.drawGame();
+        //io.drawEditor();
     }
 
     public void endLevel(){
@@ -60,6 +55,12 @@ public class GameManager {
     public void onInput(Event event) {
         if (event instanceof InputEvent inputEvent) {
             startTurn(inputEvent.getDirection());
+
+            IOManager.getInstance().drawGame();
         }
+    }
+
+    public boolean getLevelCompleted() {
+        return levelCompleted;
     }
 }

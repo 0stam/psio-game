@@ -12,7 +12,7 @@ public class ConsoleIO implements IOStrategy {
 	private GameManager gameManager;
 	private Map map;
 
-	public void draw () {
+	public void drawGame () {
 		this.gameManager = GameManager.getInstance();
 		this.map = this.gameManager.getMap();
 
@@ -70,6 +70,10 @@ public class ConsoleIO implements IOStrategy {
 		System.out.println(direction + " koniec rysowania");
 		GameManager.getInstance().onInput(new InputEvent(direction));
 		return;
+	}
+
+	public void drawEditor () {
+		System.out.println("Editor not supported in console!");
 	}
 
 	public char idToChar(Graphics graphics)	{

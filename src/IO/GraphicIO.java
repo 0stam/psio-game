@@ -72,7 +72,7 @@ public class GraphicIO implements IOStrategy, KeyListener {
 			default -> Direction.DEFAULT;
 		};
 
-		if (!GameManager.getInstance().getLevelCompleted()) {
+		if (!GameManager.getInstance().getLevelCompleted() && direction != Direction.DEFAULT) {
 			GameManager.getInstance().onInput(new InputEvent(direction));
 		}
 	}

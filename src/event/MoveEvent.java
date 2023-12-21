@@ -2,7 +2,7 @@ package event;
 
 import enums.Direction;
 
-public class MoveEvent extends Event {
+public class MoveEvent extends GameEvent {
     private final Direction direction;
 
     public MoveEvent(Direction direction) {

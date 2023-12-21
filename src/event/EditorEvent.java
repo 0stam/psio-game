@@ -1,4 +1,4 @@
 package event;
 
-public class EditorEvent extends InputEvent {
+public abstract class EditorEvent extends InputEvent {
 }

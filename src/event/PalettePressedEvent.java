@@ -2,10 +2,10 @@ package event;
 
 import enums.Graphics;
 
-public class PalettePressed extends EditorEvent {
+public class PalettePressedEvent extends EditorEvent {
     private final Graphics type;
 
-    public PalettePressed(Graphics type) {
+    public PalettePressedEvent(Graphics type) {
         this.type = type;
     }
 

@@ -2,6 +2,7 @@ package gamemanager;
 import IO.ConsoleIO;
 import IO.GraphicIO;
 import IO.IOManager;
+import editor.Editor;
 import enums.Direction;
 import map.Map;
 import event.*;
@@ -9,9 +10,12 @@ import event.*;
 public class GameManager implements EventObserver {
     private static GameManager gameManager;
     private Map map;
+    private Editor editor;
     private boolean levelCompleted;
 
     private GameManager() {
+        // TODO: remove when proper Editor initialization is implemented
+        editor = new Editor();
     }
 
     public static GameManager getInstance() {
@@ -53,10 +57,19 @@ public class GameManager implements EventObserver {
     }
 
     public void onEvent(Event event) {
-        if (event instanceof MoveEvent moveEvent) {
-            startTurn(moveEvent.getDirection());
-
-            IOManager.getInstance().drawGame();
+        if (event instanceof InputEvent) {
+            if (event instanceof GameEvent) {
+                if (event instanceof MoveEvent moveEvent) {
+                    startTurn(moveEvent.getDirection());
+                    IOManager.getInstance().drawGame();
+                } else if (event instanceof ResetEvent) {
+                    startGame();
+                }
+            } else if (event instanceof EditorEvent) {
+                editor.onEvent(event);
+            } else if (event instanceof EscapeEvent) {
+                // TODO: Go to a proper menu depending on current mode once implemented
+            }
         }
     }
 

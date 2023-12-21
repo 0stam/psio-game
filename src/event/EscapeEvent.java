@@ -1,4 +1,4 @@
 package event;
 
-public class EscapeEvent {
+public class EscapeEvent extends InputEvent {
 }

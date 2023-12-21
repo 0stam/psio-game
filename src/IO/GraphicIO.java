@@ -1,146 +1,83 @@
 package IO;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 
-import enums.Graphics;
+import enums.Direction;
+import event.InputEvent;
 import gamemanager.GameManager;
-import map.Map;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class GraphicIO extends JPanel implements IOStrategy {
+public class GraphicIO implements IOStrategy, KeyListener {
 	private static JFrame window;
+	private static MapDisplay map;
 
-	private GameManager gameManager;
-	private Map map;
-
-	private BufferedImage[][] images;
-	private BufferedImage[][] images2;
-
-	public void draw () {
-		this.gameManager = GameManager.getInstance();
-		this.map = gameManager.getMap();
-
-		this.images = new BufferedImage[this.map.getWidth()][this.map.getHeight()];
-		this.images2 = new BufferedImage[this.map.getWidth()][this.map.getHeight()];
-
-		for (int i = 0; i < map.getWidth(); i++) {
-			for (int j = 0; j < map.getHeight(); j++) {
-				try {
-					switch (this.map.getBottomLayer(i, j).getGraphicsID()) {
-						case FLOOR:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\floor.png"));
-							break;
-						case WALL:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\wall.png"));
-							break;
-						case BOX:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\box.png"));
-							break;
-						case PLAYER:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\player.png"));
-							break;
-						case ENEMY:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\enemy.png"));
-							break;
-						case BUTTON_PRESSED:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\button_pressed.png"));
-							break;
-						case BUTTON_RELEASED:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\button_released.png"));
-							break;
-						case DOOR_OPEN:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\door_open.png"));
-							break;
-						case DOOR_CLOSED:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\door_closed.png"));
-							break;
-						case GOAL:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\goal.png"));
-							break;
-						default:
-							images[i][j] = ImageIO.read(new File("src\\graphics\\floor.png"));
-							break;
-					}
-				} catch (IOException ignored) {
-
-				}
-			}
-		}
-
-		for (int i = 0; i < map.getWidth(); i++) {
-			for (int j = 0; j < map.getHeight(); j++) {
-				if (map.getUpperLayer(i, j) != null) {
-					try {
-						switch (this.map.getUpperLayer(i, j).getGraphicsID()) {
-							case FLOOR:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\floor.png"));
-								break;
-							case WALL:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\wall.png"));
-								break;
-							case BOX:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\box.png"));
-								break;
-							case PLAYER:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\player.png"));
-								break;
-							case ENEMY:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\enemy.png"));
-								break;
-							case BUTTON_PRESSED:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\button_pressed.png"));
-								break;
-							case BUTTON_RELEASED:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\button_released.png"));
-								break;
-							case DOOR_OPEN:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\door_open.png"));
-								break;
-							case DOOR_CLOSED:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\door_closed.png"));
-								break;
-							case GOAL:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\goal.png"));
-								break;
-							default:
-								images2[i][j] = ImageIO.read(new File("src\\graphics\\floor.png"));
-								break;
-						}
-					} catch (IOException ignored) {
-
-					}
-				}
-			}
+	public void drawGame () {
+		if (map == null) {
+			map = new MapDisplay();
+			map.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
+			map.setupMap(GameManager.getInstance().getMap());
+		} else {
+			map.setupMap(GameManager.getInstance().getMap());
+			map.repaint();
 		}
 
 		if (window == null) {
 			window = new JFrame("Nasza cudowna gra");
 			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			window.addKeyListener(this);
+
+			window.getContentPane().add(map.getContainer(), BorderLayout.CENTER);
+			window.pack();
+
 			window.setVisible(true);
 		}
+	}
 
-		this.setPreferredSize(new Dimension(32 * this.map.getWidth(), 32 * this.map.getHeight()));
-		window.getContentPane().add(this, BorderLayout.CENTER);
-		window.pack();
+	public void drawEditor () {
+		/*if (map == null) {
+			map = new MapDisplay();
+			map.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth(), 32 * GameManager.getInstance().getMap().getHeight()));
+			map.setupMap(GameManager.getInstance().getMap());
+		} else {
+			map.setupMap(GameManager.getInstance().getMap());
+			map.repaint();
+		}
+
+		if (window == null) {
+			window = new JFrame("Nasza cudowna gra");
+			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			window.addKeyListener(this);
+			window.getContentPane().add(map, BorderLayout.CENTER);
+			window.pack();
+
+			window.setVisible(true);
+		}*/
 	}
 
 	@Override
-	protected void paintComponent(java.awt.Graphics g) {
-		g.setColor(Color.white);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+	public void keyTyped(KeyEvent e) {
+	}
 
-		for (int i = 0;i < this.map.getWidth();i++) {
-			for (int j = 0;j < this.map.getHeight();j++) {
-				g.drawImage(images[i][j], i * 32, j * 32, this);
-				if (this.images2[i][j] != null) {
-					g.drawImage(images2[i][j], i * 32, j * 32, this);
-				}
-			}
+	@Override
+	public void keyPressed(KeyEvent e) {
+		Direction direction = switch (e.getKeyCode()) {
+			case 'w', 'W', KeyEvent.VK_UP -> Direction.UP;
+			case 'a', 'A', KeyEvent.VK_LEFT -> Direction.LEFT;
+			case 's', 'S', KeyEvent.VK_DOWN -> Direction.DOWN;
+			case 'd', 'D', KeyEvent.VK_RIGHT -> Direction.RIGHT;
+			default -> Direction.DEFAULT;
+		};
+
+		if (!GameManager.getInstance().getLevelCompleted() && direction != Direction.DEFAULT) {
+			GameManager.getInstance().onInput(new InputEvent(direction));
 		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 }

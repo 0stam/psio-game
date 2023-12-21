@@ -67,11 +67,6 @@ public class Map {
             bottomLayer[i][5] = new Wall(i, 5);
         }
 
-        // Make a wall island for enemy avoidance
-        for (int i = 0; i < 2; i++) {
-            bottomLayer[5 + i][3] = new Wall(5 + i, 3);
-        }
-
         // Create door in the wall
         Door door1 = new Door(5, 5);
         bottomLayer[5][5] = door1;
@@ -87,6 +82,9 @@ public class Map {
         // Create boxes
         upperLayer[1][2] = new Box(1, 2);
         upperLayer[1][1] = new Box(1, 1);
+        bottomLayer[1][9] = new Wall(1, 1);
+        //bottomLayer[0][8] = new Wall(1, 1);
+        bottomLayer[5][3] = new Wall(5, 3);
 
         // Create an exit
         bottomLayer[6][8] = new Goal(6, 8);

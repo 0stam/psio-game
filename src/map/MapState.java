@@ -126,39 +126,22 @@ public class MapState {
             movedTile.setY(y + direction.y);
             upperLayer[x][y] = null; // Do not use deleteUpperLayer, we don't want to lose reference to the object in actionTiles
         }
-        else {
-            // TODO: remove after testing
-            System.out.println("Can't move there");
-        }
-        /*
-        if (destinationTileBottom.isEnterable(direction, movedTile))
-        {
-            if (destinationTileUpper==null || destinationTileUpper.isEnterable(direction, movedTile)) {
-                // Trigger onEntered methods
-                destinationTileBottom.onEntered(direction, movedTile);
+    }
 
-                if (destinationTileUpper != null) {
-                    destinationTileUpper.onEntered(direction, movedTile);
+    public boolean checkEnterable(int x, int y, Direction direction, Tile tile)
+    {
+        if ((0<=x)&&(x<this.x)&&(0<=y)&&(y<this.y)) { // if position is in bounds
+            if (bottomLayer[x][y].isEnterable(direction, tile)) {
+                if (upperLayer[x][y] == null) {
+                    return true;
+                } else {
+                    return upperLayer[x][y].isEnterable(direction, tile);
                 }
-
-                // In case we are moving on an object, delete it
-                deleteUpperLayer(x + direction.x, y + direction.y);
-
-                // Trigger onExited method
-                emptiedTile.onExited(direction, movedTile);
-
-                // Move tile
-                setUpperLayer(x + direction.x, y + direction.y, movedTile);
-                movedTile.setX(x + direction.x);
-                movedTile.setY(y + direction.y);
-                upperLayer[x][y] = null; // Do not use deleteUpperLayer, we don't want to lose reference to the object in actionTiles
             }
         }
-        else {
-            // TODO: remove after testing
-            System.out.println("Can't move there");
-        }*/
+        return false;
     }
+
     public boolean update(Direction direction) {
         doUpdate = true;
         for (ActionTile actionTile : actionTiles) {

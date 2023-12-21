@@ -24,36 +24,6 @@ public class Map {
         nextMapState = currentMapState;
     }
 
-    // TODO: remove after testing
-//    public void setupMap() {
-//        Random rand = new Random();
-//        for (int i = 0; i < y; i++) {
-//            for (int j = 0; j < x; j++) {
-//                bottomLayer[i][j] = new Floor(i, j);
-//                if (rand.nextInt(100) > 90) {
-//                    upperLayer[i][j] = new Box(i, j);
-//                }
-//                if (rand.nextInt(100) > 90) {
-//                    upperLayer[i][j] = new Wall(i, j);
-//                }
-//                if (rand.nextInt(100) > 90) {
-//                    bottomLayer[i][j] = new Button(i, j);
-//                }
-//            }
-//        }
-//
-//        int goalX = rand.nextInt(x);
-//        int goalY = rand.nextInt(y);
-//        bottomLayer[goalX][goalY] = new Goal(goalX, goalY);
-//        upperLayer[goalX][goalY] = null;
-//
-//        int playerX = rand.nextInt(x);
-//        int playerY = rand.nextInt(y);
-//        PlayerCharacter player = new PlayerCharacter(playerX, playerY);
-//        upperLayer[playerX][playerY] = player;
-//        actionTiles.add(player);
-//    }
-
     public void setupMap() {
         // Create floor
         for (int i = 0; i < x; i++) {
@@ -156,22 +126,13 @@ public class Map {
       }
       else {
           // this should call some IO function to print to the screen
+          // should never happen in current implementation
           System.out.println("Invalid move. Turn skipped.");
       }
     }
+
     public boolean checkEnterable(int x, int y, Direction direction, Tile tile)
     {
-        if ((0<=x)&&(x<this.x)&&(0<=y)&&(y<this.y))
-        {
-            if (bottomLayer[x][y].isEnterable(direction, tile))
-            {
-                if (upperLayer[x][y] == null)
-                {
-                    return true;
-                }
-                else return upperLayer[x][y].isEnterable(direction, tile);
-            }
-        }
-        return false;
+        return nextMapState.checkEnterable(x, y, direction, tile);
     }
 }

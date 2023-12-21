@@ -73,24 +73,24 @@ public class MapDisplay extends JPanel {
 	private void setupFileNames ()	{
 		this.fileNames = new Hashtable<>();
 
-		this.fileNames.put(FLOOR, "src\\graphics\\floor.png");
-		this.fileNames.put(WALL, "src\\graphics\\wall.png");
-		this.fileNames.put(BOX, "src\\graphics\\box.png");
+		this.fileNames.put(FLOOR, "src/graphics/floor.png");
+		this.fileNames.put(WALL, "src/graphics/wall.png");
+		this.fileNames.put(BOX, "src/graphics/box.png");
 		switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-			case Calendar.MONDAY -> this.fileNames.put(PLAYER, "src\\graphics\\player_mon.png");
-			case Calendar.TUESDAY -> this.fileNames.put(PLAYER, "src\\graphics\\player_tue.png");
-			case Calendar.WEDNESDAY -> this.fileNames.put(PLAYER, "src\\graphics\\player_wed.png");
-			case Calendar.THURSDAY -> this.fileNames.put(PLAYER, "src\\graphics\\player_thu.png");
-			case Calendar.FRIDAY -> this.fileNames.put(PLAYER, "src\\graphics\\player_fri.png");
-			default -> this.fileNames.put(PLAYER, "src\\graphics\\player_wek.png");
+			case Calendar.MONDAY -> this.fileNames.put(PLAYER, "src/graphics/player_mon.png");
+			case Calendar.TUESDAY -> this.fileNames.put(PLAYER, "src/graphics/player_tue.png");
+			case Calendar.WEDNESDAY -> this.fileNames.put(PLAYER, "src/graphics/player_wed.png");
+			case Calendar.THURSDAY -> this.fileNames.put(PLAYER, "src/graphics/player_thu.png");
+			case Calendar.FRIDAY -> this.fileNames.put(PLAYER, "src/graphics/player_fri.png");
+			default -> this.fileNames.put(PLAYER, "src/graphics/player_wek.png");
 		}
-		this.fileNames.put(ENEMY, "src\\graphics\\enemy.png");
-		this.fileNames.put(BUTTON_PRESSED, "src\\graphics\\button_pressed.png");
-		this.fileNames.put(BUTTON_RELEASED, "src\\graphics\\button_released.png");
-		this.fileNames.put(DOOR_OPEN, "src\\graphics\\door_open.png");
-		this.fileNames.put(DOOR_CLOSED, "src\\graphics\\door_closed.png");
-		this.fileNames.put(GOAL, "src\\graphics\\goal.png");
-		this.fileNames.put(DEFAULT, "src\\graphics\\default.png");
+		this.fileNames.put(ENEMY, "src/graphics/enemy.png");
+		this.fileNames.put(BUTTON_PRESSED, "src/graphics/button_pressed.png");
+		this.fileNames.put(BUTTON_RELEASED, "src/graphics/button_released.png");
+		this.fileNames.put(DOOR_OPEN, "src/graphics/door_open.png");
+		this.fileNames.put(DOOR_CLOSED, "src/graphics/door_closed.png");
+		this.fileNames.put(GOAL, "src/graphics/goal.png");
+		this.fileNames.put(DEFAULT, "src/graphics/default.png");
 	}
 
 	public JPanel getContainer() {

@@ -6,7 +6,7 @@ import enums.Direction;
 import map.Map;
 import event.*;
 
-public class GameManager {
+public class GameManager implements EventObserver {
     private static GameManager gameManager;
     private Map map;
     private boolean levelCompleted;
@@ -52,9 +52,9 @@ public class GameManager {
         this.map.startTurn(input);
     }
 
-    public void onInput(Event event) {
-        if (event instanceof InputEvent inputEvent) {
-            startTurn(inputEvent.getDirection());
+    public void onEvent(Event event) {
+        if (event instanceof MoveEvent moveEvent) {
+            startTurn(moveEvent.getDirection());
 
             IOManager.getInstance().drawGame();
         }

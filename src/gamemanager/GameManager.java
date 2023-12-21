@@ -1,12 +1,11 @@
 package gamemanager;
 import IO.ConsoleIO;
-import IO.GraphicIO;
 import IO.IOManager;
 import enums.Direction;
 import map.Map;
 import event.*;
 
-public class GameManager {
+public class GameManager implements EventObserver {
     private static GameManager gameManager;
     private Map map;
     private boolean levelCompleted;
@@ -53,8 +52,8 @@ public class GameManager {
     }
 
     public void onInput(Event event) {
-        if (event instanceof InputEvent inputEvent) {
-            startTurn(inputEvent.getDirection());
+        if (event instanceof MoveEvent moveEvent) {
+            startTurn(moveEvent.getDirection());
 
             IOManager.getInstance().drawGame();
         }

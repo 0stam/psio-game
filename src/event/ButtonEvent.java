@@ -1,6 +1,6 @@
 package event;
 
-public class ButtonEvent extends Event {
+public class ButtonEvent extends InputEvent {
     private final boolean pressed;
 
     public ButtonEvent(boolean pressed) {

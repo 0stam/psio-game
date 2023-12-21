@@ -1,5 +1,6 @@
 package gamemanager;
 import IO.ConsoleIO;
+import IO.GraphicIO;
 import IO.IOManager;
 import enums.Direction;
 import map.Map;
@@ -51,7 +52,7 @@ public class GameManager implements EventObserver {
         this.map.startTurn(input);
     }
 
-    public void onInput(Event event) {
+    public void onEvent(Event event) {
         if (event instanceof MoveEvent moveEvent) {
             startTurn(moveEvent.getDirection());
 

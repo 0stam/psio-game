@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 
 import enums.Direction;
 import event.InputEvent;
+import event.MoveEvent;
 import gamemanager.GameManager;
 
 import java.awt.*;
@@ -73,7 +74,7 @@ public class GraphicIO implements IOStrategy, KeyListener {
 		};
 
 		if (!GameManager.getInstance().getLevelCompleted() && direction != Direction.DEFAULT) {
-			GameManager.getInstance().onInput(new InputEvent(direction));
+			GameManager.getInstance().onEvent(new MoveEvent(direction));
 		}
 	}
 

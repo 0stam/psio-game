@@ -103,7 +103,7 @@ public class MapState {
         // layers of a tile we want to move onto
         Tile destinationTileBottom = getBottomLayer(x + direction.x, y + direction.y);
         Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
-
+      
         // Is field enterable
         if (GameManager.getInstance().getMap().checkEnterable(x+ direction.x, y + direction.y, direction, movedTile))
         {

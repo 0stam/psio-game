@@ -1,8 +1,8 @@
 package map;
 
 import enums.Direction;
+import gamemanager.GameManager;
 import tile.ActionTile;
-import tile.PlayerCharacter;
 import tile.Tile;
 
 import java.util.ArrayList;
@@ -103,8 +103,6 @@ public class MapState {
         // layers of a tile we want to move onto
         Tile destinationTileBottom = getBottomLayer(x + direction.x, y + direction.y);
         Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
-
-        // Is field enterable
         if (destinationTileBottom.isEnterable(direction, movedTile))
         {
             if (destinationTileUpper==null || destinationTileUpper.isEnterable(direction, movedTile)) {

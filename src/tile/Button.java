@@ -4,11 +4,14 @@ import enterablestrategy.Empty;
 import enums.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import observers.ButtonObserver;
+
+import event.ButtonEvent;
+import event.EventObserver;
+import event.EventSource;
 import enums.Direction;
 
-public class Button extends Tile {
-	private final List<ButtonObserver> observers = new ArrayList<>();
+public class Button extends Tile implements EventSource {
+	private final List<EventObserver> observers = new ArrayList<>();
     private boolean isPressed = false;
 
     public Button(int x, int y) {
@@ -17,22 +20,24 @@ public class Button extends Tile {
         this.setGraphicsID(Graphics.BUTTON_RELEASED);
     }
 
-    public void addObserver(ButtonObserver observer) {
+    public void addObserver(EventObserver observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(ButtonObserver observer) {
+    public void removeObserver(EventObserver observer) {
         observers.remove(observer);
     }
 
     private void notifyObservers() {
-        for (ButtonObserver observer : observers) {
-            observer.onButtonEvent(isPressed);
+        for (EventObserver observer : observers) {
+            observer.onEvent(new ButtonEvent(isPressed));
         }
     }
 
     @Override
     public void onEntered(Direction direction, Tile tile) {
+        super.onEntered(direction, tile);
+
         isPressed = true;
         this.setGraphicsID(Graphics.BUTTON_PRESSED);
         notifyObservers();
@@ -40,6 +45,8 @@ public class Button extends Tile {
 
     @Override
     public void onExited(Direction direction, Tile tile) {
+        super.onExited(direction, tile);
+
         isPressed = false;
         this.setGraphicsID(Graphics.BUTTON_RELEASED);
         notifyObservers();

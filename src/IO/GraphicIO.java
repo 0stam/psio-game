@@ -1,8 +1,10 @@
 package IO;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
+import display.EditorDisplay;
+import display.GameMapDisplay;
+import display.TilePalette;
 import enums.Direction;
 import event.InputEvent;
 import event.MoveEvent;
@@ -14,16 +16,22 @@ import java.awt.event.KeyListener;
 
 public class GraphicIO implements IOStrategy, KeyListener {
 	private static JFrame window;
-	private static MapDisplay map;
+	private static EditorDisplay editorDisplay;
+	private static GameMapDisplay gameDisplay;
 
 	public void drawGame () {
-		if (map == null) {
-			map = new MapDisplay();
-			map.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
-			map.setupMap(GameManager.getInstance().getMap());
+
+		if (gameDisplay == null) {
+			//gameDisplay = new gameDisplayDisplay();
+			//gameDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getgameDisplay().getWidth()-1, 32 * GameManager.getInstance().getgameDisplay().getHeight()));
+
+
+			gameDisplay = new GameMapDisplay();
+			gameDisplay.setPreferredSize(new Dimension(32 * gameDisplay.getW()-1, 32 * gameDisplay.getH()));
+			gameDisplay.setupMap(GameManager.getInstance().getMap());
 		} else {
-			map.setupMap(GameManager.getInstance().getMap());
-			map.repaint();
+			gameDisplay.setupMap(GameManager.getInstance().getMap());
+			gameDisplay.repaint();
 		}
 
 		if (window == null) {
@@ -31,32 +39,33 @@ public class GraphicIO implements IOStrategy, KeyListener {
 			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			window.addKeyListener(this);
 
-			window.getContentPane().add(map.getContainer(), BorderLayout.CENTER);
+			window.getContentPane().add(gameDisplay.getContainer(), BorderLayout.CENTER);
 			window.pack();
 
 			window.setVisible(true);
 		}
+
+
 	}
 
 	public void drawEditor () {
-		/*if (map == null) {
-			map = new MapDisplay();
-			map.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth(), 32 * GameManager.getInstance().getMap().getHeight()));
-			map.setupMap(GameManager.getInstance().getMap());
+		if (editorDisplay == null) {
+			editorDisplay = new EditorDisplay(GameManager.getInstance().getMap());
+			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
 		} else {
-			map.setupMap(GameManager.getInstance().getMap());
-			map.repaint();
+			editorDisplay.repaint();
 		}
 
 		if (window == null) {
 			window = new JFrame("Nasza cudowna gra");
 			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			window.addKeyListener(this);
-			window.getContentPane().add(map, BorderLayout.CENTER);
+			window.getContentPane().add(editorDisplay.getContainer(), BorderLayout.CENTER);
+			window.getContentPane().add(new TilePalette(), BorderLayout.SOUTH);
 			window.pack();
 
 			window.setVisible(true);
-		}*/
+		}
 	}
 
 	@Override
@@ -80,5 +89,13 @@ public class GraphicIO implements IOStrategy, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+	}
+
+	public static JFrame getWindow() {
+		return window;
+	}
+
+	public static void setWindow(JFrame window) {
+		GraphicIO.window = window;
 	}
 }

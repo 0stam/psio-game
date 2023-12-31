@@ -31,12 +31,12 @@ public class MapDisplay extends JPanel {
 		for (int i = 0; i < map.getWidth(); i++) {
 			for (int j = 0; j < map.getHeight(); j++) {
 				if (map.getBottomLayer(i, j) != null) {
-					images[i][j] = GraphicsHashtable.images.get(map.getBottomLayer(i, j).getGraphicsID());
+					images[i][j] = GraphicsHashtable.getInstance().getImage(map.getBottomLayer(i, j).getGraphicsID());
 				} else {
-					images[i][j] = GraphicsHashtable.images.get(DEFAULT);
+					images[i][j] = GraphicsHashtable.getInstance().getImage(DEFAULT);
 				}
 				if (map.getUpperLayer(i, j) != null) {
-					images2[i][j] = GraphicsHashtable.images.get(map.getUpperLayer(i,j).getGraphicsID());
+					images2[i][j] = GraphicsHashtable.getInstance().getImage(map.getUpperLayer(i,j).getGraphicsID());
 				}
 			}
 		}

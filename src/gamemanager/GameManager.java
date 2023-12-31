@@ -17,14 +17,6 @@ public class GameManager implements EventObserver {
     private boolean levelCompleted;
 
     private GameManager() {
-        try {
-            GraphicsHashtable.setupimages();
-        }
-        catch (IOException e)
-        {
-            System.out.println("Nie udalo sie wczytac grafiki : GameManager 25");
-            e.printStackTrace();
-        }
         // TODO: remove when proper Editor initialization is implemented
         editor = new Editor();
     }
@@ -48,8 +40,8 @@ public class GameManager implements EventObserver {
 
         //We can swap between editor and main game - uncomment
         //Perhaps simple switch would solve triggering draw menu, editor and game
-        io.drawGame();
-        //io.drawEditor();
+        //io.drawGame();
+        io.drawEditor();
     }
 
     public void endLevel(){

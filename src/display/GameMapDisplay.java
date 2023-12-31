@@ -40,24 +40,24 @@ public class GameMapDisplay extends JPanel {
 				y = j + playerY - height / 2;
 
 				if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
-					images[i][j] = GraphicsHashtable.images.get(WALL);
+					images[i][j] = GraphicsHashtable.getInstance().getImage(WALL);
 					prevMapBottom[i][j] = WALL;
 					images2[i][j] = null;
 					prevMapFront[i][j] = null;
 				} else {
 					if ((map.getBottomLayer(x, y).getGraphicsID() != ((prevMapBottom[i][j] == null) ? DEFAULT : prevMapBottom[i][j])) || images[i][j] == null) {
 						if (map.getBottomLayer(x, y) != null) {
-							images[i][j] = GraphicsHashtable.images.get(map.getBottomLayer(x, y).getGraphicsID());
+							images[i][j] = GraphicsHashtable.getInstance().getImage(map.getBottomLayer(x, y).getGraphicsID());
 							prevMapBottom[i][j] = map.getBottomLayer(x, y).getGraphicsID();
 						} else {
-							images[i][j] = GraphicsHashtable.images.get(DEFAULT);
+							images[i][j] = GraphicsHashtable.getInstance().getImage(DEFAULT);
 							prevMapBottom[i][j] = DEFAULT;
 						}
 					}
 
 					if ((images2[i][j] == null) || (((map.getUpperLayer(x, y) == null) ? DEFAULT : map.getUpperLayer(x, y).getGraphicsID()) != prevMapFront[i][j])) {
 						if (map.getUpperLayer(x, y) != null) {
-							images2[i][j] = GraphicsHashtable.images.get(map.getUpperLayer(x, y).getGraphicsID());
+							images2[i][j] = GraphicsHashtable.getInstance().getImage(map.getUpperLayer(x, y).getGraphicsID());
 							prevMapFront[i][j] = map.getUpperLayer(x, y).getGraphicsID();
 						} else {
 							images2[i][j] = null;

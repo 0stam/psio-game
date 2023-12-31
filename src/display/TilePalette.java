@@ -15,7 +15,7 @@ public class TilePalette extends JPanel {
 	private BufferedImage[] images;
 
 	public TilePalette () {
-		this.fileNames = GraphicsHashtable.images;
+		this.fileNames = GraphicsHashtable.getInstance().getImages();
 
 		images = new BufferedImage[values().length];
 

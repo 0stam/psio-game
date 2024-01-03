@@ -1,10 +1,9 @@
 package IO;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
+import display.*;
 import enums.Direction;
-import event.InputEvent;
 import event.MoveEvent;
 import gamemanager.GameManager;
 
@@ -14,48 +13,91 @@ import java.awt.event.KeyListener;
 
 public class GraphicIO implements IOStrategy, KeyListener {
 	private static JFrame window;
-	private static MapDisplay map;
+	private static EditorDisplay editorDisplay;
+	private static GameMapDisplay gameDisplay;
+	//private static MenuDisplay menuDisplay;
 
-	public void drawGame () {
-		if (map == null) {
-			map = new MapDisplay();
-			map.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
-			map.setupMap(GameManager.getInstance().getMap());
-		} else {
-			map.setupMap(GameManager.getInstance().getMap());
-			map.repaint();
+	private void createWindow () {
+		try {
+			// Set System L&F
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
+			   IllegalAccessException e) {
+
 		}
 
+		window = new JFrame("Nasza cudowna gra");
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.addKeyListener(this);
+		window.setVisible(true);
+		window.setIconImage(new ImageIcon("src/graphics/icon.png").getImage());
+	}
+
+	public void drawGame () {
 		if (window == null) {
-			window = new JFrame("Nasza cudowna gra");
-			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			window.addKeyListener(this);
+			createWindow();
+		}
 
-			window.getContentPane().add(map.getContainer(), BorderLayout.CENTER);
+		if (gameDisplay == null) {
+			window.getContentPane().removeAll();
+
+			editorDisplay = null;
+			//menuDisplay = null;
+
+			gameDisplay = new GameMapDisplay();
+			gameDisplay.setPreferredSize(new Dimension(32 * gameDisplay.getW()-1, 32 * gameDisplay.getH()));
+			gameDisplay.setupMap(GameManager.getInstance().getMap());
+
+			window.getContentPane().add(gameDisplay.getContainer(), BorderLayout.CENTER);
 			window.pack();
-
-			window.setVisible(true);
+		} else {
+			gameDisplay.setupMap(GameManager.getInstance().getMap());
+			gameDisplay.repaint();
 		}
 	}
 
 	public void drawEditor () {
-		/*if (map == null) {
-			map = new MapDisplay();
-			map.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth(), 32 * GameManager.getInstance().getMap().getHeight()));
-			map.setupMap(GameManager.getInstance().getMap());
-		} else {
-			map.setupMap(GameManager.getInstance().getMap());
-			map.repaint();
+		if (window == null) {
+			createWindow();
 		}
 
-		if (window == null) {
-			window = new JFrame("Nasza cudowna gra");
-			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			window.addKeyListener(this);
-			window.getContentPane().add(map, BorderLayout.CENTER);
-			window.pack();
+		if (editorDisplay == null) {
+			window.getContentPane().removeAll();
 
-			window.setVisible(true);
+			gameDisplay = null;
+			//menuDisplay = null;
+
+			editorDisplay = new EditorDisplay();
+			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
+
+			window.getContentPane().add(editorDisplay, BorderLayout.CENTER);
+			window.pack();
+		} else {
+			editorDisplay.repaint();
+		}
+	}
+
+	//gotowy placeholder
+	public void drawMenu () {
+		/*if (window == null) {
+			createWindow();
+		}
+
+		if (menuDisplay == null) {
+			window.getContentPane().removeAll();
+
+			gameDisplay = null;
+			editorDisplay = null;
+
+			menuDisplay = new MenuDisplay();
+			menuDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
+
+			window.getContentPane().add(menuDisplay, BorderLayout.CENTER);
+			window.pack();
+		} else {
+			menuDisplay.repaint();
 		}*/
 	}
 
@@ -80,5 +122,21 @@ public class GraphicIO implements IOStrategy, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+	}
+
+	public static JFrame getWindow() {
+		return window;
+	}
+
+	public static void setWindow(JFrame window) {
+		GraphicIO.window = window;
+	}
+
+	public static EditorDisplay getEditorDisplay() {
+		return editorDisplay;
+	}
+
+	public static void setEditorDisplay(EditorDisplay editorDisplay) {
+		GraphicIO.editorDisplay = editorDisplay;
 	}
 }

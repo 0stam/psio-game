@@ -11,5 +11,6 @@ public enum Graphics {
 	BUTTON_RELEASED,
 	DOOR_OPEN,
 	DOOR_CLOSED,
-	GOAL
+	GOAL,
+	EMPTY
 }

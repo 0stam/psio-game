@@ -2,10 +2,13 @@ package gamemanager;
 import IO.ConsoleIO;
 import IO.GraphicIO;
 import IO.IOManager;
+import display.GraphicsHashtable;
 import editor.Editor;
 import enums.Direction;
 import map.Map;
 import event.*;
+
+import java.io.IOException;
 
 public class GameManager implements EventObserver {
     private static GameManager gameManager;
@@ -35,8 +38,10 @@ public class GameManager implements EventObserver {
         //IOManager io = IOManager.getInstance(new ConsoleIO());
         IOManager io = IOManager.getInstance(new GraphicIO());
 
-        io.drawGame();
-        //io.drawEditor();
+        //We can swap between editor and main game - uncomment
+        //Perhaps simple switch would solve triggering draw menu, editor and game
+        //io.drawGame();
+        io.drawEditor();
     }
 
     public void endLevel(){

@@ -11,10 +11,9 @@ import java.awt.event.MouseEvent;
 import static enums.Graphics.*;
 
 public class InteractiveTile extends JPanel {
-    private enums.Graphics identifierBottom = EMPTY;
-    private enums.Graphics identifierUpper = EMPTY;
+    private enums.Graphics identifierBottom = DEFAULT;
+    private enums.Graphics identifierUpper = DEFAULT;
     private Point coords;
-    private float scale = 1;
     public InteractiveTile(enums.Graphics idBottom, enums.Graphics idUpper, Point coords)
     {
         if (idBottom != null)
@@ -24,23 +23,21 @@ public class InteractiveTile extends JPanel {
         this.setBorder(BorderFactory.createEmptyBorder());
         this.addMouseListener(new EventListener());
     }
-
-    public float getScale() {
-        return scale;
-    }
-
-    public void setScale(float scale) {
-        this.scale = scale;
+    public InteractiveTile(Point coords)
+    {
+        this.coords = coords;
+        this.setBorder(BorderFactory.createEmptyBorder());
+        this.addMouseListener(new EventListener());
     }
 
     @Override
     public void paintComponent(java.awt.Graphics g)
     {
-        this.setPreferredSize(new Dimension((int)(32.0 * scale ), (int) (32.0 * scale)));
-		this.revalidate();
-        g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (32.0 * scale), (int) (32.0 * scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
+        this.setPreferredSize(new Dimension((int)(32.0 * EditorMapDisplay.scale ), (int) (32.0 * EditorMapDisplay.scale)));
+        this.revalidate();
+        g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
         if (identifierUpper!=null)
-            g.drawImage(GraphicsHashtable.getInstance().getImage(identifierUpper).getScaledInstance((int) (32.0 * scale), (int) (32.0 * scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
+            g.drawImage(GraphicsHashtable.getInstance().getImage(identifierUpper).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
 
     }
 
@@ -53,5 +50,10 @@ public class InteractiveTile extends JPanel {
             TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, EditorMapDisplay.getLayer());
             GameManager.getInstance().onEvent(editorEvent);
         }
+    }
+    public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper)
+    {
+        this.identifierBottom = idBottom;
+        this.identifierUpper = idUpper;
     }
 }

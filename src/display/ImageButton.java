@@ -4,6 +4,7 @@ import event.TilePressedEvent;
 import gamemanager.GameManager;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -18,18 +19,18 @@ public class ImageButton extends JPanel {
 	private JPanel container;
 	private GridBagConstraints constraints;
 
-	public ImageButton(BufferedImage image, Point coords)
+	public ImageButton(BufferedImage image, String name, Point coords)
 	{
 		this.image = image;
 		this.coords = coords;
-		this.setBorder(BorderFactory.createLineBorder(Color.black));
+		this.setBorder(BorderFactory.createEmptyBorder());
 		this.addMouseListener(new EventListener());
 		container = new JPanel();
 		container.setBackground(Color.white);
 		container.setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints(1, 1, 3, 3, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
 		container.add(this, constraints);
-		container.setBorder(BorderFactory.createLineBorder(Color.red));
+		container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), name));
 	}
 
 	public float getScale() {

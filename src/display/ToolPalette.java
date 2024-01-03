@@ -34,7 +34,7 @@ public class ToolPalette extends JPanel {
 		this.setLayout(new GridLayout(images.length, 1, 0, 0));
 
 		for (int i = 0;i < images.length;i++) {
-			buttons[i] = new ImageButton(images[i], new Point(0, i));
+			buttons[i] = new ImageButton(images[i], "", new Point(0, i));
 			this.add(buttons[i].getContainer());
 		}
 	}

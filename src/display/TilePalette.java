@@ -22,7 +22,7 @@ public class TilePalette extends JPanel {
 		this.setLayout(new GridLayout(1, placeableTiles.length, 0, 0));
 
 		for (int i = 0; i < placeableTiles.length; i++) {
-			buttons[i] = new ImageButton(this.fileNames.get(placeableTiles[i]), new Point(0, i));
+			buttons[i] = new ImageButton(this.fileNames.get(placeableTiles[i]), placeableTiles[i].toString(), new Point(0, i));
 			this.add(buttons[i].getContainer());
 		}
 	}
@@ -38,7 +38,7 @@ public class TilePalette extends JPanel {
 			buttons[i].setScale(scale / 2);
 		}
 		//border layout sam nam dopasuje szerokosc
-		this.setPreferredSize(new Dimension(0, (int) (32 * scale)));
+		this.setPreferredSize(new Dimension(0, (int) (32.0 * (scale - 1))));
 		this.revalidate();
 	}
 

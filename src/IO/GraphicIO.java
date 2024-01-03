@@ -69,10 +69,10 @@ public class GraphicIO implements IOStrategy, KeyListener {
 			gameDisplay = null;
 			//menuDisplay = null;
 
-			editorDisplay = new EditorMapDisplay(GameManager.getInstance().getMap());
+			editorDisplay = new EditorMapDisplay();
 			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
 
-			window.getContentPane().add(editorDisplay.getContainer(), BorderLayout.CENTER);
+			window.getContentPane().add(editorDisplay, BorderLayout.CENTER);
 			window.getContentPane().add(new PaletteTabs().getTabs(), BorderLayout.SOUTH);
 			window.getContentPane().add(new ToolPalette(), BorderLayout.EAST);
 			window.pack();

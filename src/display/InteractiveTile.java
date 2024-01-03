@@ -1,6 +1,5 @@
 package display;
 
-import event.EditorEvent;
 import event.TilePressedEvent;
 import gamemanager.GameManager;
 
@@ -24,15 +23,21 @@ public class InteractiveTile extends JPanel {
         this.setBorder(BorderFactory.createEmptyBorder());
         this.addMouseListener(new EventListener());
     }
+    public InteractiveTile(Point coords)
+    {
+        this.coords = coords;
+        this.setBorder(BorderFactory.createEmptyBorder());
+        this.addMouseListener(new EventListener());
+    }
 
     @Override
     public void paintComponent(java.awt.Graphics g)
     {
-        this.setPreferredSize(new Dimension((int)(32.0 * EditorDisplay.scale ), (int) (32.0 * EditorDisplay.scale)));
+        this.setPreferredSize(new Dimension((int)(32.0 * EditorMapDisplay.scale ), (int) (32.0 * EditorMapDisplay.scale)));
         this.revalidate();
-        g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (48.0 * EditorDisplay.scale), (int) (48.0 * EditorDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
+        g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (48.0 * EditorMapDisplay.scale), (int) (48.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
         if (identifierUpper!=null)
-            g.drawImage(GraphicsHashtable.getInstance().getImage(identifierUpper).getScaledInstance((int) (48.0 * EditorDisplay.scale), (int) (48.0 * EditorDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
+            g.drawImage(GraphicsHashtable.getInstance().getImage(identifierUpper).getScaledInstance((int) (48.0 * EditorMapDisplay.scale), (int) (48.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
 
     }
 
@@ -42,8 +47,13 @@ public class InteractiveTile extends JPanel {
         public void mouseClicked(MouseEvent e)
         {
             System.out.println("Kliknieto na panel o kordach: "+coords.x+" "+coords.y + " ; przygotowuje event");
-            TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, EditorDisplay.getLayer());
+            TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, EditorMapDisplay.getLayer());
             GameManager.getInstance().onEvent(editorEvent);
         }
+    }
+    public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper)
+    {
+        this.identifierBottom = idBottom;
+        this.identifierUpper = idUpper;
     }
 }

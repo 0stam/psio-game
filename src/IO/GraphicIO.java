@@ -2,11 +2,10 @@ package IO;
 
 import javax.swing.*;
 
-import display.EditorDisplay;
+import display.EditorMapDisplay;
 import display.GameMapDisplay;
 import display.TilePalette;
 import enums.Direction;
-import event.InputEvent;
 import event.MoveEvent;
 import gamemanager.GameManager;
 
@@ -16,7 +15,7 @@ import java.awt.event.KeyListener;
 
 public class GraphicIO implements IOStrategy, KeyListener {
 	private static JFrame window;
-	private static EditorDisplay editorDisplay;
+	private static EditorMapDisplay editorDisplay;
 	private static GameMapDisplay gameDisplay;
 
 	public void drawGame () {
@@ -44,23 +43,21 @@ public class GraphicIO implements IOStrategy, KeyListener {
 
 			window.setVisible(true);
 		}
-
-
 	}
 
 	public void drawEditor () {
 		if (editorDisplay == null) {
-			editorDisplay = new EditorDisplay(GameManager.getInstance().getMap());
+			editorDisplay = new EditorMapDisplay();
 			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
 		} else {
-			editorDisplay.repaint();
+			editorDisplay.refreshMap();
 		}
 
 		if (window == null) {
 			window = new JFrame("Nasza cudowna gra");
 			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			window.addKeyListener(this);
-			window.getContentPane().add(editorDisplay.getContainer(), BorderLayout.CENTER);
+			window.getContentPane().add(editorDisplay, BorderLayout.CENTER);
 			window.getContentPane().add(new TilePalette(), BorderLayout.SOUTH);
 			window.pack();
 

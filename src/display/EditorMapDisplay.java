@@ -100,8 +100,8 @@ public class EditorMapDisplay extends JPanel {
         return layer;
     }
 
-    public void setLayer(Layer layer) {
-        this.layer = layer;
+    public static void setLayer(Layer layer) {
+        EditorMapDisplay.layer = layer;
     }
 
 }

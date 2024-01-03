@@ -1,9 +1,16 @@
 package display;
 
 import display.GraphicsHashtable;
+import enums.EditorModes;
+import event.EditorEvent;
+import event.PalettePressedEvent;
+import event.TilePressedEvent;
+import gamemanager.GameManager;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 
@@ -23,8 +30,11 @@ public class TilePalette extends JPanel {
 
 		for (int i = 0; i < placeableTiles.length; i++) {
 			buttons[i] = new ImageButton(this.fileNames.get(placeableTiles[i]), placeableTiles[i].toString(), new Point(0, i));
+			buttons[i].addMouseListener(new TileListener(placeableTiles[i]));
 			this.add(buttons[i].getContainer());
 		}
+
+		selectOne(buttons[0]);
 	}
 
 	@Override
@@ -41,5 +51,30 @@ public class TilePalette extends JPanel {
 		this.setPreferredSize(new Dimension(0, (int) (32.0 * (scale - 1))));
 		this.revalidate();
 	}
+	public void unselectAll()
+	{
+		for (ImageButton i : buttons)
+		{
+			i.setSelected(false);
+		}
+	}
+	public void selectOne(ImageButton selected)
+	{
+		selected.setSelected(true);
+	}
+	public class TileListener extends MouseInputAdapter {
+		private enums.Graphics changeGraphic;
 
+		TileListener(enums.Graphics changeGraphic) {
+			this.changeGraphic = changeGraphic;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			TilePalette.this.unselectAll();
+			TilePalette.this.selectOne((ImageButton) e.getSource());
+			EditorDisplay.setMode(EditorModes.ADD);
+			GameManager.getInstance().onEvent(new PalettePressedEvent(changeGraphic));
+		}
+	}
 }

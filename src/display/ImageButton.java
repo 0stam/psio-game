@@ -18,14 +18,18 @@ public class ImageButton extends JPanel {
 	private float scale = 1;
 	private JPanel container;
 	private GridBagConstraints constraints;
+	private boolean selected;
+	private String name;
 
 	public ImageButton(BufferedImage image, String name, Point coords)
 	{
 		this.image = image;
 		this.coords = coords;
-		this.setBorder(BorderFactory.createEmptyBorder());
-		this.addMouseListener(new EventListener());
+		this.selected = false;
+		this.name = name;
+
 		container = new JPanel();
+		container.setBorder(BorderFactory.createEmptyBorder());
 		container.setBackground(Color.white);
 		container.setLayout(new GridBagLayout());
 		constraints = new GridBagConstraints(1, 1, 3, 3, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
@@ -62,5 +66,19 @@ public class ImageButton extends JPanel {
 
 	public JPanel getContainer() {
 		return container;
+	}
+
+	public boolean getSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+
+		if (selected) {
+			container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.red, Color.red), this.name));
+		} else {
+			container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), this.name));
+		}
 	}
 }

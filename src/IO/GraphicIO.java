@@ -32,7 +32,7 @@ public class GraphicIO implements IOStrategy, KeyListener {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.addKeyListener(this);
 		window.setVisible(true);
-		window.setIconImage(new ImageIcon("src/graphics/button_released.png").getImage());
+		window.setIconImage(new ImageIcon("src/graphics/icon.png").getImage());
 	}
 
 	public void drawGame () {
@@ -130,5 +130,13 @@ public class GraphicIO implements IOStrategy, KeyListener {
 
 	public static void setWindow(JFrame window) {
 		GraphicIO.window = window;
+	}
+
+	public static EditorDisplay getEditorDisplay() {
+		return editorDisplay;
+	}
+
+	public static void setEditorDisplay(EditorDisplay editorDisplay) {
+		GraphicIO.editorDisplay = editorDisplay;
 	}
 }

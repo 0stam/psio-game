@@ -57,19 +57,24 @@ public class GameManager implements EventObserver {
     }
 
     public void onEvent(Event event) {
-        if (event instanceof InputEvent) {
-            if (event instanceof GameEvent) {
-                if (event instanceof MoveEvent moveEvent) {
-                    startTurn(moveEvent.getDirection());
-                    IOManager.getInstance().drawGame();
-                } else if (event instanceof ResetEvent) {
-                    startGame();
-                }
-            } else if (event instanceof EditorEvent) {
-                editor.onEvent(event);
-            } else if (event instanceof EscapeEvent) {
-                // TODO: Go to a proper menu depending on current mode once implemented
-            }
+        if (!(event instanceof InputEvent)) {
+            return;
+        }
+
+        if (event instanceof EditorEvent) {
+            editor.onEvent(event);
+            return;
+        }
+
+        if (event instanceof MoveEvent moveEvent) {
+            startTurn(moveEvent.getDirection());
+            IOManager.getInstance().drawGame();
+            return;
+        }
+
+        if (event instanceof ResetEvent) {
+            startGame();
+            return;
         }
     }
 

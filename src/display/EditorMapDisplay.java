@@ -10,34 +10,42 @@ import static display.MapDisplay.imgHeight;
 import static display.MapDisplay.imgWidth;
 
 //moze editor display tez powinien byc singletonem
-public class EditorDisplay extends JPanel {
+public class EditorMapDisplay extends JPanel {
 
     private JPanel container = new JPanel();
     private Map mapObject;
-    private static Layer layer = Layer.BOTTOM;
+    private static Layer layer = Layer.UPPER;
     public static float scale = 1;
 
-    public EditorDisplay(Map map) {
+    public EditorMapDisplay(Map map) {
         this.mapObject = map;
         refreshMap();
 
         this.setLayout(new GridLayout(map.getWidth(), map.getHeight(),0,0));
-        container.setBackground(Color.red);
+        container.setBackground(Color.white);
         container.add(this);
     }
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         //jesli damy tu kod do modyfikowania mapy to dzieja sie naprawde dziwne rzeczy
+        g.setColor(Color.white);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        float scaleX = (float) container.getWidth() / (32.0f * imgWidth);
-        float scaleY = (float) container.getHeight() / (32.0f * imgHeight);
+        float scaleX = (float) container.getWidth() / (32.0f * mapObject.getWidth());
+        float scaleY = (float) container.getHeight() / (32.0f * mapObject.getHeight());
 
         scale = Math.min(scaleX, scaleY);
-        this.setPreferredSize(new Dimension((int) (32 * (scale-0.01) * imgWidth), (int) (32 * (scale-0.01) * imgHeight)));
+
+        Component[] tiles = this.getComponents();
+
+        for (int i = 0;i < tiles.length;i++) {
+            ((InteractiveTile)tiles[i]).setScale(scale);
+        }
+
+        this.setPreferredSize(new Dimension((int) (32 * (scale-0.01) * mapObject.getWidth()), (int) (32 * (scale-0.01) * mapObject.getHeight())));
     }
-    public void refreshMap()
-    {
+
+    public void refreshMap () {
         switch (layer) {
             case BOTH: {
                 for (int j = 0; j < mapObject.getHeight(); j++) {
@@ -51,16 +59,12 @@ public class EditorDisplay extends JPanel {
                 break;
             }
             case UPPER: {
-                //proponuje by zrobic jakis kafelek ktory by dzielil nam plansze na kwadraty
-                //ale byl inny od podlogi i byl bardziej kafelkiem uzytkowym - moze to byc
-                //default ale ten obecny jest rzucajacy sie w oczy - niech bedzie jakis widoczny ale nie az tak
-                //wtedy bysmy go dali na dolna warstwe
                 for (int j = 0; j < mapObject.getHeight(); j++) {
                     for (int i = 0; i < mapObject.getWidth(); i++) {
                         if (mapObject.getUpperLayer(i,j) == null)
-                            this.add(new InteractiveTile(enums.Graphics.DEFAULT, enums.Graphics.DEFAULT, new Point(i, j)));
+                            this.add(new InteractiveTile(enums.Graphics.EMPTY, enums.Graphics.EMPTY, new Point(i, j)));
                         else
-                            this.add(new InteractiveTile(null, mapObject.getUpperLayer(i, j).getGraphicsID(), new Point(i, j)));
+                            this.add(new InteractiveTile(enums.Graphics.EMPTY, mapObject.getUpperLayer(i, j).getGraphicsID(), new Point(i, j)));
                     }
                 }
                 break;
@@ -70,7 +74,7 @@ public class EditorDisplay extends JPanel {
                 for (int j = 0; j < mapObject.getHeight(); j++) {
                     for (int i = 0; i < mapObject.getWidth(); i++) {
                         if (mapObject.getBottomLayer(i,j) == null)
-                            this.add(new InteractiveTile(enums.Graphics.DEFAULT, null, new Point(i, j)));
+                            this.add(new InteractiveTile(enums.Graphics.EMPTY, null, new Point(i, j)));
                         else
                             this.add(new InteractiveTile(mapObject.getBottomLayer(i, j).getGraphicsID(), null, new Point(i, j)));
                     }

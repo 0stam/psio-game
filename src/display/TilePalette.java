@@ -12,15 +12,18 @@ import static enums.Graphics.*;
 public class TilePalette extends JPanel {
 	private Hashtable<enums.Graphics, BufferedImage> fileNames;
 
-	private BufferedImage[] images;
+	private enums.Graphics[] placeableTiles = {FLOOR, WALL, BUTTON_RELEASED, DOOR_CLOSED, ENEMY, BOX, PLAYER, GOAL};
+	private ImageButton[] buttons;
 
 	public TilePalette () {
-		this.fileNames = GraphicsHashtable.getInstance().getImages();
+		fileNames = GraphicsHashtable.getInstance().getImages();
+		buttons = new ImageButton[placeableTiles.length];
 
-		images = new BufferedImage[values().length];
+		this.setLayout(new GridLayout(1, placeableTiles.length, 0, 0));
 
-		for (int i = 0; i < images.length; i++) {
-			images[i] = this.fileNames.get(enums.Graphics.values()[i]);
+		for (int i = 0; i < placeableTiles.length; i++) {
+			buttons[i] = new ImageButton(this.fileNames.get(placeableTiles[i]), new Point(0, i));
+			this.add(buttons[i].getContainer());
 		}
 	}
 
@@ -29,12 +32,10 @@ public class TilePalette extends JPanel {
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		float scale = (float) this.getWidth() / (32.0f * images.length);
+		float scale = (float) this.getWidth() / (32.0f * placeableTiles.length);
 
-		int tileSize = (int)(16 * scale);
-
-		for (int i = 0;i < images.length;i++) {
-			g.drawImage(images[i].getScaledInstance(tileSize, tileSize, Image.SCALE_AREA_AVERAGING), (int) ((i + 0.5f) * ((int) (32 * scale)) - (0.5f * tileSize)), (int) (0.5f * (32 * scale - tileSize)), this);
+		for (int i = 0;i < buttons.length;i++) {
+			buttons[i].setScale(scale / 2);
 		}
 		//border layout sam nam dopasuje szerokosc
 		this.setPreferredSize(new Dimension(0, (int) (32 * scale)));

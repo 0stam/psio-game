@@ -34,4 +34,7 @@ public class IOManager {
 	public void drawEditor () {
 		this.strategy.drawEditor();
 	}
+	public void drawMenu () {
+		this.strategy.drawMenu();
+	}
 }

@@ -2,11 +2,8 @@ package IO;
 
 import javax.swing.*;
 
-import display.EditorDisplay;
-import display.GameMapDisplay;
-import display.TilePalette;
+import display.*;
 import enums.Direction;
-import event.InputEvent;
 import event.MoveEvent;
 import gamemanager.GameManager;
 
@@ -16,56 +13,94 @@ import java.awt.event.KeyListener;
 
 public class GraphicIO implements IOStrategy, KeyListener {
 	private static JFrame window;
-	private static EditorDisplay editorDisplay;
+	private static EditorMapDisplay editorDisplay;
 	private static GameMapDisplay gameDisplay;
+	//private static MenuDisplay menuDisplay;
+
+	private void createWindow () {
+		try {
+			// Set System L&F
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
+			   IllegalAccessException e) {
+
+		}
+
+		window = new JFrame("Nasza cudowna gra");
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.addKeyListener(this);
+		window.setVisible(true);
+		window.setIconImage(new ImageIcon("src/graphics/button_released.png").getImage());
+	}
 
 	public void drawGame () {
+		if (window == null) {
+			createWindow();
+		}
 
 		if (gameDisplay == null) {
-			//gameDisplay = new gameDisplayDisplay();
-			//gameDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getgameDisplay().getWidth()-1, 32 * GameManager.getInstance().getgameDisplay().getHeight()));
+			window.getContentPane().removeAll();
 
+			editorDisplay = null;
+			//menuDisplay = null;
 
 			gameDisplay = new GameMapDisplay();
 			gameDisplay.setPreferredSize(new Dimension(32 * gameDisplay.getW()-1, 32 * gameDisplay.getH()));
 			gameDisplay.setupMap(GameManager.getInstance().getMap());
+
+			window.getContentPane().add(gameDisplay.getContainer(), BorderLayout.CENTER);
+			window.pack();
 		} else {
 			gameDisplay.setupMap(GameManager.getInstance().getMap());
 			gameDisplay.repaint();
 		}
-
-		if (window == null) {
-			window = new JFrame("Nasza cudowna gra");
-			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			window.addKeyListener(this);
-
-			window.getContentPane().add(gameDisplay.getContainer(), BorderLayout.CENTER);
-			window.pack();
-
-			window.setVisible(true);
-		}
-
-
 	}
 
 	public void drawEditor () {
+		if (window == null) {
+			createWindow();
+		}
+
 		if (editorDisplay == null) {
-			editorDisplay = new EditorDisplay(GameManager.getInstance().getMap());
+			window.getContentPane().removeAll();
+
+			gameDisplay = null;
+			//menuDisplay = null;
+
+			editorDisplay = new EditorMapDisplay(GameManager.getInstance().getMap());
 			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
+
+			window.getContentPane().add(editorDisplay.getContainer(), BorderLayout.CENTER);
+			window.getContentPane().add(new PaletteTabs().getTabs(), BorderLayout.SOUTH);
+			window.getContentPane().add(new ToolPalette(), BorderLayout.EAST);
+			window.pack();
 		} else {
 			editorDisplay.repaint();
 		}
+	}
 
-		if (window == null) {
-			window = new JFrame("Nasza cudowna gra");
-			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			window.addKeyListener(this);
-			window.getContentPane().add(editorDisplay.getContainer(), BorderLayout.CENTER);
-			window.getContentPane().add(new TilePalette(), BorderLayout.SOUTH);
-			window.pack();
-
-			window.setVisible(true);
+	//gotowy placeholder
+	public void drawMenu () {
+		/*if (window == null) {
+			createWindow();
 		}
+
+		if (menuDisplay == null) {
+			window.getContentPane().removeAll();
+
+			gameDisplay = null;
+			editorDisplay = null;
+
+			menuDisplay = new MenuDisplay();
+			menuDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
+
+			window.getContentPane().add(menuDisplay, BorderLayout.CENTER);
+			window.pack();
+		} else {
+			menuDisplay.repaint();
+		}*/
 	}
 
 	@Override

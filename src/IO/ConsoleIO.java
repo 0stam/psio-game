@@ -76,6 +76,9 @@ public class ConsoleIO implements IOStrategy {
 		System.out.println("Editor not supported in console!");
 	}
 
+	@Override
+	public void drawMenu() {}
+
 	public char idToChar(Graphics graphics)	{
         return switch (graphics) {
             case FLOOR -> '_';

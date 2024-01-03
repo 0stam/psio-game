@@ -21,8 +21,7 @@ public class ImageButton extends JPanel {
 	private boolean selected;
 	private String name;
 
-	public ImageButton(BufferedImage image, String name, Point coords)
-	{
+	public ImageButton(BufferedImage image, String name, Point coords) {
 		this.image = image;
 		this.coords = coords;
 		this.selected = false;
@@ -46,15 +45,13 @@ public class ImageButton extends JPanel {
 	}
 
 	@Override
-	public void paintComponent(java.awt.Graphics g)
-	{
+	public void paintComponent(java.awt.Graphics g) {
 		this.setPreferredSize(new Dimension((int)(32.0 * scale ), (int) (32.0 * scale)));
 		this.revalidate();
 		g.drawImage(this.image.getScaledInstance((int) (32.0 * scale), (int) (32.0 * scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
 	}
 
-	public class EventListener extends MouseInputAdapter
-	{
+	public class EventListener extends MouseInputAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{

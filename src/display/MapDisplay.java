@@ -72,6 +72,5 @@ public class MapDisplay extends JPanel {
 
 	public void setContainer(JPanel container) {
 		this.container = container;
-		return;
 	}
 }

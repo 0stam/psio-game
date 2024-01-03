@@ -10,7 +10,6 @@ import static display.MapDisplay.imgHeight;
 import static display.MapDisplay.imgWidth;
 
 public class EditorMapDisplay extends JPanel {
-
     private JPanel container = new JPanel();
     private static Layer layer = Layer.BOTTOM;
     public static float scale = 1;
@@ -33,6 +32,7 @@ public class EditorMapDisplay extends JPanel {
         this.refreshMap();
         this.add(container);
     }
+
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         //jesli damy tu kod do modyfikowania mapy to dzieja sie naprawde dziwne rzeczy

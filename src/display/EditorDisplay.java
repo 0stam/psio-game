@@ -12,8 +12,7 @@ public class EditorDisplay extends JPanel {
 	private PaletteTabs paletteTabs;
 	private ToolPalette toolPalette;
 	private static enums.EditorModes mode = enums.EditorModes.SELECT;
-	public EditorDisplay ()
-	{
+	public EditorDisplay() {
 		editorDisplay = new EditorMapDisplay();
 		paletteTabs = new PaletteTabs();
 		toolPalette = new ToolPalette(editorDisplay);

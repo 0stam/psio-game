@@ -54,15 +54,13 @@ public class ToolPalette extends JPanel {
 			this.add(buttons[i].getContainer());
 		}
 	}
-	public void unselectAll()
-	{
+	public void unselectAll() {
 		for (ImageButton i : buttons)
 		{
 			i.setSelected(false);
 		}
 	}
-	public void selectOne(ImageButton selected)
-	{
+	public void selectOne(ImageButton selected) {
 		selected.setSelected(true);
 	}
 
@@ -80,6 +78,7 @@ public class ToolPalette extends JPanel {
 		this.setPreferredSize(new Dimension((int) (32 * scale), (int) (32 * scale * buttons.length)));
 		this.revalidate();
 	}
+
 	public class layerListener extends MouseInputAdapter {
 		private enums.Layer changeLayer;
 

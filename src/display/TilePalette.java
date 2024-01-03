@@ -51,6 +51,7 @@ public class TilePalette extends JPanel {
 		this.setPreferredSize(new Dimension(0, (int) (32.0 * (scale - 1))));
 		this.revalidate();
 	}
+
 	public void unselectAll()
 	{
 		for (ImageButton i : buttons)
@@ -58,10 +59,11 @@ public class TilePalette extends JPanel {
 			i.setSelected(false);
 		}
 	}
-	public void selectOne(ImageButton selected)
-	{
+
+	public void selectOne(ImageButton selected) {
 		selected.setSelected(true);
 	}
+
 	public class TileListener extends MouseInputAdapter {
 		private enums.Graphics changeGraphic;
 

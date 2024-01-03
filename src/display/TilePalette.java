@@ -12,7 +12,7 @@ import static enums.Graphics.*;
 public class TilePalette extends JPanel {
 	private Hashtable<enums.Graphics, BufferedImage> fileNames;
 
-	private enums.Graphics[] placeableTiles = {FLOOR, WALL, BUTTON_RELEASED, DOOR_CLOSED, ENEMY, BOX, PLAYER, GOAL};
+	private enums.Graphics[] placeableTiles = {EMPTY, FLOOR, WALL, BUTTON_RELEASED, DOOR_CLOSED, ENEMY, BOX, PLAYER, GOAL};
 	private ImageButton[] buttons;
 
 	public TilePalette () {

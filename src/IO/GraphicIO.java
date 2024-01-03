@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 
 public class GraphicIO implements IOStrategy, KeyListener {
 	private static JFrame window;
-	private static EditorMapDisplay editorDisplay;
+	private static EditorDisplay editorDisplay;
 	private static GameMapDisplay gameDisplay;
 	//private static MenuDisplay menuDisplay;
 
@@ -69,12 +69,10 @@ public class GraphicIO implements IOStrategy, KeyListener {
 			gameDisplay = null;
 			//menuDisplay = null;
 
-			editorDisplay = new EditorMapDisplay();
+			editorDisplay = new EditorDisplay();
 			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
 
 			window.getContentPane().add(editorDisplay, BorderLayout.CENTER);
-			window.getContentPane().add(new PaletteTabs().getTabs(), BorderLayout.SOUTH);
-			window.getContentPane().add(new ToolPalette(), BorderLayout.EAST);
 			window.pack();
 		} else {
 			editorDisplay.repaint();

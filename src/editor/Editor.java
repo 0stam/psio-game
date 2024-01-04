@@ -1,5 +1,7 @@
 package editor;
 
+import IO.IOManager;
+import enterablestrategy.Empty;
 import enums.Graphics;
 import event.*;
 import tile.*;
@@ -13,7 +15,7 @@ public class Editor implements EventObserver {
     private Graphics HeldTile;
     public Editor()
     {
-        this.setHeldTile(WALL);
+        this.setHeldTile(EMPTY);
     }
     public Graphics getHeldTile() {
         return HeldTile;
@@ -22,6 +24,7 @@ public class Editor implements EventObserver {
     public void setHeldTile(Graphics heldTile) {
         HeldTile = heldTile;
     }
+
     //pewnie powinno być gdzie indziej
     public Tile graphicstoobject(Graphics graphics, int x, int y) {
         return switch (graphics) {
@@ -38,33 +41,33 @@ public class Editor implements EventObserver {
     }
         public void onEvent(Event event) {
         if (event instanceof EditorEvent editorEvent) {
-            if (event instanceof PalettePressedEvent)
+            if (event instanceof PalettePressedEvent palettePressedEvent)
             {
-                this.setHeldTile(((PalettePressedEvent) event).getType());
+                this.setHeldTile(palettePressedEvent.getType());
             }
-            if (event instanceof TilePressedEvent)
+            if (event instanceof TilePressedEvent tilePressedEvent)
             {
-                switch (((TilePressedEvent) event).getLayer())
+                switch (tilePressedEvent.getLayer())
                 {
                     //TODO: un-yanderedev-ify conditions
                     case BOTH:
                     {
                         if (HeldTile != BUTTON_RELEASED && HeldTile != DOOR_CLOSED && HeldTile != FLOOR) {
-                            GameManager.getInstance().getMap().setUpperLayer(((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY(), graphicstoobject(HeldTile, ((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY()));
+                            GameManager.getInstance().getMap().setUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY(), graphicstoobject(HeldTile, tilePressedEvent.getX(), tilePressedEvent.getY()));
                         }
-                        if (HeldTile != ENEMY && HeldTile != PLAYER && HeldTile != BOX) {
-                            GameManager.getInstance().getMap().setBottomLayer(((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY(), graphicstoobject(HeldTile, ((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY()));
-                        }
+                        editorPlaceBottomTile(tilePressedEvent);
+                        break;
                     }
                     case UPPER: {
-                        GameManager.getInstance().getMap().setUpperLayer(((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY(), graphicstoobject(HeldTile, ((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY()));
+                        GameManager.getInstance().getMap().setUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY(), graphicstoobject(HeldTile, tilePressedEvent.getX(), tilePressedEvent.getY()));
+                        break;
                     }
                     case BOTTOM: {
-                        if (HeldTile != ENEMY && HeldTile != PLAYER && HeldTile != BOX) {
-                            GameManager.getInstance().getMap().setBottomLayer(((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY(), graphicstoobject(HeldTile, ((TilePressedEvent) event).getX(), ((TilePressedEvent) event).getY()));
-                        }
+                        editorPlaceBottomTile(tilePressedEvent);
+                        break;
                     }
                 }
+                IOManager.getInstance().drawEditor();
             }
             if (event instanceof LevelEvent) {
                 //TODO: fill out methods
@@ -74,15 +77,24 @@ public class Editor implements EventObserver {
                     //zapisz poziom
                 }
             }
-            if (event instanceof ConnectionEvent) {
+            if (event instanceof ConnectionEvent connectionEvent) {
                 //TODO: change casting from button/door to more general statements
                 if (event instanceof ConnectionCreatedEvent) {
-                    ((Button) ((ConnectionCreatedEvent) event).getFrom()).addObserver((Door) ((ConnectionCreatedEvent) event).getTo());
+                    ((Button) connectionEvent.getFrom()).addObserver((Door) connectionEvent.getTo());
                 }
                 if (event instanceof ConnectionDeletedEvent) {
-                    ((Button) ((ConnectionDeletedEvent) event).getFrom()).removeObserver((Door) ((ConnectionDeletedEvent) event).getTo());
+                    ((Button) connectionEvent.getFrom()).removeObserver((Door) connectionEvent.getTo());
                 }
             }
+        }
+    }
+
+    private void editorPlaceBottomTile(TilePressedEvent event) {
+        if (HeldTile != ENEMY && HeldTile != PLAYER && HeldTile != BOX && HeldTile != EMPTY) {
+            GameManager.getInstance().getMap().setBottomLayer(event.getX(), event.getY(), graphicstoobject(HeldTile, event.getX(), event.getY()));
+        }
+        else if (HeldTile == EMPTY) {
+            GameManager.getInstance().getMap().setBottomLayer(event.getX(), event.getY(), graphicstoobject(FLOOR, event.getX(), event.getY()));
         }
     }
 }

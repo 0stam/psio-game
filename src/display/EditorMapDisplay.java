@@ -11,7 +11,7 @@ import static display.MapDisplay.imgWidth;
 
 public class EditorMapDisplay extends JPanel {
     private JPanel container = new JPanel();
-    private static Layer layer = Layer.BOTTOM;
+    private static Layer layer = Layer.BOTH;
     public static float scale = 1;
     private InteractiveTile[][] mapTiles;
 

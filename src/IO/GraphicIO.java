@@ -75,6 +75,7 @@ public class GraphicIO implements IOStrategy, KeyListener {
 			window.getContentPane().add(editorDisplay, BorderLayout.CENTER);
 			window.pack();
 		} else {
+			editorDisplay.getEditorMapDisplay().refreshMap();
 			editorDisplay.repaint();
 		}
 	}

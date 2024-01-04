@@ -31,4 +31,7 @@ public class EditorDisplay extends JPanel {
 		EditorDisplay.mode = mode;
 	}
 
+	public EditorMapDisplay getEditorMapDisplay() {
+		return editorDisplay;
+	}
 }

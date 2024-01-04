@@ -42,6 +42,24 @@ public class Editor implements EventObserver {
             default -> null;
         };
     }
+    public Graphics objecttographics(Tile tile)
+    {
+        if (tile == null){
+            return null;
+        }
+        return switch (tile.getClass().getSimpleName())
+        {
+            case "Box" -> BOX;
+            case "Button" -> BUTTON_RELEASED;
+            case "ChasingEnemy" -> ENEMY;
+            case "Door" -> DOOR_CLOSED;
+            case "Floor" -> FLOOR;
+            case "Goal" -> GOAL;
+            case "PlayerCharacter" -> PLAYER;
+            case "Wall" -> WALL;
+            default -> null;
+        };
+    }
         public void onEvent(Event event) {
         if (event instanceof EditorEvent editorEvent) {
             if (event instanceof PalettePressedEvent palettePressedEvent)
@@ -55,7 +73,7 @@ public class Editor implements EventObserver {
                     //TODO: un-yanderedev-ify conditions
                     case BOTH:
                     {
-                        if (HeldTile != BUTTON_RELEASED && HeldTile != DOOR_CLOSED && HeldTile != FLOOR && graphicstoobject(HeldTile, tilePressedEvent.getX(), tilePressedEvent.getY()) != GameManager.getInstance().getMap().getUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY())) {
+                        if (HeldTile != BUTTON_RELEASED && HeldTile != DOOR_CLOSED && HeldTile != FLOOR && HeldTile != objecttographics(GameManager.getInstance().getMap().getUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY()))) {
                             GameManager.getInstance().getMap().setUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY(), graphicstoobject(HeldTile, tilePressedEvent.getX(), tilePressedEvent.getY()));
                             change = true;
                         }
@@ -64,7 +82,7 @@ public class Editor implements EventObserver {
                     }
                     case UPPER:
                     {
-                        if (graphicstoobject(HeldTile, tilePressedEvent.getX(), tilePressedEvent.getY()) != GameManager.getInstance().getMap().getUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY())) {
+                        if (HeldTile != objecttographics(GameManager.getInstance().getMap().getUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY()))) {
                             GameManager.getInstance().getMap().setUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY(), graphicstoobject(HeldTile, tilePressedEvent.getX(), tilePressedEvent.getY()));
                             change = true;
                         }
@@ -75,7 +93,6 @@ public class Editor implements EventObserver {
                         break;
                     }
                 }
-                //TODO: use a tile refresh method, when that is finished
                 if (change) {
                     IOManager.getInstance().drawEditor();
                     change = false;
@@ -113,11 +130,11 @@ public class Editor implements EventObserver {
     }
 
     private void editorPlaceBottomTile(TilePressedEvent event) {
-        if (HeldTile != ENEMY && HeldTile != PLAYER && HeldTile != BOX && HeldTile != EMPTY && graphicstoobject(HeldTile, event.getX(), event.getY()) != GameManager.getInstance().getMap().getBottomLayer(event.getX(), event.getY())) {
+        if (HeldTile != ENEMY && HeldTile != PLAYER && HeldTile != BOX && HeldTile != EMPTY && HeldTile != objecttographics(GameManager.getInstance().getMap().getBottomLayer(event.getX(), event.getY()))) {
             GameManager.getInstance().getMap().setBottomLayer(event.getX(), event.getY(), graphicstoobject(HeldTile, event.getX(), event.getY()));
             change = true;
         }
-        else if (HeldTile == EMPTY && graphicstoobject(FLOOR, event.getX(), event.getY()) != GameManager.getInstance().getMap().getBottomLayer(event.getX(), event.getY())) {
+        else if (HeldTile == EMPTY && FLOOR != objecttographics(GameManager.getInstance().getMap().getUpperLayer(event.getX(), event.getY()))) {
             GameManager.getInstance().getMap().setBottomLayer(event.getX(), event.getY(), graphicstoobject(FLOOR, event.getX(), event.getY()));
             change = true;
         }

@@ -1,5 +1,4 @@
 package IO;
-
 public class IOManager {
 	private static IOManager instance;
 	private IOStrategy strategy;

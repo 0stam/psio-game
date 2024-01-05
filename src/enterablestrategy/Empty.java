@@ -1,8 +1,9 @@
 package enterablestrategy;
 import tile.*;
 import enums.Direction;
+import java.io.Serializable;
 
-public class Empty implements EnterableStrategy{
+public class Empty implements EnterableStrategy, Serializable{
     public boolean isEnterable(Direction direction, Tile tile){
         return true;
     }

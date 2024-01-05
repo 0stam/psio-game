@@ -5,6 +5,7 @@ import IO.IOManager;
 import display.GraphicsHashtable;
 import editor.Editor;
 import enums.Direction;
+import levelloader.*;
 import map.Map;
 import event.*;
 
@@ -28,21 +29,41 @@ public class GameManager implements EventObserver {
         return gameManager;
     }
 
-    public void startGame() {
+    public void startGame(){
+        /* //Tworzenie mapy do pozniejszego zapisu
         Map map = new Map(10, 10);
         levelCompleted = false;
+
         map.setupMap();
 
         this.map = map;
+
+        try {
+            LevelLoader.saveLevel("test2", this.map);
+        } catch (LevelNotSaved e) {
+            e.printStackTrace();
+        }
+        System.out.println(LevelLoader.getLevelCount());*/
+
+        //Wczytywanie zapisanej mapy
+        Map map = null;
+        try {
+            map = LevelLoader.loadLevel("test1");
+        } catch (LevelNotLoaded e) {
+            e.printStackTrace();
+        }
+        levelCompleted=false;
+        this.map=map;
 
         //IOManager io = IOManager.getInstance(new ConsoleIO());
         IOManager io = IOManager.getInstance(new GraphicIO());
 
         //We can swap between editor and main game - uncomment
         //Perhaps simple switch would solve triggering draw menu, editor and game
-        //io.drawGame();
+        io.drawGame();
         io.drawEditor();
     }
+
 
     public void endLevel(){
         levelCompleted = true;

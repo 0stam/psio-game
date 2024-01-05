@@ -7,8 +7,9 @@ import tile.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class MapState {
+public class MapState implements Serializable {
     private int x, y;
     private boolean doUpdate = true;
     private Tile[][] bottomLayer;

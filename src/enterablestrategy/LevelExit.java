@@ -2,8 +2,9 @@ package enterablestrategy;
 import tile.*;
 import enums.Direction;
 import gamemanager.GameManager;
+import java.io.Serializable;
 
-public class LevelExit implements EnterableStrategy{
+public class LevelExit implements EnterableStrategy, Serializable{
     public boolean isEnterable(Direction direction, Tile tile){
         return true;
     }

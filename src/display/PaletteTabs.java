@@ -3,7 +3,7 @@ package display;
 import javax.swing.*;
 
 public class PaletteTabs {
-	JTabbedPane tabs;
+	private JTabbedPane tabs;
 
 	public PaletteTabs () {
 		tabs = new JTabbedPane();

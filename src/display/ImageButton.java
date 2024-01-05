@@ -13,27 +13,32 @@ import java.awt.image.BufferedImage;
 import static enums.Graphics.*;
 
 public class ImageButton extends JPanel {
-	private BufferedImage image;
-	private Point coords;
 	private float scale = 1;
 	private JPanel container;
-	private GridBagConstraints constraints;
 	private boolean selected;
 	private String name;
 
-	public ImageButton(BufferedImage image, String name, Point coords) {
-		this.image = image;
-		this.coords = coords;
+	public ImageButton(BufferedImage image, String name) {
 		this.selected = false;
 		this.name = name;
 
-		container = new JPanel();
-		container.setBorder(BorderFactory.createEmptyBorder());
-		container.setBackground(Color.white);
-		container.setLayout(new GridBagLayout());
-		constraints = new GridBagConstraints(1, 1, 3, 3, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-		container.add(this, constraints);
-		container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), name));
+
+		this.setBorder(BorderFactory.createEmptyBorder());
+		this.setBackground(Color.white);
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints(1, 1, 3, 3, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
+		container = new JPanel()
+		{
+			@Override
+			public void paintComponent(Graphics g)
+			{
+				this.setPreferredSize(new Dimension((int)(32.0 * ImageButton.this.scale), (int) (32.0 * ImageButton.this.scale)));
+				g.drawImage(image.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_AREA_AVERAGING), 0, 0, this);
+				this.revalidate();
+			}
+		};
+		this.add(container, constraints);
+		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), name));
 	}
 
 	public float getScale() {
@@ -42,23 +47,6 @@ public class ImageButton extends JPanel {
 
 	public void setScale(float scale) {
 		this.scale = scale;
-	}
-
-	@Override
-	public void paintComponent(java.awt.Graphics g) {
-		this.setPreferredSize(new Dimension((int)(32.0 * scale ), (int) (32.0 * scale)));
-		this.revalidate();
-		g.drawImage(this.image.getScaledInstance((int) (32.0 * scale), (int) (32.0 * scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
-	}
-
-	public class EventListener extends MouseInputAdapter {
-		@Override
-		public void mouseClicked(MouseEvent e)
-		{
-			System.out.println("Kliknieto na panel o kordach: "+coords.x+" "+coords.y + " ; przygotowuje event");
-			TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, EditorMapDisplay.getLayer());
-			GameManager.getInstance().onEvent(editorEvent);
-		}
 	}
 
 	public JPanel getContainer() {
@@ -73,9 +61,9 @@ public class ImageButton extends JPanel {
 		this.selected = selected;
 
 		if (selected) {
-			container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.red, Color.red), this.name));
+			this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.red, Color.red), this.name));
 		} else {
-			container.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), this.name));
+			this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), this.name));
 		}
 	}
 }

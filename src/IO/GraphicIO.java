@@ -33,6 +33,8 @@ public class GraphicIO implements IOStrategy, KeyListener {
 		window.addKeyListener(this);
 		window.setVisible(true);
 		window.setIconImage(new ImageIcon("src/graphics/icon.png").getImage());
+		//i tak nie ma sensu robic mniejszego
+		window.setMinimumSize(new Dimension(300, 400));
 	}
 
 	public void drawGame () {

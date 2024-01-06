@@ -13,6 +13,15 @@ public class PlayerFollower implements TurnStrategy, Serializable{
 
     //cel dla followera
     private Tile targetTile;
+
+    public Tile getTargetTile() {
+        return targetTile;
+    }
+
+    public void setTargetTile(Tile targetTile) {
+        this.targetTile = targetTile;
+    }
+
     public PlayerFollower(Tile targetTile)
     {
         this.targetTile = targetTile;

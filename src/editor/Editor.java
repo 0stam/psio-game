@@ -9,6 +9,7 @@ import levelloader.LevelNotSaved;
 import tile.*;
 import gamemanager.GameManager;
 import map.Map;
+import turnstrategy.PlayerFollower;
 
 import static enums.EditableTile.*;
 
@@ -18,11 +19,13 @@ public class Editor implements EventObserver {
     private Layer layer = Layer.BOTH;
     private EditableTile heldTile;
     private boolean change;
+    private int playerCount;
 
     public Editor() {
         this.setHeldTile(EMPTY);
         change=false;
         setDefaultMap(10, 10);
+        playerCount = 1;
     }
 
     public EditableTile getHeldTile() {
@@ -36,15 +39,16 @@ public class Editor implements EventObserver {
     //pewnie powinno być gdzie indziej
     public Tile enumToObject(EditableTile editableTile, int x, int y) {
         return switch (editableTile) {
-            case BOX -> new Box(x, y);
-            case GOAL -> new Goal(x, y);
-            case WALL -> new Wall(x, y);
-            case ENEMY -> new ChasingEnemy(x, y, null);
-            case FLOOR -> new Floor(x, y);
-            case PLAYER -> new PlayerCharacter(x, y);
-            case DOOR -> new Door(x, y);
-            case BUTTON -> new Button(x, y);
-            default -> null;
+            case BOX ->  new Box(x, y);
+            case GOAL ->  new Goal(x, y);
+            case WALL ->  (layer==Layer.UPPER) ? null : new Wall(x, y);
+            case ENEMY ->  new ChasingEnemy(x, y, findPlayer());
+            case FLOOR ->  new Floor(x, y);
+            case PLAYER ->  new PlayerCharacter(x, y);
+            case DOOR ->  new Door(x, y);
+            case BUTTON ->  new Button(x, y);
+            case EMPTY ->  (layer==Layer.UPPER) ? null : new Floor(x,y);
+            default ->  null;
         };
     }
     public EditableTile objectToEnum(Tile tile)
@@ -153,6 +157,42 @@ public class Editor implements EventObserver {
             }
         }
     }
+    private void editorPlaceTile(EditableTile tile, Layer layer, int x, int y) {
+        switch (layer) {
+            case BOTH:
+                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.UPPER) {
+                    this.layer = Layer.UPPER;
+                    editorPlaceTile(tile, Layer.UPPER, x, y);
+                }
+                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
+                    this.layer = Layer.BOTTOM;
+                    editorPlaceTile(tile, Layer.BOTTOM, x, y);
+                }
+                this.layer = Layer.BOTH;
+                break;
+            case UPPER:
+                if (tile.isPlaceableUpper && tile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
+                    if (tile == PLAYER) {
+                        playerCount++;
+                    }
+                    if (GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter) {
+                        playerCount--;
+                        GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
+                        for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
+                            for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
+                                if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof ChasingEnemy enemy) {
+                                    if (((PlayerFollower) enemy.getTurnStrategy()).getTargetTile().getX() == x && ((PlayerFollower) (enemy.getTurnStrategy())).getTargetTile().getY() == y) {
+                                        ((PlayerFollower) (((ChasingEnemy) (GameManager.getInstance().getMap().getUpperLayer(i, j))).getTurnStrategy())).setTargetTile(findPlayer());
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
+                    }
+                }
+        }
+    }
 
     private void editorPlaceBottomTile(TilePressedEvent event) {
         if (heldTile != ENEMY && heldTile != PLAYER && heldTile != BOX && heldTile != EMPTY && heldTile != objectToEnum(GameManager.getInstance().getMap().getBottomLayer(event.getX(), event.getY()))) {
@@ -171,5 +211,20 @@ public class Editor implements EventObserver {
 
     public void setLayer(Layer layer) {
         this.layer = layer;
+    }
+    
+    public Tile findPlayer()
+    {
+        for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
+        {
+            for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)
+            {
+                if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof PlayerCharacter)
+                {
+                    return GameManager.getInstance().getMap().getUpperLayer(i,j);
+                }
+            }
+        }
+        return null;
     }
 }

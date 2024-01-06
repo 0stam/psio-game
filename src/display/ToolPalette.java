@@ -24,8 +24,6 @@ import java.util.Hashtable;
 import static enums.Graphics.*;
 
 public class ToolPalette extends AbstractPalette {
-	private ArrayList<ImageButton> buttons;
-
 	public ToolPalette() {
 		buttons = new ArrayList<>();
 		try {

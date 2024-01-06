@@ -5,14 +5,12 @@ import gamemanager.GameManager;
 
 import javax.swing.*;
 import java.awt.*;
-
-import static display.MapDisplay.imgHeight;
-import static display.MapDisplay.imgWidth;
-
 public class EditorMapDisplay extends JPanel {
     private JPanel container = new JPanel();
-    private static Layer layer = Layer.BOTH;
+    //skala chyba powinna tu zostac bo oblicza ja EditorMapDisplay
     public static float scale = 1;
+    //lepiej zeby to byla tablica dla refreshTile i refreshMap, tablice 1D bede zamienial na
+    //array listy bo sa szybsze i bardziej elastyczne
     private InteractiveTile[][] mapTiles;
 
     public EditorMapDisplay() {
@@ -28,7 +26,7 @@ public class EditorMapDisplay extends JPanel {
             }
         }
 
-        this.setBackground(Color.RED);
+        this.setBackground(Color.WHITE);
         this.refreshMap();
         this.add(container);
     }
@@ -47,7 +45,7 @@ public class EditorMapDisplay extends JPanel {
     }
     public void refreshMap()
     {
-        switch (layer) {
+        switch (GameManager.getInstance().getEditor().getLayer()) {
             case BOTH: {
                 for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                     for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
@@ -84,10 +82,16 @@ public class EditorMapDisplay extends JPanel {
             }
         }
 
-
         this.repaint();
     }
-
+    /*
+    Komentarz nt tej metody w Editor
+    public void repaintTile(enums.Graphics bottomLayer, enums.Graphics upperLayer, int x, int y)
+    {
+        mapTiles[x][y].updateGraphics(bottomLayer, upperLayer);
+        mapTiles[x][y].repaint();
+    }
+    */
     public JPanel getContainer() {
         return container;
     }
@@ -95,13 +99,4 @@ public class EditorMapDisplay extends JPanel {
     public void setContainer(JPanel container) {
         this.container = container;
     }
-
-    public static Layer getLayer() {
-        return layer;
-    }
-
-    public static void setLayer(Layer layer) {
-        EditorMapDisplay.layer = layer;
-    }
-
 }

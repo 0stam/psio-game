@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import enums.EditorModes;
+//import enums.EditorModes;
 
 import static enums.Graphics.*;
 
@@ -43,10 +43,9 @@ public class InteractiveTile extends JPanel {
     public class EventListener extends MouseInputAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println("Kliknieto na panel o kordach: "+coords.x+" "+coords.y + " ; przygotowuje event");
-            TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, EditorMapDisplay.getLayer());
-            if (EditorDisplay.getMode() == EditorModes.ADD)
-                GameManager.getInstance().onEvent(editorEvent);
+            TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer());
+            //if (EditorDisplay.getMode() == EditorModes.ADD)
+            GameManager.getInstance().onEvent(editorEvent);
         }
     }
     public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper) {

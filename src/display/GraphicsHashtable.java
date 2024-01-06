@@ -14,7 +14,7 @@ import static enums.Graphics.*;
 
 public class GraphicsHashtable {
     private static GraphicsHashtable graphicsHashtable = new GraphicsHashtable();
-    private static Hashtable<Graphics, BufferedImage> images;
+    private Hashtable<Graphics, BufferedImage> images;
     private GraphicsHashtable() {
         try {
             images = new Hashtable<>();
@@ -50,7 +50,7 @@ public class GraphicsHashtable {
     public BufferedImage getImage(Graphics g) {
         return images.get(g);
     }
-    public static Hashtable<Graphics, BufferedImage> getImages() {
+    public Hashtable<Graphics, BufferedImage> getImages() {
         return images;
     }
 }

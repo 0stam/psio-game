@@ -86,4 +86,8 @@ public class GameManager implements EventObserver {
     public boolean getLevelCompleted() {
         return levelCompleted;
     }
+
+    public Editor getEditor() {
+        return editor;
+    }
 }

@@ -2,6 +2,7 @@ package editor;
 
 import IO.IOManager;
 import enums.Graphics;
+import enums.Layer;
 import event.*;
 import levelloader.LevelLoader;
 import levelloader.LevelNotSaved;
@@ -12,6 +13,8 @@ import static enums.Graphics.*;
 
 
 public class Editor implements EventObserver {
+
+    private Layer layer = Layer.BOTH;
     private Graphics heldTile;
     private boolean change;
 
@@ -96,6 +99,10 @@ public class Editor implements EventObserver {
                 }
             }
             if (change) {
+                //nie wiem czy jest sens metody ktora rysowala by 1 tile
+                //jasne, ze byloby to efektywniejsze, ale wg naszego systemu chyba chcemy to
+                //wywolac przez IOmanager, ktory w interfejsie musialby miec taka metode
+                //wymaga duzych zmian, a i tak nikt raczej tego nie zauwazy
                 IOManager.getInstance().drawEditor();
                 change = false;
             }
@@ -139,5 +146,13 @@ public class Editor implements EventObserver {
             GameManager.getInstance().getMap().setBottomLayer(event.getX(), event.getY(), graphicsToObject(FLOOR, event.getX(), event.getY()));
             change = true;
         }
+    }
+
+    public Layer getLayer() {
+        return layer;
+    }
+
+    public void setLayer(Layer layer) {
+        this.layer = layer;
     }
 }

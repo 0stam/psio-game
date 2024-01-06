@@ -1,32 +1,24 @@
 package display;
 
-import display.GraphicsHashtable;
-import event.EditorEvent;
 import event.PalettePressedEvent;
-import event.TilePressedEvent;
 import gamemanager.GameManager;
+import enums.EditableTile;
 
-import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Hashtable;
-
-import static enums.Graphics.*;
 
 public class TilePalette extends AbstractPalette {
-	private enums.Graphics[] placeableTiles = {EMPTY, FLOOR, WALL, BUTTON_RELEASED, DOOR_CLOSED, ENEMY, BOX, PLAYER, GOAL};
-
 	public TilePalette () {
-		buttons = new ArrayList<>(placeableTiles.length);
+		buttons = new ArrayList<>(EditableTile.values().length);
 
-		this.setLayout(new GridLayout(1, placeableTiles.length, 0, 0));
+		this.setLayout(new GridLayout(1, EditableTile.values().length, 0, 0));
 
-		for (int i = 0; i < placeableTiles.length; i++) {
-			buttons.add(new ImageButton(GraphicsHashtable.getInstance().getImages().get(placeableTiles[i]), placeableTiles[i].toString()));
-			buttons.get(i).addMouseListener(new TileListener(placeableTiles[i]));
+		for (int i = 0; i < EditableTile.values().length; i++) {
+			EditableTile editableTile = EditableTile.values()[i];
+			buttons.add(new ImageButton(GraphicsHashtable.getInstance().getImages().get(editableTile.graphics), editableTile.name));
+			buttons.get(i).addMouseListener(new TileListener(editableTile));
 			this.add(buttons.get(i));
 		}
 		buttons.get(0).setSelected(true);
@@ -47,9 +39,9 @@ public class TilePalette extends AbstractPalette {
 		this.revalidate();
 	}
 	public class TileListener extends MouseInputAdapter {
-		private enums.Graphics changeGraphic;
+		private EditableTile changeGraphic;
 
-		TileListener(enums.Graphics changeGraphic) {
+		TileListener(EditableTile changeGraphic) {
 			this.changeGraphic = changeGraphic;
 		}
 

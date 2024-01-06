@@ -1,15 +1,15 @@
 package event;
 
-import enums.Graphics;
+import enums.EditableTile;
 
 public class PalettePressedEvent extends EditorEvent {
-    private final Graphics type;
+    private final EditableTile type;
 
-    public PalettePressedEvent(Graphics type) {
+    public PalettePressedEvent(EditableTile type) {
         this.type = type;
     }
 
-    public Graphics getType() {
+    public EditableTile getType() {
         return type;
     }
 }

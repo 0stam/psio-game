@@ -5,4 +5,8 @@ public class LevelNotSaved extends Exception {
         // TODO: implement custom exception properties if it makes sense
         super(message);
     }
+
+    public LevelNotSaved(String message, Throwable e){
+        super(message, e);
+    }
 }

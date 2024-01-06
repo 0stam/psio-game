@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GraphicIO implements IOStrategy, KeyListener {
+public class GraphicIO implements IOStrategy, KeyListener{
 	private static JFrame window;
 	private static EditorDisplay editorDisplay;
 	private static GameMapDisplay gameDisplay;

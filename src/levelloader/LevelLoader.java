@@ -2,18 +2,86 @@ package levelloader;
 
 import map.Map;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.*;
+import java.util.Arrays;
+
 public class LevelLoader {
-    public static void saveLevel(String path, Map map) throws LevelNotSaved {
-        // TODO: implement level saving
+    private static final String userLevelsPath = "/psio-game/userlevels/";
+
+    public static void saveLevel(String name, Map map) throws LevelNotSaved {
+        String userHome = System.getProperty("user.home");
+        String path = userHome + userLevelsPath + name;
+
+        try {
+            Path folderPath = Paths.get(path).getParent();
+            Files.createDirectories(folderPath);
+
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path));
+            os.writeObject(map);
+
+        } catch(IOException e) {
+            throw new LevelNotSaved("Failed to save level " + name, e);
+        }
     }
 
-    public static Map loadLevel(String path) throws LevelNotLoaded {
-        // TODO: implement loading levels from path
-        return new Map(1, 1);
+    public static Map loadLevel(String name) throws LevelNotLoaded {
+        String userHome = System.getProperty("user.home");
+        String path = userHome + userLevelsPath + name;
+
+        try {
+            ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
+            Map loadedMap = (Map)is.readObject();
+            return loadedMap;
+        } catch(IOException | ClassNotFoundException e) {
+            throw new LevelNotLoaded("Failed to load level " + name);
+        }
     }
 
     public static Map loadLevel(int index) throws LevelNotLoaded {
-        // TODO: get level path from the index and load the level
-        return new Map(1, 1);
+        String userHome = System.getProperty("user.home");
+        String path;
+        File baseLevels = new File("src/levels");
+        File userLevels = new File(userHome + userLevelsPath);
+
+        File[] bfiles = baseLevels.listFiles();
+        Arrays.sort(bfiles);
+        if(index <= bfiles.length) {
+            path = bfiles[index-1].getAbsolutePath();
+        }
+        else {
+            File[] ufiles = userLevels.listFiles();
+            Arrays.sort(ufiles);
+            path = ufiles[index-bfiles.length-1].getAbsolutePath();
+        }
+
+        try {
+            ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
+            Map loadedMap = (Map)is.readObject();
+            return loadedMap;
+        } catch(IOException | ClassNotFoundException e) {
+            throw new LevelNotLoaded("Failed to load level " + index);
+        }
     }
+
+    public static int getLevelCount(){
+        String userHome = System.getProperty("user.home");
+        File baseLevels = new File("src/levels");
+        File userLevels = new File(userHome + "/psio-game/userlevels");
+        int a=0, b=0;
+
+        if(baseLevels.isDirectory()){
+            File[] bfiles = baseLevels.listFiles();
+            a = bfiles.length;
+        }
+        if(userLevels.isDirectory()){
+            File[] ufiles = userLevels.listFiles();
+            b=ufiles.length;
+        }
+
+        return a+b;
+    }
+
 }

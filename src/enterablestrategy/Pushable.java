@@ -3,8 +3,9 @@ import gamemanager.GameManager;
 import map.Map;
 import tile.*;
 import enums.Direction;
+import java.io.Serializable;
 
-public class Pushable implements EnterableStrategy{
+public class Pushable implements EnterableStrategy, Serializable{
     public boolean isEnterable(Direction direction, Tile tile){
         Map map = GameManager.getInstance().getMap();
 

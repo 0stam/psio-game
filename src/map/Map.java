@@ -6,7 +6,9 @@ import java.util.List;
 import enums.Direction;
 import tile.*;
 
-public class Map {
+import java.io.Serializable;
+
+public class Map implements Serializable{
     private final int x, y;
     private Tile[][] bottomLayer;
     private Tile[][] upperLayer;
@@ -33,15 +35,30 @@ public class Map {
         }
 
         // Make a horizontal wall
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i < 10; i++) {
             bottomLayer[i][5] = new Wall(i, 5);
         }
+        //Make vertical walls
+        for(int i=6; i<10; i++){
+            bottomLayer[1][i] = new Wall(1, i);
+            bottomLayer[4][i] = new Wall(4, i);
+            bottomLayer[7][i] = new Wall(7, i);
+        }
+        bottomLayer[5][7] = new Wall(5, 7);
+        bottomLayer[6][7] = new Wall(6, 7);
+
+
+
 
         // Create door in the wall
         Door door1 = new Door(5, 5);
         bottomLayer[5][5] = door1;
         Door door2 = new Door(6, 5);
         bottomLayer[6][5] = door2;
+        Door door3 = new Door(5, 7);
+        bottomLayer[5][7]=door3;
+        Door door4 = new Door(6, 7);
+        bottomLayer[6][7]=door4;
 
         // Create button
         Button button = new Button(9, 2);
@@ -49,10 +66,16 @@ public class Map {
         button.addObserver(door2);
         bottomLayer[9][2] = button;
 
+        //Create second button
+        Button button2 = new Button(9, 0);
+        button2.addObserver(door3);
+        button2.addObserver(door4);
+        bottomLayer[9][0]=button2;
+
         // Create boxes
         upperLayer[1][2] = new Box(1, 2);
         upperLayer[1][1] = new Box(1, 1);
-        bottomLayer[1][9] = new Wall(1, 1);
+        //bottomLayer[1][9] = new Wall(1, 1);
         //bottomLayer[0][8] = new Wall(1, 1);
         bottomLayer[5][3] = new Wall(5, 3);
 
@@ -110,6 +133,15 @@ public class Map {
     }
     public void addActionTile(ActionTile actionTile) {
         nextMapState.addActionTile(actionTile);
+    }
+
+    public void addCurrentActionTile(ActionTile actionTile) {actionTiles.add(actionTile);}
+
+    public void getActionTiles(){
+        System.out.println("There are " + actionTiles.size() + " actiontiles");
+        for(int i=0; i<actionTiles.size(); i++){
+            System.out.println(actionTiles.get(i).getClass().getSimpleName());
+        }
     }
 
     public void move(int x, int y, Direction direction) {

@@ -4,8 +4,9 @@ import javax.lang.model.element.ModuleElement.Directive;
 import enterablestrategy.EnterableStrategy;
 import enums.Direction;
 import enums.Graphics;
+import java.io.Serializable;
 
-public abstract class Tile {
+public abstract class Tile implements Serializable{
 	private int x;
 	private int y;
 	private Graphics graphicsID;

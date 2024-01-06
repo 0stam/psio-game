@@ -7,8 +7,9 @@ import tile.Tile;
 
 import static enums.Direction.*;
 import static java.lang.Math.*;
+import java.io.Serializable;
 
-public class PlayerFollower implements TurnStrategy{
+public class PlayerFollower implements TurnStrategy, Serializable{
 
     //cel dla followera
     private Tile targetTile;

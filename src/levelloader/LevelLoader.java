@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.Arrays;
 
 public class LevelLoader {
-    private static final String userLevelsPath = "/psio-game/userlevels/";
+    public static final String userLevelsPath = "/psio-game/userlevels/";
 
     public static void saveLevel(String name, Map map) throws LevelNotSaved {
         String userHome = System.getProperty("user.home");

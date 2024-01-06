@@ -1,7 +1,7 @@
 package levelloader;
 
 import map.Map;
-import tile.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,93 +9,61 @@ import java.io.*;
 import java.util.Arrays;
 
 public class LevelLoader {
+    private static final String userLevelsPath = "/psio-game/userlevels/";
+
     public static void saveLevel(String name, Map map) throws LevelNotSaved {
         String userHome = System.getProperty("user.home");
-        String path = userHome + "/psio-game/userlevels/" + name;
+        String path = userHome + userLevelsPath + name;
 
-        try{
+        try {
             Path folderPath = Paths.get(path).getParent();
             Files.createDirectories(folderPath);
 
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path));
             os.writeObject(map);
 
-        } catch(IOException e){
+        } catch(IOException e) {
             throw new LevelNotSaved("Failed to save level " + name, e);
         }
     }
 
     public static Map loadLevel(String name) throws LevelNotLoaded {
         String userHome = System.getProperty("user.home");
-        String path = userHome + "/psio-game/userlevels/" + name;
+        String path = userHome + userLevelsPath + name;
 
-        try{
+        try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            Map deserMap = (Map)is.readObject();
-            Map loadedMap = new Map(deserMap.getWidth(), deserMap.getHeight());
-
-            for (int i = 0; i < loadedMap.getWidth(); i++) {
-                for (int j = 0; j < loadedMap.getHeight(); j++) {
-                    Tile bottomTile = deserMap.getBottomLayer(i, j);
-                    Tile upperTile = deserMap.getUpperLayer(i, j);
-
-                    loadedMap.setBottomLayer(i, j, bottomTile);
-                    loadedMap.setUpperLayer(i, j, upperTile);
-                    if (upperTile instanceof ActionTile) {
-                        loadedMap.addCurrentActionTile((ActionTile)upperTile);
-                    }
-
-                }
-            }
+            Map loadedMap = (Map)is.readObject();
             return loadedMap;
-
-        } catch(IOException | ClassNotFoundException e){
-            e.printStackTrace();
+        } catch(IOException | ClassNotFoundException e) {
+            throw new LevelNotLoaded("Failed to load level " + name);
         }
-        throw new LevelNotLoaded("Failed to load level " + name);
     }
 
     public static Map loadLevel(int index) throws LevelNotLoaded {
         String userHome = System.getProperty("user.home");
         String path;
         File baseLevels = new File("src/levels");
-        File userLevels = new File(userHome + "/psio-game/userlevels");
+        File userLevels = new File(userHome + userLevelsPath);
 
         File[] bfiles = baseLevels.listFiles();
         Arrays.sort(bfiles);
-        if(index <= bfiles.length){
+        if(index <= bfiles.length) {
             path = bfiles[index-1].getAbsolutePath();
         }
-        else{
+        else {
             File[] ufiles = userLevels.listFiles();
             Arrays.sort(ufiles);
             path = ufiles[index-bfiles.length-1].getAbsolutePath();
         }
 
-        try{
+        try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            Map deserMap = (Map)is.readObject();
-            Map loadedMap = new Map(deserMap.getWidth(), deserMap.getHeight());
-
-            for (int i = 0; i < loadedMap.getWidth(); i++) {
-                for (int j = 0; j < loadedMap.getHeight(); j++) {
-                    Tile bottomTile = deserMap.getBottomLayer(i, j);
-                    Tile upperTile = deserMap.getUpperLayer(i, j);
-
-                    loadedMap.setBottomLayer(i, j, bottomTile);
-                    loadedMap.setUpperLayer(i, j, upperTile);
-                    if (upperTile instanceof ActionTile) {
-                        loadedMap.addCurrentActionTile((ActionTile)upperTile);
-                    }
-
-                }
-            }
+            Map loadedMap = (Map)is.readObject();
             return loadedMap;
-
-        } catch(IOException | ClassNotFoundException e){
-            e.printStackTrace();
+        } catch(IOException | ClassNotFoundException e) {
+            throw new LevelNotLoaded("Failed to load level " + index);
         }
-        throw new LevelNotLoaded("Failed to load level " + index);
     }
 
     public static int getLevelCount(){

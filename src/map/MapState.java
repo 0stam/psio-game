@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
-public class MapState implements Serializable {
+public class MapState implements Serializable, Cloneable {
     private int x, y;
     private boolean doUpdate = true;
     private Tile[][] bottomLayer;
@@ -91,6 +91,14 @@ public class MapState implements Serializable {
         return actionTiles;
     }
 
+    protected void updateActionTiles() {
+        actionTiles.addAll(actionTilesToAdd);
+        actionTiles.removeAll(actionTilesToRemove);
+
+        actionTilesToAdd = new ArrayList<>();
+        actionTilesToRemove = new ArrayList<>();
+    }
+
     public void move(int x, int y, Direction direction) {
         Tile movedTile = getUpperLayer(x, y);
         Tile emptiedTile = getBottomLayer(x, y);
@@ -145,6 +153,8 @@ public class MapState implements Serializable {
 
     public boolean update(Direction direction) {
         doUpdate = true;
+        updateActionTiles();
+
         for (ActionTile actionTile : actionTiles) {
             //check if actionTile is not in actionTilesToRemove
             if (!actionTilesToRemove.contains(actionTile)) {
@@ -152,15 +162,17 @@ public class MapState implements Serializable {
             }
         }
 
-        // Remove all actionTiles that were deleted during the turn
-        for (ActionTile actionTile : actionTilesToRemove) {
-            actionTiles.remove(actionTile);
-        }
-
-        // Add all actionTiles that were added during the turn
-        for (ActionTile actionTile : actionTilesToAdd) {
-            actionTiles.add(actionTile);
-        }
+        updateActionTiles();
         return doUpdate;
+    }
+
+    @Override
+    public MapState clone() {
+        try {
+            return (MapState) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // Should never happen
+            return new MapState(x, y);
+        }
     }
 }

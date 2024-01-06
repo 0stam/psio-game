@@ -149,18 +149,15 @@ public class Map implements Serializable{
     }
 
     public void startTurn(Direction direction) {
-      currentMapState = new MapState(x, y);
-      pushMapState(currentMapState);
-      nextMapState = currentMapState;
-      if (nextMapState.update(direction)) {
-          currentMapState = nextMapState;
-          pullMapState(currentMapState);
-      }
-      else {
-          // this should call some IO function to print to the screen
-          // should never happen in current implementation
-          System.out.println("Invalid move. Turn skipped.");
-      }
+        currentMapState = nextMapState.clone();
+        if (nextMapState.update(direction)) {
+            currentMapState = nextMapState.clone();
+        }
+        else {
+            // this should call some IO function to print to the screen
+            // should never happen in current implementation
+            System.out.println("Invalid move. Turn skipped.");
+        }
     }
 
     public boolean checkEnterable(int x, int y, Direction direction, Tile tile)

@@ -31,7 +31,7 @@ public class GameManager implements EventObserver {
 
     public void startGame(){
          //Tworzenie mapy do pozniejszego zapisu
-        /*Map map = new Map(10, 10);
+        Map map = new Map(10, 10);
         levelCompleted = false;
 
         map.setupMap();
@@ -43,10 +43,10 @@ public class GameManager implements EventObserver {
         } catch (LevelNotSaved e) {
             e.printStackTrace();
         }
-        System.out.println(LevelLoader.getLevelCount());*/
+        System.out.println(LevelLoader.getLevelCount());
 
         //Wczytywanie zapisanej mapy
-        Map map = null;
+        /*Map map = null;
         try {
             map = LevelLoader.loadLevel(1);
         } catch (LevelNotLoaded e) {
@@ -54,7 +54,7 @@ public class GameManager implements EventObserver {
             System.exit(1);
         }
         levelCompleted=false;
-        this.map=map;
+        this.map=map;*/
 
         //IOManager io = IOManager.getInstance(new ConsoleIO());
         IOManager io = IOManager.getInstance(new GraphicIO());

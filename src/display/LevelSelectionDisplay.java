@@ -18,11 +18,13 @@ public class LevelSelectionDisplay extends JPanel {
     public LevelSelectionDisplay() {
         totalLevels = LevelLoader.getLevelCount();
         // 4x4 siatka poziomów
-        levelsPerPage = 16;
+        levelsPerPage = 4;
 
         setLayout(new BorderLayout());
         JPanel levelGrid = createLevelGrid();
         add(levelGrid, BorderLayout.CENTER);
+
+        setOpaque(false);
 
         if (totalLevels > levelsPerPage) {
             add(createNavigationPanel(), BorderLayout.SOUTH);
@@ -30,8 +32,15 @@ public class LevelSelectionDisplay extends JPanel {
     }
 
     private JPanel createLevelGrid() {
-        JPanel grid = new JPanel(new GridLayout(4, 4)); // 4x4 siatka
+        GridLayout layout = new GridLayout(2, 2);
+        layout.setHgap(5);
+        layout.setVgap(5);
+
+        JPanel grid = new JPanel(layout);
+        grid.setOpaque(false);
+
         int startLevel = currentPage * levelsPerPage;
+
         for (int i = 0; i < levelsPerPage; i++) {
             int levelNumber = startLevel + i;
             if (levelNumber < totalLevels) {
@@ -40,6 +49,14 @@ public class LevelSelectionDisplay extends JPanel {
                     LevelSelectedEvent levelSelectedEvent = new LevelSelectedEvent(levelNumber);
                     GameManager.getInstance().onEvent(levelSelectedEvent);
                 });
+
+                // Button style
+                levelButton.setForeground(Color.white);
+                levelButton.setOpaque(true);
+                levelButton.setContentAreaFilled(false);
+                levelButton.setFont(new Font("Arial", Font.PLAIN, 40));
+                levelButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
+
                 grid.add(levelButton);
             } else {
                 grid.add(new JLabel("")); // Puste miejsce
@@ -62,6 +79,7 @@ public class LevelSelectionDisplay extends JPanel {
 
     private JPanel createNavigationPanel() {
         JPanel navigationPanel = new JPanel(new FlowLayout());
+        navigationPanel.setOpaque(false);
 
         JButton prevButton = new JButton("<");
         prevButton.addActionListener(e -> navigate(-1));

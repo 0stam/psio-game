@@ -3,10 +3,12 @@ package display;
 import javax.swing.*;
 import java.awt.*;
 
+import IO.IOManager;
 import event.EditorSelectedEvent;
 import gamemanager.GameManager;
 
 public class MenuDisplay extends JPanel {
+    private JPanel container;
     private JButton playButton;
     private JButton editorButton;
     private JLabel titleLabel;
@@ -20,7 +22,12 @@ public class MenuDisplay extends JPanel {
             e.printStackTrace();
         }
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
+        container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setOpaque(false);
+        add(container, BorderLayout.CENTER);
+
 
         titleLabel = new JLabel("TILE ADVENTURE");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 48));
@@ -36,22 +43,28 @@ public class MenuDisplay extends JPanel {
         playButton.addActionListener(e -> onPlayClicked());
         editorButton.addActionListener(e -> onEditorClicked());
 
-        add(Box.createVerticalGlue());
-        add(titleLabel);
-        add(Box.createRigidArea(new Dimension(0, 50)));
-        add(playButton);
-        add(Box.createRigidArea(new Dimension(0, 30)));
-        add(editorButton);
-        add(Box.createVerticalGlue());
+        container.add(Box.createVerticalGlue());
+        container.add(titleLabel);
+        container.add(Box.createRigidArea(new Dimension(0, 50)));
+        container.add(playButton);
+        container.add(Box.createRigidArea(new Dimension(0, 30)));
+        container.add(editorButton);
+        container.add(Box.createVerticalGlue());
     }
 
     private void onPlayClicked() {
         // Obsługa przycisku PLAY
-        JFrame window = (JFrame) SwingUtilities.getWindowAncestor(this);
-        window.getContentPane().removeAll();
-        window.getContentPane().add(new LevelSelectionDisplay(), BorderLayout.CENTER);
-        window.revalidate();
-        window.repaint();
+        //JFrame window = (JFrame) SwingUtilities.getWindowAncestor(this);
+        //window.getContentPane().removeAll();
+        //window.getContentPane().add(new LevelSelectionDisplay(), BorderLayout.CENTER);
+        //window.revalidate();
+        //window.repaint();
+
+        container.removeAll();
+        container.setLayout(new BorderLayout());
+        container.add(new LevelSelectionDisplay(), BorderLayout.CENTER);
+        container.revalidate();
+        IOManager.getInstance().drawMenu();
     }
 
     private void onEditorClicked() {

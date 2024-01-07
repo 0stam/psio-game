@@ -46,7 +46,7 @@ public class GraphicIO implements IOStrategy, KeyListener{
 			window.getContentPane().removeAll();
 
 			editorDisplay = null;
-			//menuDisplay = null;
+			menuDisplay = null;
 
 			gameDisplay = new GameMapDisplay();
 			gameDisplay.setPreferredSize(new Dimension(32 * gameDisplay.getW()-1, 32 * gameDisplay.getH()));
@@ -69,7 +69,7 @@ public class GraphicIO implements IOStrategy, KeyListener{
 			window.getContentPane().removeAll();
 
 			gameDisplay = null;
-			//menuDisplay = null;
+			menuDisplay = null;
 
 			editorDisplay = new EditorDisplay();
 			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));

@@ -8,6 +8,7 @@ import levelloader.LevelLoader;
 import levelloader.LevelNotSaved;
 import tile.*;
 import gamemanager.GameManager;
+import map.Map;
 
 import static enums.EditableTile.*;
 
@@ -21,6 +22,7 @@ public class Editor implements EventObserver {
     public Editor() {
         this.setHeldTile(EMPTY);
         change=false;
+        setDefaultMap(10, 10);
     }
 
     public EditableTile getHeldTile() {
@@ -63,6 +65,21 @@ public class Editor implements EventObserver {
             default -> null;
         };
     }
+
+    public void setDefaultMap(int x, int y) {
+        Map map = new Map(x, y);
+
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                map.setBottomLayer(i, j, new Floor(i, j));
+            }
+        }
+
+        map.setUpperLayer(0, 0, new PlayerCharacter(0, 0));
+
+        GameManager.getInstance().setMap(map);
+    }
+
     public void onEvent(Event event) {
         if (!(event instanceof EditorEvent)) {
             return;

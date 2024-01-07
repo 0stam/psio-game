@@ -42,7 +42,7 @@ public class Map implements Serializable{
         for(int i=6; i<10; i++){
             bottomLayer[1][i] = new Wall(1, i);
             bottomLayer[4][i] = new Wall(4, i);
-            bottomLayer[7][i] = new Wall(7, i);
+            //bottomLayer[7][i] = new Wall(7, i);
         }
         bottomLayer[5][7] = new Wall(5, 7);
         bottomLayer[6][7] = new Wall(6, 7);

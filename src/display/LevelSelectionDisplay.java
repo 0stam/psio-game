@@ -67,13 +67,7 @@ public class LevelSelectionDisplay extends JPanel {
 
 
     private void loadAndStartLevel(int levelNumber) {
-        try {
-            Map levelMap = LevelLoader.loadLevel(levelNumber + 1);
-            GameManager.getInstance().setMap(levelMap);
-            GameManager.getInstance().startGame();
-        } catch (LevelNotLoaded e) {
-            e.printStackTrace();
-        }
+        GameManager.getInstance().onEvent(new LevelSelectedEvent(levelNumber));
     }
 
 

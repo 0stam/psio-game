@@ -1,0 +1,109 @@
+package display;
+
+import javax.swing.*;
+import java.awt.*;
+
+import event.EditorSelectedEvent;
+import gamemanager.GameManager;
+
+public class MenuDisplay extends JPanel {
+    private JButton playButton;
+    private JButton editorButton;
+    private JLabel titleLabel;
+    private Image backgroundImage;
+
+    public MenuDisplay() {
+        // Ładowanie obrazu tła
+        try {
+            backgroundImage = new ImageIcon(getClass().getResource("/graphics/background.png")).getImage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        titleLabel = new JLabel("TILE ADVENTURE");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 48));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        playButton = new JButton("PLAY");
+        stylizeButton(playButton);
+
+        editorButton = new JButton("EDITOR");
+        stylizeButton(editorButton);
+
+        playButton.addActionListener(e -> onPlayClicked());
+        editorButton.addActionListener(e -> onEditorClicked());
+
+        add(Box.createVerticalGlue());
+        add(titleLabel);
+        add(Box.createRigidArea(new Dimension(0, 50)));
+        add(playButton);
+        add(Box.createRigidArea(new Dimension(0, 30)));
+        add(editorButton);
+        add(Box.createVerticalGlue());
+    }
+
+    private void onPlayClicked() {
+        // Obsługa przycisku PLAY
+        JFrame window = (JFrame) SwingUtilities.getWindowAncestor(this);
+        window.getContentPane().removeAll();
+        window.getContentPane().add(new LevelSelectionDisplay(), BorderLayout.CENTER);
+        window.revalidate();
+        window.repaint();
+    }
+
+    private void onEditorClicked() {
+        // Obsługa przycisku EDITOR
+        GameManager.getInstance().onEvent(new EditorSelectedEvent());
+    }
+
+    private void stylizeButton(JButton button) {
+        button.setFont(new Font("Serif", Font.PLAIN, 24));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(100, 100, 100));
+        button.setFocusPainted(false);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if (backgroundImage != null) {
+            // Ustawienie skalowania obrazu, aby pasował do komponentu
+            int width = this.getWidth();
+            int height = this.getHeight();
+
+            // Obliczenie nowych wymiarów zachowując proporcje
+            int imgWidth = backgroundImage.getWidth(this);
+            int imgHeight = backgroundImage.getHeight(this);
+
+            float aspectRatio = (float) imgWidth / imgHeight;
+            float containerRatio = (float) width / height;
+
+            int newWidth, newHeight;
+
+            // Dostosuj rozmiar obrazu do proporcji kontenera
+            if (containerRatio > aspectRatio) {
+                newWidth = width;
+                newHeight = (int) (width / aspectRatio);
+            } else {
+                newHeight = height;
+                newWidth = (int) (height * aspectRatio);
+            }
+
+            // Wycentrowanie obrazu
+            int x = (width - newWidth) / 2;
+            int y = (height - newHeight) / 2;
+
+            // Rysowanie przeskalowanego obrazu
+            g.drawImage(backgroundImage, x, y, newWidth, newHeight, this);
+        }
+    }
+
+}

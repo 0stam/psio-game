@@ -105,6 +105,11 @@ public class GameManager implements EventObserver {
         }
     }
 
+    public void startLevelSelection() {
+        //wybór lvl
+    }
+
+
     public boolean getLevelCompleted() {
         return levelCompleted;
     }

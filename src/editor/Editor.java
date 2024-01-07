@@ -17,12 +17,10 @@ public class Editor implements EventObserver {
     private Layer layer = Layer.BOTH;
     private EditableTile heldTile;
     private boolean change;
-    private int playerCount;
 
     public Editor() {
         this.setHeldTile(EMPTY);
         change=false;
-        playerCount = 1;
     }
 
     public EditableTile getHeldTile() {
@@ -32,38 +30,25 @@ public class Editor implements EventObserver {
     public void setHeldTile(EditableTile heldTile) {
         this.heldTile = heldTile;
     }
-    //Note: enumToObject has functions probably specific to the editor
-    //wall and empty sometimes return a different object, enemy finds a player to attach
-    //only use if you know what you're doing
+
+    //pewnie powinno być gdzie indziej
     public Tile enumToObject(EditableTile editableTile, int x, int y) {
-        switch (editableTile) {
-            case BOX: { return new Box(x, y); }
-            case GOAL: { return new Goal(x, y); }
-            case WALL: { return (layer==Layer.UPPER) ? null : new Wall(x, y); }
-            case ENEMY: {
-                for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
-                {
-                    for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)
-                    {
-                        if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof PlayerCharacter)
-                        {
-                            return new ChasingEnemy(x, y, GameManager.getInstance().getMap().getUpperLayer(i,j));
-                        }
-                    }
-                }
-            }
-            case FLOOR: { return new Floor(x, y); }
-            case PLAYER: { return new PlayerCharacter(x, y); }
-            case DOOR: { return new Door(x, y); }
-            case BUTTON: { return new Button(x, y); }
-            case EMPTY: { return (layer==Layer.UPPER) ? null : new Floor(x,y); }
-            default: { return null; }
-        }
+        return switch (editableTile) {
+            case BOX -> new Box(x, y);
+            case GOAL -> new Goal(x, y);
+            case WALL -> new Wall(x, y);
+            case ENEMY -> new ChasingEnemy(x, y, null);
+            case FLOOR -> new Floor(x, y);
+            case PLAYER -> new PlayerCharacter(x, y);
+            case DOOR -> new Door(x, y);
+            case BUTTON -> new Button(x, y);
+            default -> null;
+        };
     }
     public EditableTile objectToEnum(Tile tile)
     {
         if (tile == null){
-            return EMPTY;
+            return null;
         }
         return switch (tile.getClass().getSimpleName())
         {
@@ -88,8 +73,31 @@ public class Editor implements EventObserver {
         }
         if (event instanceof TilePressedEvent tilePressedEvent)
         {
-            this.setLayer(tilePressedEvent.getLayer());
-            editorPlaceTile(heldTile, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
+            switch (tilePressedEvent.getLayer())
+            {
+                //TODO: un-yanderedev-ify conditions
+                case BOTH:
+                {
+                    if (heldTile != BUTTON && heldTile != DOOR && heldTile != FLOOR && heldTile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY()))) {
+                        GameManager.getInstance().getMap().setUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY(), enumToObject(heldTile, tilePressedEvent.getX(), tilePressedEvent.getY()));
+                        change = true;
+                    }
+                    editorPlaceBottomTile(tilePressedEvent);
+                    break;
+                }
+                case UPPER:
+                {
+                    if (heldTile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY()))) {
+                        GameManager.getInstance().getMap().setUpperLayer(tilePressedEvent.getX(), tilePressedEvent.getY(), enumToObject(heldTile, tilePressedEvent.getX(), tilePressedEvent.getY()));
+                        change = true;
+                    }
+                    break;
+                }
+                case BOTTOM: {
+                    editorPlaceBottomTile(tilePressedEvent);
+                    break;
+                }
+            }
             if (change) {
                 //nie wiem czy jest sens metody ktora rysowala by 1 tile
                 //jasne, ze byloby to efektywniejsze, ale wg naszego systemu chyba chcemy to
@@ -103,17 +111,6 @@ public class Editor implements EventObserver {
             if (event instanceof LevelLoadedEvent) {
                 try {
                     LevelLoader.loadLevel(levelEvent.getPath());
-                    playerCount = 0;
-                    for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
-                    {
-                        for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)
-                        {
-                            if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof PlayerCharacter)
-                            {
-                                playerCount++;
-                            }
-                        }
-                    }
                 }
                 catch (levelloader.LevelNotLoaded e)
                 {
@@ -139,35 +136,15 @@ public class Editor implements EventObserver {
             }
         }
     }
-    private void editorPlaceTile(EditableTile tile, Layer layer, int x, int y) {
-        switch (layer) {
-            case BOTH:
-                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.UPPER) {
-                    this.layer = Layer.UPPER;
-                    editorPlaceTile(tile, Layer.UPPER, x, y);
-                }
-                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
-                    this.layer = Layer.BOTTOM;
-                    editorPlaceTile(tile, Layer.BOTTOM, x, y);
-                }
-                this.layer = Layer.BOTH;
-                break;
-            case UPPER:
-                if (tile.isPlaceableUpper && tile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
-                    if (tile == PLAYER)
-                        playerCount++;
-                    if (GameManager.getInstance().getMap().getUpperLayer(x,y) instanceof PlayerCharacter)
-                        playerCount--;
-                    GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
 
-                    change = true;
-                }
-                break;
-            case BOTTOM:
-                if (tile.isPlaceableBottom && tile != objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) && !(tile == EMPTY && objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) == FLOOR)) {
-                    GameManager.getInstance().getMap().setBottomLayer(x, y, enumToObject(tile, x, y));
-                    change = true;
-                }
+    private void editorPlaceBottomTile(TilePressedEvent event) {
+        if (heldTile != ENEMY && heldTile != PLAYER && heldTile != BOX && heldTile != EMPTY && heldTile != objectToEnum(GameManager.getInstance().getMap().getBottomLayer(event.getX(), event.getY()))) {
+            GameManager.getInstance().getMap().setBottomLayer(event.getX(), event.getY(), enumToObject(heldTile, event.getX(), event.getY()));
+            change = true;
+        }
+        else if (heldTile == EMPTY && FLOOR != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(event.getX(), event.getY()))) {
+            GameManager.getInstance().getMap().setBottomLayer(event.getX(), event.getY(), enumToObject(FLOOR, event.getX(), event.getY()));
+            change = true;
         }
     }
 

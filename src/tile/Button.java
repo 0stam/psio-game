@@ -11,7 +11,7 @@ import event.EventSource;
 import enums.Direction;
 
 public class Button extends Tile implements EventSource {
-	private final List<EventObserver> observers = new ArrayList<>();
+    private final List<EventObserver> observers = new ArrayList<>();
     private boolean isPressed = false;
 
     public Button(int x, int y) {

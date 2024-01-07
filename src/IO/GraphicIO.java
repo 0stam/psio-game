@@ -15,7 +15,7 @@ public class GraphicIO implements IOStrategy, KeyListener{
 	private static JFrame window;
 	private static EditorDisplay editorDisplay;
 	private static GameMapDisplay gameDisplay;
-	//private static MenuDisplay menuDisplay;
+	private static MenuDisplay menuDisplay;
 
 	private void createWindow () {
 		try {
@@ -84,8 +84,8 @@ public class GraphicIO implements IOStrategy, KeyListener{
 	}
 
 	//gotowy placeholder
-	public void drawMenu () {
-		/*if (window == null) {
+	public void drawMenu() {
+		if (window == null) {
 			createWindow();
 		}
 
@@ -96,14 +96,20 @@ public class GraphicIO implements IOStrategy, KeyListener{
 			editorDisplay = null;
 
 			menuDisplay = new MenuDisplay();
-			menuDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
+			menuDisplay.setPreferredSize(new Dimension(300, 400));
 
 			window.getContentPane().add(menuDisplay, BorderLayout.CENTER);
 			window.pack();
 		} else {
 			menuDisplay.repaint();
-		}*/
+		}
 	}
+
+
+
+
+
+
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -131,6 +137,8 @@ public class GraphicIO implements IOStrategy, KeyListener{
 	public static JFrame getWindow() {
 		return window;
 	}
+
+
 
 	public static void setWindow(JFrame window) {
 		GraphicIO.window = window;

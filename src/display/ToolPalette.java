@@ -4,6 +4,8 @@ import IO.IOManager;
 //import enums.EditorModes;
 import enums.Layer;
 import enums.Loader;
+import event.LevelLoadedEvent;
+import event.LevelSavedEvent;
 import gamemanager.GameManager;
 import levelloader.LevelLoader;
 import levelloader.LevelNotLoaded;
@@ -99,20 +101,14 @@ public class ToolPalette extends AbstractPalette {
 		public void mouseClicked(MouseEvent e) {
 			ToolPalette.this.selectOne((ImageButton) e.getSource());
 			if (changeLayer == Loader.LOAD) {
-				try {
-					GameManager.getInstance().setMap(LevelLoader.loadLevel("testsave"));
-				} catch (LevelNotLoaded ex) {
-					throw new RuntimeException(ex);
-				}
+				LevelLoadedEvent levelLoadedEvent = new LevelLoadedEvent("testsave");
+				GameManager.getInstance().onEvent(levelLoadedEvent);
 				IOManager.getInstance().drawEditor();
 			}
 			else if (changeLayer == Loader.SAVE)
 			{
-				try {
-					LevelLoader.saveLevel("testsave", GameManager.getInstance().getMap());
-				} catch (LevelNotSaved ex) {
-					throw new RuntimeException(ex);
-				}
+				LevelSavedEvent levelSavedEvent = new LevelSavedEvent("testsave");
+				GameManager.getInstance().onEvent(levelSavedEvent);
 			}
 
 		}

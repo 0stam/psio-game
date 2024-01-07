@@ -1,5 +1,6 @@
 package levelloader;
 
+import gamemanager.GameManager;
 import map.Map;
 
 import java.nio.file.Files;
@@ -34,6 +35,7 @@ public class LevelLoader {
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
             Map loadedMap = (Map)is.readObject();
+            GameManager.getInstance().setMap(loadedMap);
             return loadedMap;
         } catch(IOException | ClassNotFoundException e) {
             throw new LevelNotLoaded("Failed to load level " + name);

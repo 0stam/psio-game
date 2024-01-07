@@ -86,6 +86,30 @@ public class GameMapDisplay extends JPanel {
 			height = map.getHeight();
 		}
 
+		if (playerX < width / 2) {
+			playerX = width / 2;
+		}
+
+		if (playerX > map.getWidth() - width / 2 - 1) {
+			playerX = map.getWidth() - width / 2 - 1;
+		}
+
+		if (playerY < height / 2) {
+			playerY = height / 2;
+		}
+
+		if (playerY > map.getHeight() - height / 2 - 1) {
+			playerY = map.getHeight() - height / 2 - 1;
+		}
+
+		if (map.getWidth() < width) {
+			playerX = map.getWidth() / 2;
+		}
+
+		if (map.getHeight() < height) {
+			playerY = map.getHeight() / 2;
+		}
+
 		int x = 0;
 		int y = 0;
 
@@ -100,8 +124,8 @@ public class GameMapDisplay extends JPanel {
 				}
 
 				if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
-					images[i][j] = GraphicsHashtable.getInstance().getImage(WALL);
-					prevMapBottom[i][j] = WALL;
+					images[i][j] = GraphicsHashtable.getInstance().getImage(OUT_OF_BOUNDS);
+					prevMapBottom[i][j] = OUT_OF_BOUNDS;
 					images2[i][j] = null;
 					prevMapFront[i][j] = null;
 				} else {

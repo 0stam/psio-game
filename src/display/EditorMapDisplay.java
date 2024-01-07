@@ -13,8 +13,7 @@ public class EditorMapDisplay extends JPanel {
     private InteractiveTile[][] mapTiles;
 
     public EditorMapDisplay() {
-
-        container.setLayout(new GridLayout(GameManager.getInstance().getMap().getWidth(), GameManager.getInstance().getMap().getHeight(),0,0));
+        container.setLayout(new GridLayout(GameManager.getInstance().getMap().getHeight(), GameManager.getInstance().getMap().getWidth(),0,0));
         this.mapTiles = new InteractiveTile[GameManager.getInstance().getMap().getWidth()][GameManager.getInstance().getMap().getHeight()];
 
         for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {

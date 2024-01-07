@@ -3,7 +3,11 @@ package display;
 import IO.IOManager;
 //import enums.EditorModes;
 import enums.Layer;
+import enums.Loader;
 import gamemanager.GameManager;
+import levelloader.LevelLoader;
+import levelloader.LevelNotLoaded;
+import levelloader.LevelNotSaved;
 import map.Map;
 
 import javax.imageio.ImageIO;
@@ -39,7 +43,10 @@ public class ToolPalette extends AbstractPalette {
 			buttons.get(2).addMouseListener(new layerListener(Layer.BOTTOM));
 
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_save.png")), "Save"));
+			buttons.get(3).addMouseListener(new loaderListener(Loader.SAVE));
+
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_load.png")), "Load"));
+			buttons.get(4).addMouseListener(new loaderListener(Loader.LOAD));
 		} catch (IOException ignored) {
 
 		}
@@ -77,6 +84,35 @@ public class ToolPalette extends AbstractPalette {
 			if (changeLayer != GameManager.getInstance().getEditor().getLayer()) {
 				GameManager.getInstance().getEditor().setLayer(changeLayer);
 				IOManager.getInstance().drawEditor();
+			}
+
+		}
+	}
+	public class loaderListener extends MouseInputAdapter {
+		private enums.Loader changeLayer;
+
+		loaderListener(enums.Loader changeLayer) {
+			this.changeLayer = changeLayer;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			ToolPalette.this.selectOne((ImageButton) e.getSource());
+			if (changeLayer == Loader.LOAD) {
+				try {
+					GameManager.getInstance().setMap(LevelLoader.loadLevel("testsave"));
+				} catch (LevelNotLoaded ex) {
+					throw new RuntimeException(ex);
+				}
+				IOManager.getInstance().drawEditor();
+			}
+			else if (changeLayer == Loader.SAVE)
+			{
+				try {
+					LevelLoader.saveLevel("testsave", GameManager.getInstance().getMap());
+				} catch (LevelNotSaved ex) {
+					throw new RuntimeException(ex);
+				}
 			}
 
 		}

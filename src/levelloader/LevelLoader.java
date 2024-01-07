@@ -48,13 +48,13 @@ public class LevelLoader {
 
         File[] bfiles = baseLevels.listFiles();
         Arrays.sort(bfiles);
-        if(index <= bfiles.length) {
-            path = bfiles[index-1].getAbsolutePath();
+        if(index < bfiles.length) {
+            path = bfiles[index].getAbsolutePath();
         }
         else {
             File[] ufiles = userLevels.listFiles();
             Arrays.sort(ufiles);
-            path = ufiles[index-bfiles.length-1].getAbsolutePath();
+            path = ufiles[index-bfiles.length].getAbsolutePath();
         }
 
         try {

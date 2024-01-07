@@ -16,10 +16,10 @@ public class GameManager implements EventObserver {
     private Map map;
     private Editor editor;
     private boolean levelCompleted;
+    private int currentLevel;
 
     private GameManager() {
-        // TODO: remove when proper Editor initialization is implemented
-        editor = new Editor();
+
     }
 
     public static GameManager getInstance() {
@@ -65,10 +65,27 @@ public class GameManager implements EventObserver {
         io.drawEditor();
     }
 
+    public void startLevel(int index) {
+        try {
+            map = LevelLoader.loadLevel(index);
+        } catch (LevelNotLoaded e) {
+            System.out.println("Incorrect level selected for loading in GameManager, should never happen");
+            return;
+        }
+
+        currentLevel = index;
+        levelCompleted = false;
+        IOManager.getInstance().drawGame();
+    }
 
     public void endLevel(){
         levelCompleted = true;
-        System.out.println("Essa zwyciężyłeś");
+
+        if (currentLevel < LevelLoader.getLevelCount() - 1) {
+            startLevel(currentLevel + 1);
+        } else {
+            IOManager.getInstance().drawMenu();
+        }
     }
     public void setMap(Map map) {
         this.map = map;
@@ -93,9 +110,22 @@ public class GameManager implements EventObserver {
             return;
         }
 
+        if (event instanceof LevelSelectedEvent levelSelectedEvent) {
+            startLevel(levelSelectedEvent.getIndex());
+            return;
+        }
+
+        if (event instanceof EditorSelectedEvent) {
+            editor = new Editor();
+            IOManager.getInstance().drawEditor();
+            return;
+        }
+
         if (event instanceof MoveEvent moveEvent) {
             startTurn(moveEvent.getDirection());
-            IOManager.getInstance().drawGame();
+            if (!levelCompleted) {
+                IOManager.getInstance().drawGame();
+            }
             return;
         }
 

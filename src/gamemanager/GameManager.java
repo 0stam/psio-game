@@ -29,7 +29,7 @@ public class GameManager implements EventObserver {
         return gameManager;
     }
 
-    public void startGame(){
+    public void saveExampleLevel(){
          //Tworzenie mapy do pozniejszego zapisu
         Map map = new Map(10, 10);
         levelCompleted = false;
@@ -55,21 +55,13 @@ public class GameManager implements EventObserver {
         }
         levelCompleted=false;
         this.map=map;*/
-
-        //IOManager io = IOManager.getInstance(new ConsoleIO());
-        IOManager io = IOManager.getInstance(new GraphicIO());
-
-        //We can swap between editor and main game - uncomment
-        //Perhaps simple switch would solve triggering draw menu, editor and game
-        io.drawGame();
-        io.drawEditor();
     }
 
     public void startLevel(int index) {
         try {
             map = LevelLoader.loadLevel(index);
         } catch (LevelNotLoaded e) {
-            System.out.println("Incorrect level selected for loading in GameManager, should never happen");
+            System.out.println("Incorrect level selected for loading in GameManager");
             return;
         }
 
@@ -130,7 +122,7 @@ public class GameManager implements EventObserver {
         }
 
         if (event instanceof ResetEvent) {
-            startGame();
+            startLevel(currentLevel);
             return;
         }
     }

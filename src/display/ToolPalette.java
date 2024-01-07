@@ -3,12 +3,7 @@ package display;
 import IO.IOManager;
 //import enums.EditorModes;
 import enums.Layer;
-import event.LevelLoadedEvent;
-import event.LevelSavedEvent;
 import gamemanager.GameManager;
-import levelloader.LevelLoader;
-import levelloader.LevelNotLoaded;
-import levelloader.LevelNotSaved;
 import map.Map;
 
 import javax.imageio.ImageIO;
@@ -43,11 +38,14 @@ public class ToolPalette extends AbstractPalette {
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_bottom.png")), "Bottom"));
 			buttons.get(2).addMouseListener(new layerListener(Layer.BOTTOM));
 
+			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_resize.png")), "Resize"));
+			buttons.get(3).addMouseListener(new resizeListener());
+
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_save.png")), "Save"));
-			buttons.get(3).addMouseListener(new SaveListener());
+			buttons.get(4).addMouseListener(new saveListener(this));
 
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_load.png")), "Load"));
-			buttons.get(4).addMouseListener(new LoadListener());
+			buttons.get(5).addMouseListener(new loadListener(this));
 		} catch (IOException ignored) {
 
 		}
@@ -90,16 +88,54 @@ public class ToolPalette extends AbstractPalette {
 		}
 	}
 
-	public class SaveListener extends MouseInputAdapter {
+	public class resizeListener extends MouseInputAdapter {
+		ResizeWindow resizeWindow;
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
-            GameManager.getInstance().onEvent(new LevelSavedEvent("0"));
-        }
+			resizeWindow = new ResizeWindow();
+		}
 	}
-	public class LoadListener extends MouseInputAdapter {
+
+	public class loadListener extends MouseInputAdapter {
+		final JFileChooser fc = new JFileChooser();
+		private ToolPalette parent;
+
+		public loadListener (ToolPalette parent) {
+			this.parent = parent;
+		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
-            GameManager.getInstance().onEvent(new LevelLoadedEvent("0"));
-        }
+			int returnVal = fc.showOpenDialog(this.parent);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				GameManager.getInstance().getEditor().onEvent(new LevelLoadedEvent(file.getName()));
+			} else {
+				System.out.println("Cancelled");
+			}
+		}
+	}
+
+	public class saveListener extends MouseInputAdapter {
+		final JFileChooser fc = new JFileChooser();
+		private ToolPalette parent;
+
+		public saveListener (ToolPalette parent) {
+			this.parent = parent;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			int returnVal = fc.showSaveDialog(this.parent);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				GameManager.getInstance().getEditor().onEvent(new LevelSavedEvent(file.getName()));
+			} else {
+				System.out.println("Cancelled");
+			}
+		}
 	}
 }

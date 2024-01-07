@@ -102,6 +102,10 @@ public class GameManager implements EventObserver {
             return;
         }
 
+        if (event instanceof EscapeEvent) {
+            IOManager.getInstance().drawMenu();
+        }
+
         if (event instanceof LevelSelectedEvent levelSelectedEvent) {
             startLevel(levelSelectedEvent.getIndex());
             return;

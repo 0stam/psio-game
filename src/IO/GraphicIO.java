@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GraphicIO implements IOStrategy, KeyListener{
+public class GraphicIO implements IOStrategy {
 	private static JFrame window;
 	private static EditorDisplay editorDisplay;
 	private static GameMapDisplay gameDisplay;
@@ -30,7 +30,6 @@ public class GraphicIO implements IOStrategy, KeyListener{
 
 		window = new JFrame("Nasza cudowna gra");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.addKeyListener(this);
 		window.setVisible(true);
 		window.setIconImage(new ImageIcon("src/graphics/icon.png").getImage());
 		//i tak nie ma sensu robic mniejszego
@@ -43,17 +42,19 @@ public class GraphicIO implements IOStrategy, KeyListener{
 		}
 
 		if (gameDisplay == null) {
+			Dimension currentSize = window.getSize();
 			window.getContentPane().removeAll();
 
 			editorDisplay = null;
 			menuDisplay = null;
 
 			gameDisplay = new GameMapDisplay();
-			gameDisplay.setPreferredSize(new Dimension(32 * gameDisplay.getW()-1, 32 * gameDisplay.getH()));
+			gameDisplay.setMinimumSize(new Dimension(32 * gameDisplay.getW()-1, 32 * gameDisplay.getH()));
 			gameDisplay.setupMap(GameManager.getInstance().getMap());
 
 			window.getContentPane().add(gameDisplay.getContainer(), BorderLayout.CENTER);
 			window.pack();
+			window.setSize(currentSize);
 		} else {
 			gameDisplay.setupMap(GameManager.getInstance().getMap());
 			gameDisplay.repaint();
@@ -66,16 +67,18 @@ public class GraphicIO implements IOStrategy, KeyListener{
 		}
 
 		if (editorDisplay == null) {
+			Dimension currentSize = window.getSize();
 			window.getContentPane().removeAll();
 
 			gameDisplay = null;
 			menuDisplay = null;
 
 			editorDisplay = new EditorDisplay();
-			editorDisplay.setPreferredSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
+			editorDisplay.setMinimumSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
 
 			window.getContentPane().add(editorDisplay, BorderLayout.CENTER);
 			window.pack();
+			window.setSize(currentSize);
 		} else {
 			// FIXME: add proper editor refresh method
 			editorDisplay.getEditorMapDisplay().refreshMap();
@@ -90,55 +93,26 @@ public class GraphicIO implements IOStrategy, KeyListener{
 		}
 
 		if (menuDisplay == null) {
+			Dimension currentSize = window.getSize();
 			window.getContentPane().removeAll();
 
 			gameDisplay = null;
 			editorDisplay = null;
 
 			menuDisplay = new MenuDisplay();
-			menuDisplay.setPreferredSize(new Dimension(300, 400));
+			menuDisplay.setMinimumSize(new Dimension(300, 400));
 
 			window.getContentPane().add(menuDisplay, BorderLayout.CENTER);
 			window.pack();
+			window.setSize(currentSize);
 		} else {
 			menuDisplay.repaint();
 		}
 	}
 
-
-
-
-
-
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		Direction direction = switch (e.getKeyCode()) {
-			case 'w', 'W', KeyEvent.VK_UP -> Direction.UP;
-			case 'a', 'A', KeyEvent.VK_LEFT -> Direction.LEFT;
-			case 's', 'S', KeyEvent.VK_DOWN -> Direction.DOWN;
-			case 'd', 'D', KeyEvent.VK_RIGHT -> Direction.RIGHT;
-			default -> Direction.DEFAULT;
-		};
-
-		if (!GameManager.getInstance().getLevelCompleted() && direction != Direction.DEFAULT) {
-			GameManager.getInstance().onEvent(new MoveEvent(direction));
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-	}
-
 	public static JFrame getWindow() {
 		return window;
 	}
-
-
 
 	public static void setWindow(JFrame window) {
 		GraphicIO.window = window;

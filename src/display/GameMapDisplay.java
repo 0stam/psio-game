@@ -1,12 +1,18 @@
 package display;
 
+import enums.Direction;
+import event.EscapeEvent;
+import event.MoveEvent;
+import event.ResetEvent;
+import gamemanager.GameManager;
 import map.Map;
 import tile.PlayerCharacter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.Hashtable;
 
 import static enums.Graphics.*;
 
@@ -26,6 +32,43 @@ public class GameMapDisplay extends JPanel {
 		prevMapFront = new enums.Graphics[width][height];
 		this.images = new BufferedImage[width][height];
 		this.images2 = new BufferedImage[width][height];
+		createInputBindings();
+	}
+
+	private void createInputBindings() {
+		class EventAction extends AbstractAction {
+			event.Event event;
+
+			public EventAction(event.Event event) {
+				this.event = event;
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GameManager.getInstance().onEvent(event);
+			}
+		}
+
+		String[] names = {"up", "down", "left", "right"};
+		Direction[] directions = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
+		String[] letters = {"W", "S", "A", "D"};
+		int[] arrows = {KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT};
+
+		InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap actionMap = getActionMap();
+
+		for (int i = 0; i < names.length; i++) {
+			inputMap.put(KeyStroke.getKeyStroke(letters[i]), names[i]);
+			inputMap.put(KeyStroke.getKeyStroke(arrows[i], 0), names[i]);
+
+			actionMap.put(names[i], new EventAction(new MoveEvent(directions[i])));
+		}
+
+		inputMap.put(KeyStroke.getKeyStroke("R"), "reset");
+		actionMap.put("reset", new EventAction(new ResetEvent()));
+
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "escape");
+		actionMap.put("escape", new EventAction(new EscapeEvent()));
 	}
 
 	public void setupMap (Map map) {

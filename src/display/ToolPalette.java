@@ -3,7 +3,10 @@ package display;
 import IO.IOManager;
 //import enums.EditorModes;
 import enums.Layer;
+import event.LevelLoadedEvent;
+import event.LevelSavedEvent;
 import gamemanager.GameManager;
+import levelloader.LevelLoader;
 import map.Map;
 
 import javax.imageio.ImageIO;
@@ -98,7 +101,7 @@ public class ToolPalette extends AbstractPalette {
 	}
 
 	public class loadListener extends MouseInputAdapter {
-		final JFileChooser fc = new JFileChooser();
+		JFileChooser fc;
 		private ToolPalette parent;
 
 		public loadListener (ToolPalette parent) {
@@ -107,19 +110,19 @@ public class ToolPalette extends AbstractPalette {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			fc = new JFileChooser(new File(System.getProperty("user.home") + LevelLoader.userLevelsPath));
+
 			int returnVal = fc.showOpenDialog(this.parent);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
-				GameManager.getInstance().getEditor().onEvent(new LevelLoadedEvent(file.getName()));
-			} else {
-				System.out.println("Cancelled");
+				GameManager.getInstance().getEditor().onEvent(new LevelLoadedEvent(file.getPath()));
 			}
 		}
 	}
 
 	public class saveListener extends MouseInputAdapter {
-		final JFileChooser fc = new JFileChooser();
+		JFileChooser fc;
 		private ToolPalette parent;
 
 		public saveListener (ToolPalette parent) {
@@ -128,13 +131,13 @@ public class ToolPalette extends AbstractPalette {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			fc = new JFileChooser(new File(System.getProperty("user.home") + LevelLoader.userLevelsPath));
+
 			int returnVal = fc.showSaveDialog(this.parent);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
-				GameManager.getInstance().getEditor().onEvent(new LevelSavedEvent(file.getName()));
-			} else {
-				System.out.println("Cancelled");
+				GameManager.getInstance().getEditor().onEvent(new LevelSavedEvent(file.getPath()));
 			}
 		}
 	}

@@ -13,7 +13,7 @@ public class LevelLoader {
 
     public static void saveLevel(String name, Map map) throws LevelNotSaved {
         String userHome = System.getProperty("user.home");
-        String path = userHome + userLevelsPath + name;
+        String path = name;
 
         try {
             Path folderPath = Paths.get(path).getParent();
@@ -29,7 +29,7 @@ public class LevelLoader {
 
     public static Map loadLevel(String name) throws LevelNotLoaded {
         String userHome = System.getProperty("user.home");
-        String path = userHome + userLevelsPath + name;
+        String path = name;
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));

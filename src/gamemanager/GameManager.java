@@ -17,6 +17,7 @@ public class GameManager implements EventObserver {
     private Editor editor;
     private boolean levelCompleted;
     private int currentLevel;
+    private boolean endLevel = false;
 
     private GameManager() {
 
@@ -39,10 +40,11 @@ public class GameManager implements EventObserver {
         this.map = map;
 
         try {
-            LevelLoader.saveLevel("0", this.map);
+            LevelLoader.saveLevel("test2", this.map);
         } catch (LevelNotSaved e) {
             e.printStackTrace();
         }
+        System.out.println(LevelLoader.getLevelCount());
 
         //Wczytywanie zapisanej mapy
         /*Map map = null;
@@ -71,6 +73,7 @@ public class GameManager implements EventObserver {
 
     public void endLevel(){
         levelCompleted = true;
+        endLevel = false;
 
         if (currentLevel < LevelLoader.getLevelCount() - 1) {
             startLevel(currentLevel + 1);
@@ -89,6 +92,9 @@ public class GameManager implements EventObserver {
     // should have input parameters
     public void startTurn(Direction input) {
         this.map.startTurn(input);
+        if (endLevel) {
+            endLevel();
+        }
     }
 
     public void onEvent(Event event) {
@@ -102,6 +108,7 @@ public class GameManager implements EventObserver {
         }
 
         if (event instanceof EscapeEvent) {
+            editor = null;
             IOManager.getInstance().drawMenu();
         }
 
@@ -136,5 +143,13 @@ public class GameManager implements EventObserver {
 
     public Editor getEditor() {
         return editor;
+    }
+
+    public boolean getEndLevel() {
+        return endLevel;
+    }
+
+    public void setEndLevel(boolean endLevel) {
+        this.endLevel = endLevel;
     }
 }

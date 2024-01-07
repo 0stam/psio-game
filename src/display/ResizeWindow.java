@@ -53,6 +53,7 @@ public class ResizeWindow {
 				}
 
 				GameManager.getInstance().setMap(newMap);
+
 				IOManager.getInstance().drawGame();
 				IOManager.getInstance().drawEditor();
 			}

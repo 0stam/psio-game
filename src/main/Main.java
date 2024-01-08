@@ -7,7 +7,6 @@ import IO.GraphicIO;
 public class Main {
     public static void main(String[] args) {
         GameManager gameManager = GameManager.getInstance();
-        gameManager.saveExampleLevel();
 
         IOManager io = IOManager.getInstance(new GraphicIO());
 

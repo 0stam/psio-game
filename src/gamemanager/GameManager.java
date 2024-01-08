@@ -39,7 +39,7 @@ public class GameManager implements EventObserver {
         this.map = map;
 
         try {
-            LevelLoader.saveLevel("test2", this.map);
+            LevelLoader.saveLevel("0", this.map);
         } catch (LevelNotSaved e) {
             e.printStackTrace();
         }

@@ -93,13 +93,13 @@ public class ToolPalette extends AbstractPalette {
 	public class SaveListener extends MouseInputAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-            GameManager.getInstance().onEvent(new LevelSavedEvent("test_level"));
+            GameManager.getInstance().onEvent(new LevelSavedEvent("0"));
         }
 	}
 	public class LoadListener extends MouseInputAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-            GameManager.getInstance().onEvent(new LevelLoadedEvent("test_level"));
+            GameManager.getInstance().onEvent(new LevelLoadedEvent("0"));
         }
 	}
 }

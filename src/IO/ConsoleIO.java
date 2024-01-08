@@ -2,8 +2,11 @@ package IO;
 
 import enums.Graphics;
 import enums.Direction;
+import event.LevelSelectedEvent;
 import event.MoveEvent;
+import event.ResetEvent;
 import gamemanager.GameManager;
+import levelloader.LevelLoader;
 import map.Map;
 
 import java.util.Scanner;
@@ -61,15 +64,16 @@ public class ConsoleIO implements IOStrategy {
                 case 'd', 'D':
 					direction = Direction.RIGHT;
 					break;
+				case 'r', 'R':
+					GameManager.getInstance().onEvent(new ResetEvent());
+					return;
                 default:
 					inputError = true;
 					break;
 			}
 		}
 
-		System.out.println(direction + " koniec rysowania");
 		GameManager.getInstance().onEvent(new MoveEvent(direction));
-		return;
 	}
 
 	public void drawEditor () {
@@ -77,7 +81,28 @@ public class ConsoleIO implements IOStrategy {
 	}
 
 	@Override
-	public void drawMenu() {}
+	public void drawMenu() {
+		Scanner scn = new Scanner(System.in);
+
+		boolean validInput = false;
+		int levelCount = LevelLoader.getLevelCount();
+
+		while (!validInput) {
+			System.out.print("Select level [0-" + (levelCount - 1) + "]: ");
+			try {
+				int selection = Integer.parseInt(scn.nextLine());
+
+				if (selection >= 0 && selection < levelCount) {
+					validInput = true;
+					GameManager.getInstance().onEvent(new LevelSelectedEvent(selection));
+				}
+			} catch (NumberFormatException e) {}
+
+			if (!validInput) {
+				System.out.println("Incorrect level number.");
+			}
+		}
+	}
 
 	public char idToChar(Graphics graphics)	{
         return switch (graphics) {

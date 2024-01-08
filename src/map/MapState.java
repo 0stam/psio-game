@@ -83,7 +83,6 @@ public class MapState implements Serializable, Cloneable {
         actionTilesToRemove.add(actionTile);
     }
     public void addActionTile(ActionTile actionTile) {
-        System.out.println("added actionTile: " + actionTile);
         actionTilesToAdd.add(actionTile);
     }
 

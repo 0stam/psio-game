@@ -3,7 +3,12 @@ package display;
 import IO.IOManager;
 //import enums.EditorModes;
 import enums.Layer;
+import event.LevelLoadedEvent;
+import event.LevelSavedEvent;
 import gamemanager.GameManager;
+import levelloader.LevelLoader;
+import levelloader.LevelNotLoaded;
+import levelloader.LevelNotSaved;
 import map.Map;
 
 import javax.imageio.ImageIO;
@@ -39,7 +44,10 @@ public class ToolPalette extends AbstractPalette {
 			buttons.get(2).addMouseListener(new layerListener(Layer.BOTTOM));
 
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_save.png")), "Save"));
+			buttons.get(3).addMouseListener(new SaveListener());
+
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_load.png")), "Load"));
+			buttons.get(4).addMouseListener(new LoadListener());
 		} catch (IOException ignored) {
 
 		}
@@ -80,5 +88,18 @@ public class ToolPalette extends AbstractPalette {
 			}
 
 		}
+	}
+
+	public class SaveListener extends MouseInputAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+            GameManager.getInstance().onEvent(new LevelSavedEvent("test_level"));
+        }
+	}
+	public class LoadListener extends MouseInputAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+            GameManager.getInstance().onEvent(new LevelLoadedEvent("test_level"));
+        }
 	}
 }

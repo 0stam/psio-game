@@ -93,10 +93,8 @@ public class PlayerFollower implements TurnStrategy, Serializable{
         return LEFT;
     }
 
-
     @Override
     public void onTurn(Direction direction, ActionTile follower) {
         GameManager.getInstance().getMap().move(follower.getX(), follower.getY(), getDirection(follower, targetTile));
     }
-
 }

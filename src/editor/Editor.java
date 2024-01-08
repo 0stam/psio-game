@@ -41,7 +41,7 @@ public class Editor implements EventObserver {
         return switch (editableTile) {
             case BOX ->  new Box(x, y);
             case GOAL ->  new Goal(x, y);
-            case WALL ->  (layer==Layer.UPPER) ? null : new Wall(x, y);
+            case WALL ->  new Wall(x, y);
             case ENEMY ->  new ChasingEnemy(x, y, findPlayer());
             case FLOOR ->  new Floor(x, y);
             case PLAYER ->  new PlayerCharacter(x, y);
@@ -109,6 +109,8 @@ public class Editor implements EventObserver {
             if (event instanceof LevelLoadedEvent) {
                 try {
                     GameManager.getInstance().setMap(LevelLoader.loadLevel(levelEvent.getPath()));
+                    IOManager.getInstance().drawGame();
+                    IOManager.getInstance().drawEditor();
                     playerCount = 0;
                     for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
                     {
@@ -151,13 +153,18 @@ public class Editor implements EventObserver {
     private void editorPlaceTile(EditableTile tile, Layer layer, int x, int y) {
         switch (layer) {
             case BOTH:
-                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.UPPER) {
-                    this.layer = Layer.UPPER;
-                    editorPlaceTile(tile, Layer.UPPER, x, y);
-                }
+
                 if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
                     this.layer = Layer.BOTTOM;
                     editorPlaceTile(tile, Layer.BOTTOM, x, y);
+                }
+                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.UPPER) {
+                    if (tile == WALL)
+                    {
+                        tile = EMPTY;
+                    }
+                    this.layer = Layer.UPPER;
+                    editorPlaceTile(tile, Layer.UPPER, x, y);
                 }
                 this.layer = Layer.BOTH;
                 break;

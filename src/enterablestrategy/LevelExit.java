@@ -11,7 +11,7 @@ public class LevelExit implements EnterableStrategy, Serializable{
 
     public void onEntered(Direction direction, Tile tile) {
         if (tile instanceof PlayerCharacter) {
-            GameManager.getInstance().endLevel();
+            GameManager.getInstance().setEndLevel(true);
         }
     }
 

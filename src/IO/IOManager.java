@@ -36,4 +36,8 @@ public class IOManager {
 	public void drawMenu () {
 		this.strategy.drawMenu();
 	}
+
+	public IOStrategy getStrategy() {
+		return strategy;
+	}
 }

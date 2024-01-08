@@ -26,7 +26,7 @@ public class GameMapDisplay extends JPanel {
 	private int height = 15;
 
 	// Following camera parameters
-	private boolean useFollowingCamera = false;
+	private boolean useFollowingCamera = true;
 	private final int followingWidth = 15;
 	private final int followingHeight = 15;
 	private int playerX = -1;
@@ -86,6 +86,30 @@ public class GameMapDisplay extends JPanel {
 			height = map.getHeight();
 		}
 
+		if (playerX < width / 2 - 1) {
+			playerX = width / 2 - 1;
+		}
+
+		if (playerX > map.getWidth() - width / 2) {
+			playerX = map.getWidth() - width / 2;
+		}
+
+		if (playerY < height / 2 - 1) {
+			playerY = height / 2 - 1;
+		}
+
+		if (playerY > map.getHeight() - height / 2) {
+			playerY = map.getHeight() - height / 2;
+		}
+
+		if (map.getWidth() < width) {
+			playerX = map.getWidth() / 2;
+		}
+
+		if (map.getHeight() < height) {
+			playerY = map.getHeight() / 2;
+		}
+
 		int x = 0;
 		int y = 0;
 
@@ -100,8 +124,8 @@ public class GameMapDisplay extends JPanel {
 				}
 
 				if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
-					images[i][j] = GraphicsHashtable.getInstance().getImage(WALL);
-					prevMapBottom[i][j] = WALL;
+					images[i][j] = GraphicsHashtable.getInstance().getImage(OUT_OF_BOUNDS);
+					prevMapBottom[i][j] = OUT_OF_BOUNDS;
 					images2[i][j] = null;
 					prevMapFront[i][j] = null;
 				} else {
@@ -134,6 +158,11 @@ public class GameMapDisplay extends JPanel {
 
 	private void playerSearch(Map map) {
 		boolean found = false;
+
+		if (playerX >= map.getWidth() || playerY >= map.getHeight()) {
+			playerX = -1;
+			playerY = -1;
+		}
 
 		if (playerX != -1 && playerY != -1) {
 			if ((map.getUpperLayer(playerX, playerY) instanceof PlayerCharacter) || (map.getBottomLayer(playerX, playerY) instanceof PlayerCharacter)) {

@@ -28,6 +28,10 @@ public class Button extends Tile implements EventSource {
         observers.remove(observer);
     }
 
+    public boolean hasObserver(EventObserver eventObserver) {
+        return observers.contains(eventObserver);
+    }
+
     private void notifyObservers() {
         for (EventObserver observer : observers) {
             observer.onEvent(new ButtonEvent(isPressed));

@@ -1,5 +1,6 @@
 package main;
 
+import IO.ConsoleIO;
 import IO.IOManager;
 import gamemanager.GameManager;
 import IO.GraphicIO;

@@ -3,13 +3,9 @@ package IO;
 import javax.swing.*;
 
 import display.*;
-import enums.Direction;
-import event.MoveEvent;
 import gamemanager.GameManager;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class GraphicIO implements IOStrategy {
 	private static JFrame window;
@@ -81,7 +77,7 @@ public class GraphicIO implements IOStrategy {
 			window.setSize(currentSize);
 		} else {
 			// FIXME: add proper editor refresh method
-			editorDisplay.getEditorMapDisplay().refreshMap();
+			editorDisplay.refresh();
 			editorDisplay.repaint();
 		}
 	}

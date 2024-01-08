@@ -43,7 +43,6 @@ public class GameManager implements EventObserver {
         } catch (LevelNotSaved e) {
             e.printStackTrace();
         }
-        System.out.println(LevelLoader.getLevelCount());
 
         //Wczytywanie zapisanej mapy
         /*Map map = null;

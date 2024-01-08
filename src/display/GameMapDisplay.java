@@ -22,8 +22,13 @@ public class GameMapDisplay extends JPanel {
 	private JPanel container = new JPanel();
 	private enums.Graphics[][] prevMapBottom;
 	private enums.Graphics[][] prevMapFront;
-	private final int width = 15;
-	private final int height = 15;
+	private int width = 15;
+	private int height = 15;
+
+	// Following camera parameters
+	private boolean useFollowingCamera = false;
+	private final int followingWidth = 15;
+	private final int followingHeight = 15;
 	private int playerX = -1;
 	private int playerY = -1;
 
@@ -72,15 +77,27 @@ public class GameMapDisplay extends JPanel {
 	}
 
 	public void setupMap (Map map) {
-		playerSearch (map);
+		if (useFollowingCamera) {
+			playerSearch(map);
+			width = followingWidth;
+			height = followingHeight;
+		} else {
+			width = map.getWidth();
+			height = map.getHeight();
+		}
 
 		int x = 0;
 		int y = 0;
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				x = i + playerX - width / 2;
-				y = j + playerY - height / 2;
+				if (useFollowingCamera) {
+					x = i + playerX - width / 2;
+					y = j + playerY - height / 2;
+				} else {
+					x = i;
+					y = j;
+				}
 
 				if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
 					images[i][j] = GraphicsHashtable.getInstance().getImage(WALL);
@@ -201,5 +218,13 @@ public class GameMapDisplay extends JPanel {
 
 	public int getH() {
 		return height;
+	}
+
+	public boolean isUseFollowingCamera() {
+		return useFollowingCamera;
+	}
+
+	public void setUseFollowingCamera(boolean useFollowingCamera) {
+		this.useFollowingCamera = useFollowingCamera;
 	}
 }

@@ -1,6 +1,5 @@
 package display;
 
-import enums.Layer;
 import gamemanager.GameManager;
 
 import javax.swing.*;
@@ -27,7 +26,7 @@ public class EditorMapDisplay extends JPanel {
         }
 
         this.setBackground(Color.WHITE);
-        this.refreshMap();
+        this.refresh();
         this.add(container);
     }
 
@@ -43,7 +42,7 @@ public class EditorMapDisplay extends JPanel {
         scale = Math.min(scaleX, scaleY);
         container.setPreferredSize(new Dimension((int) (32 * scale * GameManager.getInstance().getMap().getWidth()), (int) (32 * (scale-0.01) * GameManager.getInstance().getMap().getHeight())));
     }
-    public void refreshMap()
+    public void refresh()
     {
         switch (GameManager.getInstance().getEditor().getLayer()) {
             case BOTH: {

@@ -137,13 +137,6 @@ public class Map implements Serializable{
 
     public void addCurrentActionTile(ActionTile actionTile) {actionTiles.add(actionTile);}
 
-    public void getActionTiles(){
-        System.out.println("There are " + actionTiles.size() + " actiontiles");
-        for(int i=0; i<actionTiles.size(); i++){
-            System.out.println(actionTiles.get(i).getClass().getSimpleName());
-        }
-    }
-
     public void move(int x, int y, Direction direction) {
         nextMapState.move(x, y, direction);
     }

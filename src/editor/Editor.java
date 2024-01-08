@@ -48,6 +48,7 @@ public class Editor implements EventObserver {
             case GOAL ->  new Goal(x, y);
             case WALL ->  new Wall(x, y);
             case ENEMY ->  new ChasingEnemy(x, y, findPlayer());
+            case MIMIC -> new MimicEnemy(x, y);
             case FLOOR ->  new Floor(x, y);
             case PLAYER ->  new PlayerCharacter(x, y);
             case DOOR ->  new Door(x, y);
@@ -65,6 +66,7 @@ public class Editor implements EventObserver {
             case "Box" -> BOX;
             case "Button" -> BUTTON;
             case "ChasingEnemy" -> ENEMY;
+            case "MimicEnemy" -> MIMIC;
             case "Door" -> DOOR;
             case "Floor" -> FLOOR;
             case "Goal" -> GOAL;

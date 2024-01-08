@@ -1,6 +1,8 @@
 package levelloader;
 
 import map.Map;
+import map.MapConverter;
+import map.RawMap;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +22,7 @@ public class LevelLoader {
             Files.createDirectories(folderPath);
 
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path));
-            os.writeObject(map);
+            os.writeObject(MapConverter.saveConvert(map));
 
         } catch(IOException e) {
             throw new LevelNotSaved("Failed to save level " + name, e);
@@ -33,8 +35,8 @@ public class LevelLoader {
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            Map loadedMap = (Map)is.readObject();
-            return loadedMap;
+            RawMap loadedMap = (RawMap)is.readObject();
+            return MapConverter.loadConvert(loadedMap);
         } catch(IOException | ClassNotFoundException e) {
             throw new LevelNotLoaded("Failed to load level " + name);
         }
@@ -59,8 +61,8 @@ public class LevelLoader {
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            Map loadedMap = (Map)is.readObject();
-            return loadedMap;
+            RawMap loadedMap = (RawMap)is.readObject();
+            return MapConverter.loadConvert(loadedMap);
         } catch(IOException | ClassNotFoundException e) {
             throw new LevelNotLoaded("Failed to load level " + index);
         }

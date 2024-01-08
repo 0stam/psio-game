@@ -111,6 +111,7 @@ public class ConsoleIO implements IOStrategy {
             case BOX -> 'O';
             case PLAYER -> 'X';
             case ENEMY -> 'Y';
+			case MIMIC -> 'x';
             case BUTTON_PRESSED -> 'v';
             case BUTTON_RELEASED -> '^';
             case DOOR_OPEN -> 'u';

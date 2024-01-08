@@ -81,7 +81,7 @@ public class ToolPalette extends AbstractPalette {
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			ToolPalette.this.selectOne((ImageButton) e.getSource());
 			if (changeLayer != GameManager.getInstance().getEditor().getLayer()) {
 				GameManager.getInstance().getEditor().setLayer(changeLayer);
@@ -95,7 +95,7 @@ public class ToolPalette extends AbstractPalette {
 		ResizeWindow resizeWindow;
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			resizeWindow = new ResizeWindow();
 		}
 	}
@@ -109,7 +109,7 @@ public class ToolPalette extends AbstractPalette {
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			fc = new JFileChooser(new File(System.getProperty("user.home") + LevelLoader.userLevelsPath));
 
 			int returnVal = fc.showOpenDialog(this.parent);
@@ -130,7 +130,7 @@ public class ToolPalette extends AbstractPalette {
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			fc = new JFileChooser(new File(System.getProperty("user.home") + LevelLoader.userLevelsPath));
 
 			int returnVal = fc.showSaveDialog(this.parent);

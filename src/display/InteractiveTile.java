@@ -42,9 +42,18 @@ public class InteractiveTile extends JPanel {
 
     public class EventListener extends MouseInputAdapter {
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
+            sendTilePressedEvent (e);
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            if (SwingUtilities.isLeftMouseButton(e))
+            {
+                sendTilePressedEvent (e);
+            }
+        }
+        public void sendTilePressedEvent (MouseEvent e) {
             TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer());
-            //if (EditorDisplay.getMode() == EditorModes.ADD)
             GameManager.getInstance().onEvent(editorEvent);
         }
     }

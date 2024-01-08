@@ -46,7 +46,7 @@ public class TilePalette extends AbstractPalette {
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			TilePalette.this.selectOne((ImageButton) e.getSource());
 			TilePalette.this.repaint();
 			//EditorDisplay.setMode(EditorModes.ADD);

@@ -2,6 +2,7 @@ package editor;
 
 import IO.IOManager;
 import enums.EditableTile;
+import enums.EditorMode;
 import enums.Layer;
 import event.*;
 import levelloader.LevelLoader;
@@ -17,6 +18,7 @@ import static enums.EditableTile.*;
 public class Editor implements EventObserver {
 
     private Layer layer = Layer.BOTH;
+    private EditorMode mode = EditorMode.ADD;
     private EditableTile heldTile;
     private boolean change;
     private int playerCount;
@@ -230,5 +232,13 @@ public class Editor implements EventObserver {
             }
         }
         return null;
+    }
+
+    public EditorMode getMode() {
+        return mode;
+    }
+
+    public void setMode(EditorMode mode) {
+        this.mode = mode;
     }
 }

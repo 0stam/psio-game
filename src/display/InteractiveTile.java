@@ -1,5 +1,6 @@
 package display;
 
+import enums.EditorMode;
 import event.TilePressedEvent;
 import gamemanager.GameManager;
 
@@ -53,8 +54,10 @@ public class InteractiveTile extends JPanel {
             }
         }
         public void sendTilePressedEvent (MouseEvent e) {
-            TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer());
-            GameManager.getInstance().onEvent(editorEvent);
+            if (GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {
+                TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer());
+                GameManager.getInstance().onEvent(editorEvent);
+            }
         }
     }
     public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper) {

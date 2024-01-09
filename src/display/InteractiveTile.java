@@ -48,14 +48,14 @@ public class InteractiveTile extends JPanel {
         }
         @Override
         public void mouseEntered(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e))
+            if (SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e))
             {
                 sendTilePressedEvent (e);
             }
         }
         public void sendTilePressedEvent (MouseEvent e) {
             if (GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {
-                TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer());
+                TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
                 GameManager.getInstance().onEvent(editorEvent);
             }
         }

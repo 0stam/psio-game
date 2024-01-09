@@ -23,6 +23,9 @@ public enum EditableTile {
         this.isPlaceableBottom = isPlaceableBottom;
         this.isPlaceableUpper = isPlaceableUpper;
         this.preferredLayer = preferredLayer;
+        // If editor layer is set to BOTH and tile's preferredLayer is not set to BOTH, the tile will act as if it occupied two layers with null on one of them
+        // When single-layer tile is placed on a tile with fullTileWhenBoth, the latter one will be deleted
+        // This property can only be true if tile's preferredLayer IS NOT SET TO BOTH
         this.fullTileWhenBoth = fullTileWhenBoth;
         this.name = name;
         this.graphics = graphics;

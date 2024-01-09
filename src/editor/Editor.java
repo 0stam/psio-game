@@ -10,7 +10,10 @@ import levelloader.LevelNotSaved;
 import tile.*;
 import gamemanager.GameManager;
 import map.Map;
+import tile.Box;
 import turnstrategy.PlayerFollower;
+
+import javax.swing.*;
 
 import static enums.EditableTile.*;
 
@@ -86,28 +89,32 @@ public class Editor implements EventObserver {
     }
 
     public void onEvent(Event event) {
-        if (!(event instanceof EditorEvent)) {
-            return;
-        }
-
-        if (event instanceof PalettePressedEvent palettePressedEvent) {
-            this.setHeldTile(palettePressedEvent.getType());
-        }
-        if (event instanceof TilePressedEvent tilePressedEvent)
-        {
-            this.setLayer(tilePressedEvent.getLayer());
-            editorPlaceTile(heldTile, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
-            if (change) {
-                //nie wiem czy jest sens metody ktora rysowala by 1 tile
-                //jasne, ze byloby to efektywniejsze, ale wg naszego systemu chyba chcemy to
-                //wywolac przez IOmanager, ktory w interfejsie musialby miec taka metode
-                //wymaga duzych zmian, a i tak nikt raczej tego nie zauwazy
-                IOManager.getInstance().drawEditor();
-                change = false;
+        switch (event.getClass().getSimpleName()) {
+            case "PalettePressedEvent": {
+                PalettePressedEvent palettePressedEvent = (PalettePressedEvent) event;
+                this.setHeldTile(palettePressedEvent.getType());
+                break;
             }
-        }
-        if (event instanceof LevelEvent levelEvent) {
-            if (event instanceof LevelLoadedEvent) {
+            //TODO: fix edge case where second button is pressed while the other is still pressed down (no idea why it happens)
+            case "TilePressedEvent": {
+                TilePressedEvent tilePressedEvent = (TilePressedEvent) event;
+                this.setLayer(tilePressedEvent.getLayer());
+                //right click functionality
+                if (tilePressedEvent.isRightMouseButton()) {
+                    editorPlaceTile(EMPTY, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
+                }
+                //left click functionality
+                else {
+                    editorPlaceTile(heldTile, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
+                }
+                if (change) {
+                    IOManager.getInstance().drawEditor();
+                    change = false;
+                }
+                break;
+            }
+            case "LevelLoadedEvent": {
+                LevelEvent levelEvent = (LevelEvent) event;
                 try {
                     GameManager.getInstance().setMap(LevelLoader.loadLevel(levelEvent.getPath()));
                     IOManager.getInstance().drawGame();
@@ -131,23 +138,30 @@ public class Editor implements EventObserver {
                     setDefaultMap(10, 10);
                 }
                 IOManager.getInstance().drawEditor();
-            } else if (event instanceof LevelSavedEvent levelSavedEvent) {
+                break;
+            }
+            case "LevelSavedEvent": {
+                LevelEvent levelEvent = (LevelEvent) event;
                 try {
-                    LevelLoader.saveLevel(levelSavedEvent.getPath(),GameManager.getInstance().getMap());
+                    LevelLoader.saveLevel(levelEvent.getPath(),GameManager.getInstance().getMap());
                 }
                 catch (LevelNotSaved e) {
                     System.err.println("Błąd zapisywania poziomu");
                 }
+                break;
             }
-        }
-        if (event instanceof ConnectionEvent connectionEvent) {
             //TODO: change casting from button/door to more general statements
-            if (event instanceof ConnectionCreatedEvent) {
+            case "ConnectionCreatedEvent": {
+                ConnectionEvent connectionEvent = (ConnectionEvent) event;
                 ((Button) connectionEvent.getFrom()).addObserver((Door) connectionEvent.getTo());
+                break;
             }
-            if (event instanceof ConnectionDeletedEvent) {
+            case "ConnectionDeletedEvent": {
+                ConnectionEvent connectionEvent = (ConnectionEvent) event;
                 ((Button) connectionEvent.getFrom()).removeObserver((Door) connectionEvent.getTo());
+                break;
             }
+            default: return;
         }
     }
 

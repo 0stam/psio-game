@@ -47,14 +47,13 @@ public class Editor implements EventObserver {
             case PLAYER ->  new PlayerCharacter(x, y);
             case DOOR ->  new Door(x, y);
             case BUTTON ->  new Button(x, y);
-            case EMPTY ->  (layer==Layer.UPPER) ? null : new Floor(x,y);
             default ->  null;
         };
     }
     public EditableTile objectToEnum(Tile tile)
     {
         if (tile == null){
-            return null;
+            return EMPTY;
         }
         return switch (tile.getClass().getSimpleName())
         {
@@ -66,7 +65,7 @@ public class Editor implements EventObserver {
             case "Goal" -> GOAL;
             case "PlayerCharacter" -> PLAYER;
             case "Wall" -> WALL;
-            default -> null;
+            default -> EMPTY;
         };
     }
 
@@ -153,18 +152,19 @@ public class Editor implements EventObserver {
     private void editorPlaceTile(EditableTile tile, Layer layer, int x, int y) {
         switch (layer) {
             case BOTH:
-
-                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
-                    this.layer = Layer.BOTTOM;
-                    editorPlaceTile(tile, Layer.BOTTOM, x, y);
-                }
                 if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.UPPER) {
-                    if (tile == WALL)
-                    {
-                        tile = EMPTY;
-                    }
-                    this.layer = Layer.UPPER;
                     editorPlaceTile(tile, Layer.UPPER, x, y);
+                    if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x,y)).fullTileWhenBoth)
+                    {
+                        editorPlaceTile(EMPTY, Layer.BOTTOM, x, y);
+                    }
+                }
+                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
+                    editorPlaceTile(tile, Layer.BOTTOM, x, y);
+                    if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x,y)).fullTileWhenBoth)
+                    {
+                        editorPlaceTile(EMPTY, Layer.UPPER, x, y);
+                    }
                 }
                 this.layer = Layer.BOTH;
                 break;
@@ -198,6 +198,10 @@ public class Editor implements EventObserver {
                 }
                 break;
             case BOTTOM:
+                if (tile == EMPTY)
+                {
+                    tile = FLOOR;
+                }
                 if (tile.isPlaceableBottom && tile != objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) && !(tile == EMPTY && objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) == FLOOR)) {
                     GameManager.getInstance().getMap().setBottomLayer(x, y, enumToObject(tile, x, y));
                     change = true;

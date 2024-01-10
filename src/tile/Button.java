@@ -2,6 +2,8 @@ package tile;
 
 import enterablestrategy.Empty;
 import enums.Graphics;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,10 @@ public class Button extends Tile implements EventSource {
 
     public void removeObserver(EventObserver observer) {
         observers.remove(observer);
+    }
+
+    public List<EventObserver> getObservers() {
+        return observers;
     }
 
     public boolean hasObserver(EventObserver eventObserver) {

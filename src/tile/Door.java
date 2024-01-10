@@ -8,8 +8,11 @@ import event.Event;
 import event.EventObserver;
 
 public class Door extends Tile implements EventObserver {
+    private int numer;
+
     public Door(int x, int y) {
         super(x, y);
+        numer = 0;
         close();
     }
 
@@ -17,6 +20,12 @@ public class Door extends Tile implements EventObserver {
     public void onEvent(Event event) {
         if (event instanceof ButtonEvent buttonEvent) {
             if (buttonEvent.isPressed()) {
+                numer++;
+            } else {
+                numer--;
+            }
+
+            if (numer > 0) {
                 open();
             } else {
                 close();

@@ -7,6 +7,7 @@ public enum Graphics {
 	BOX,
 	PLAYER,
 	ENEMY,
+	MIMIC,
 	BUTTON_PRESSED,
 	BUTTON_RELEASED,
 	DOOR_OPEN,

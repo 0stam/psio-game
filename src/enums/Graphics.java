@@ -8,6 +8,7 @@ public enum Graphics {
 	PLAYER,
 	ENEMY,
 	MIMIC,
+	SMART,
 	BUTTON_PRESSED,
 	BUTTON_RELEASED,
 	DOOR_OPEN,

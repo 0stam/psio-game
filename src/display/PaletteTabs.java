@@ -24,7 +24,7 @@ public class PaletteTabs {
 
 		tabs.addTab("", new ImageIcon("src/graphics/tool_tiles.png"), tilePalette, "Tiles");
 		tabs.addTab("", new ImageIcon("src/graphics/tool_connect.png"), connectionsPalette, "Connections");
-		//tabs.addTab("", new ImageIcon("Tu daj sciezke grafiki do ikony robienia sciezek"), ??, "Pathedit");
+		tabs.addTab("", new ImageIcon("src/graphics/tool_path.png"), new JPanel(), "Pathedit");
 
 		tabs.addChangeListener(new ModeListener());
 	}

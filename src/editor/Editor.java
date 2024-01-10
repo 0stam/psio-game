@@ -1,6 +1,7 @@
 package editor;
 
 import IO.IOManager;
+import enums.ConnectableTile;
 import enums.EditableTile;
 import enums.EditorMode;
 import enums.Layer;
@@ -19,10 +20,13 @@ import static enums.EditableTile.*;
 
 
 public class Editor implements EventObserver {
-
+    // Variables required for the graphics to work
     private Layer layer = Layer.BOTH;
     private EditorMode mode = EditorMode.ADD;
     private EditableTile heldTile;
+    private ConnectableTile connectingTile;
+
+    // Variables required for the logic to work
     private boolean change;
     private int playerCount;
 
@@ -250,11 +254,29 @@ public class Editor implements EventObserver {
         return null;
     }
 
+    public Tile[] getConnectibleTilesInCategory(ConnectableTile category) {
+        // TODO: return all tiles belonging to a given category, eg. buttons, enemies etc.
+        return null;
+    }
+
+    public Tile[] getTileConnections(Tile tile) {
+        // TODO: return all tiles connected to the tile passed as an argument
+        return null;
+    }
+
     public EditorMode getMode() {
         return mode;
     }
 
     public void setMode(EditorMode mode) {
         this.mode = mode;
+    }
+
+    public ConnectableTile getConnectingTile() {
+        return connectingTile;
+    }
+
+    public void setConnectingTile(ConnectableTile connectingTile) {
+        this.connectingTile = connectingTile;
     }
 }

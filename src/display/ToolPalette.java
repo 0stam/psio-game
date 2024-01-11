@@ -121,7 +121,11 @@ public class ToolPalette extends AbstractPalette {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			parent.getEditorMapDisplay().setScale(parent.getEditorMapDisplay().getScale() + 0.1f * this.zoom);
+			if (zoom > 0) {
+				parent.getEditorMapDisplay().setScale(parent.getEditorMapDisplay().getScale() * 1.1f);
+			} else {
+				parent.getEditorMapDisplay().setScale(parent.getEditorMapDisplay().getScale() / 1.1f);
+			}
 			parent.getEditorMapDisplay().repaint();
 		}
 	}

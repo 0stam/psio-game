@@ -29,7 +29,10 @@ public class TilePalette extends AbstractPalette {
 	protected void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
 		
-		float scale = (float) this.getWidth() / (32.0f * buttons.toArray().length);
+		float scaleX = (float) this.getWidth() / (32.0f * buttons.toArray().length);
+		float scaleY = (float) this.getHeight() / (32.0f);
+
+		float scale = Math.min(scaleX, scaleY);
 
 		for (ImageButton i : buttons) {
 			i.setScale(scale / 2);

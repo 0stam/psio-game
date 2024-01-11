@@ -44,6 +44,7 @@ public class InteractiveTile extends JPanel {
     public class EventListener extends MouseInputAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
+            GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
             sendTilePressedEvent (e);
         }
         @Override
@@ -52,6 +53,11 @@ public class InteractiveTile extends JPanel {
             {
                 sendTilePressedEvent (e);
             }
+        }
+        @Override
+        public void mouseReleased(MouseEvent e)
+        {
+            GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
         }
         public void sendTilePressedEvent (MouseEvent e) {
             if (GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {

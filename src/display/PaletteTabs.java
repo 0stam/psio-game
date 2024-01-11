@@ -45,7 +45,7 @@ public class PaletteTabs {
 			{
 				case "Tiles":
 				{
-					GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
+					GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
 					break;
 				}
 				case "Connections":

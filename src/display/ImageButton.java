@@ -14,31 +14,24 @@ import static enums.Graphics.*;
 
 public class ImageButton extends JPanel {
 	private float scale = 1;
-	private JPanel container;
 	private boolean selected;
 	private String name;
+	private BufferedImage image;
 
 	public ImageButton(BufferedImage image, String name) {
 		this.selected = false;
 		this.name = name;
-
+		this.image = image;
 
 		this.setBorder(BorderFactory.createEmptyBorder());
 		this.setBackground(Color.white);
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints(1, 1, 3, 3, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
-		container = new JPanel()
-		{
-			@Override
-			public void paintComponent(Graphics g)
-			{
-				this.setPreferredSize(new Dimension((int)(32.0 * ImageButton.this.scale), (int) (32.0 * ImageButton.this.scale)));
-				g.drawImage(image.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_AREA_AVERAGING), 0, 0, this);
-				this.revalidate();
-			}
-		};
-		this.add(container, constraints);
+
 		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), name));
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		g.drawImage(image.getScaledInstance((int) (32 * scale), (int) (32 * scale), Image.SCALE_AREA_AVERAGING), (int) ((this.getWidth() - 32 * scale) / 2), (int) ((this.getHeight() - 32 * scale) / 2), this);
 	}
 
 	public float getScale() {
@@ -47,10 +40,6 @@ public class ImageButton extends JPanel {
 
 	public void setScale(float scale) {
 		this.scale = scale;
-	}
-
-	public JPanel getContainer() {
-		return container;
 	}
 
 	public boolean getSelected() {

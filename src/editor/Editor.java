@@ -22,7 +22,7 @@ import static enums.EditableTile.*;
 public class Editor implements EventObserver {
     // Variables required for the graphics to work
     private Layer layer = Layer.BOTH;
-    private EditorMode mode = EditorMode.ADD;
+    private EditorMode mode = EditorMode.PREADD;
     private EditableTile heldTile;
     private ConnectableTile connectingTile;
 

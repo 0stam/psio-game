@@ -73,7 +73,10 @@ public class ToolPalette extends AbstractPalette {
 	@Override
 	protected void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		float scale = (float) this.getHeight() / (32.0f * buttons.toArray().length);
+		float scaleX = (float) this.getWidth() / (32.0f);
+		float scaleY = (float) this.getHeight() / (32.0f * buttons.toArray().length);
+
+		float scale = Math.min(scaleX, scaleY);
 
 		for (ImageButton i : buttons) {
 			i.setScale(scale / 2);

@@ -1,7 +1,7 @@
 package display;
 
-import event.ConnectionCreatedEvent;
-import event.ConnectionDeletedEvent;
+import event.LegacyConnectionCreatedEvent;
+import event.LegacyConnectionDeletedEvent;
 import gamemanager.GameManager;
 import map.Map;
 import tile.Button;
@@ -44,9 +44,9 @@ public class ConnectionsPalette extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                GameManager.getInstance().onEvent(new ConnectionCreatedEvent(from, to));
+                GameManager.getInstance().onEvent(new LegacyConnectionCreatedEvent(from, to));
             } else {
-                GameManager.getInstance().onEvent(new ConnectionDeletedEvent(from, to));
+                GameManager.getInstance().onEvent(new LegacyConnectionDeletedEvent(from, to));
             }
         }
     }

@@ -1,6 +1,7 @@
 package display;
 
 import enums.EditorMode;
+import event.ConnectionDeletedEvent;
 import event.TilePressedEvent;
 import gamemanager.GameManager;
 
@@ -32,7 +33,7 @@ public class InteractiveTile extends JPanel {
     }
 
     @Override
-    public void paintComponent(java.awt.Graphics g) {
+    public void paintComponent(Graphics g) {
         this.setPreferredSize(new Dimension((int)(32.0 * EditorMapDisplay.scale ), (int) (32.0 * EditorMapDisplay.scale)));
         this.revalidate();
         g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
@@ -44,7 +45,7 @@ public class InteractiveTile extends JPanel {
     public class EventListener extends MouseInputAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
-            GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
+            GameManager.getInstance().getEditor().setModeEnabled(true);
             sendTilePressedEvent (e);
         }
         @Override
@@ -57,13 +58,15 @@ public class InteractiveTile extends JPanel {
         @Override
         public void mouseReleased(MouseEvent e)
         {
-            GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
+            GameManager.getInstance().getEditor().setMode(EditorMode.DEFAULT);
         }
         public void sendTilePressedEvent (MouseEvent e) {
-            if (GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {
-                TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
-                GameManager.getInstance().onEvent(editorEvent);
+            if (!GameManager.getInstance().getEditor().isModeEnabled()) {
+                return;
             }
+
+            TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
+            GameManager.getInstance().onEvent(editorEvent);
         }
     }
     public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper) {

@@ -1,14 +1,11 @@
 package display;
 
-import editor.Editor;
 import enums.EditorMode;
 import gamemanager.GameManager;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PaletteTabs {
 	private JTabbedPane tabs;
@@ -45,7 +42,7 @@ public class PaletteTabs {
 			{
 				case "Tiles":
 				{
-					GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
+					GameManager.getInstance().getEditor().setMode(EditorMode.DEFAULT);
 					break;
 				}
 				case "Connections":

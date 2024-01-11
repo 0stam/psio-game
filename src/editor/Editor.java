@@ -15,15 +15,14 @@ import turnstrategy.PlayerFollower;
 import java.util.List;
 import java.util.ArrayList;
 
-import javax.swing.*;
-
 import static enums.EditableTile.*;
 
 
 public class Editor implements EventObserver {
     // Variables required for the graphics to work
     private Layer layer = Layer.BOTH;
-    private EditorMode mode = EditorMode.PREADD;
+    private EditorMode mode = EditorMode.DEFAULT;
+    private boolean modeEnabled = false;
     private EditableTile heldTile;
     private ConnectableTile connectingTile;
 
@@ -115,6 +114,7 @@ public class Editor implements EventObserver {
                 this.setHeldTile(palettePressedEvent.getType());
                 break;
             }
+            //TODO: IMPORTANT: implement mode handling
             //TODO: fix edge case where second button is pressed while the other is still pressed down (no idea why it happens)
             case "TilePressedEvent": {
                 TilePressedEvent tilePressedEvent = (TilePressedEvent) event;
@@ -153,7 +153,6 @@ public class Editor implements EventObserver {
                 }
                 catch (levelloader.LevelNotLoaded e)
                 {
-                    //TODO: Zrobić tu coś mądrzejszego
                     System.err.println("Błąd wczytywania poziomu");
                     setDefaultMap(10, 10);
                 }
@@ -171,13 +170,13 @@ public class Editor implements EventObserver {
                 break;
             }
             //TODO: change casting from button/door to more general statements
-            case "ConnectionCreatedEvent": {
-                ConnectionEvent connectionEvent = (ConnectionEvent) event;
+            case "LegacyConnectionCreatedEvent": {
+                LegacyConnectionEvent connectionEvent = (LegacyConnectionEvent) event;
                 ((Button) connectionEvent.getFrom()).addObserver((Door) connectionEvent.getTo());
                 break;
             }
-            case "ConnectionDeletedEvent": {
-                ConnectionEvent connectionEvent = (ConnectionEvent) event;
+            case "LegacyConnectionDeletedEvent": {
+                LegacyConnectionEvent connectionEvent = (LegacyConnectionEvent) event;
                 ((Button) connectionEvent.getFrom()).removeObserver((Door) connectionEvent.getTo());
                 break;
             }
@@ -234,11 +233,10 @@ public class Editor implements EventObserver {
                 }
                 break;
             case BOTTOM:
-                if (tile == EMPTY)
-                {
+                if (tile == EMPTY) {
                     tile = FLOOR;
                 }
-                if (tile.isPlaceableBottom && tile != objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x, y)) && !(tile == EMPTY && objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x, y)) == FLOOR)) {
+                if (tile.isPlaceableBottom && tile != objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x, y))) {
                     GameManager.getInstance().getMap().setBottomLayer(x, y, editableToObject(tile, x, y));
                     change = true;
                 }
@@ -296,6 +294,14 @@ public class Editor implements EventObserver {
 
     public void setMode(EditorMode mode) {
         this.mode = mode;
+    }
+
+    public boolean isModeEnabled() {
+        return modeEnabled;
+    }
+
+    public void setModeEnabled(boolean modeEnabled) {
+        this.modeEnabled = modeEnabled;
     }
 
     public ConnectableTile getConnectingTile() {

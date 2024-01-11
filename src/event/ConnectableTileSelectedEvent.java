@@ -1,15 +1,10 @@
 package event;
 
 import enums.ConnectableTile;
+import tile.Tile;
 
-public class ConnectableTileSelectedEvent extends EditorEvent {
-    private final ConnectableTile connectableTile;
-
-    public ConnectableTileSelectedEvent(ConnectableTile connectableTile) {
-        this.connectableTile = connectableTile;
-    }
-
-    public ConnectableTile getConnectableTile() {
-        return connectableTile;
+public class ConnectableTileSelectedEvent extends ConnectionEvent {
+    public ConnectableTileSelectedEvent(Tile tile) {
+        super(tile);
     }
 }

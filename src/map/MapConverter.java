@@ -23,6 +23,7 @@ public class MapConverter {
 		graphicsConvert.put("Button", BUTTON_RELEASED);
 		graphicsConvert.put("ChasingEnemy", ENEMY);
 		graphicsConvert.put("MimicEnemy", MIMIC);
+		graphicsConvert.put("SmartEnemy", SMART);
 		graphicsConvert.put("Door", DOOR_CLOSED);
 		graphicsConvert.put("Floor", FLOOR);
 		graphicsConvert.put("Goal", GOAL);
@@ -90,6 +91,7 @@ public class MapConverter {
 					case BUTTON_RELEASED -> result.setUpperLayer(i, j, new Button(i, j));
 					case ENEMY -> result.setUpperLayer(i, j, new ChasingEnemy(i, j, null));
 					case MIMIC -> result.setUpperLayer(i, j, new MimicEnemy(i, j));
+					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR_CLOSED -> result.setUpperLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
 					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));

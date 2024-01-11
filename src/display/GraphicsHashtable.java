@@ -32,6 +32,7 @@ public class GraphicsHashtable {
             }
             images.put(ENEMY, ImageIO.read(new File("src/graphics/enemy.png")));
             images.put(MIMIC, ImageIO.read(new File("src/graphics/mimic.png")));
+            images.put(SMART, ImageIO.read(new File("src/graphics/enemy_smart.png")));
             images.put(BUTTON_PRESSED, ImageIO.read(new File("src/graphics/button_pressed.png")));
             images.put(BUTTON_RELEASED, ImageIO.read(new File("src/graphics/button_released.png")));
             images.put(DOOR_OPEN, ImageIO.read(new File("src/graphics/door_open.png")));

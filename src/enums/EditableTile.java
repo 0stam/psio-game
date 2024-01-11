@@ -8,6 +8,7 @@ public enum EditableTile {
     DOOR(true, true, Layer.BOTTOM, true, "DOOR", Graphics.DOOR_CLOSED),
     ENEMY(false, true, Layer.UPPER, false, "CHASING ENEMY", Graphics.ENEMY),
     MIMIC(false, true, Layer.UPPER, false,"MIMIC", Graphics.MIMIC),
+    SMART(false, true, Layer.UPPER, false,"SMART ENEMY", Graphics.SMART),
     BOX(false, true, Layer.UPPER, false,"BOX", Graphics.BOX),
     PLAYER(false, true, Layer.UPPER, false,"PLAYER", Graphics.PLAYER),
     GOAL(true, true, Layer.BOTTOM, false,"GOAL", Graphics.GOAL);

@@ -27,7 +27,11 @@ import java.util.Hashtable;
 import static enums.Graphics.*;
 
 public class ToolPalette extends AbstractPalette {
-	public ToolPalette() {
+	private EditorDisplay parent;
+
+	public ToolPalette(EditorDisplay parent) {
+		this.parent = parent;
+
 		buttons = new ArrayList<>();
 		try {
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_both.png")), "Both"));
@@ -44,11 +48,17 @@ public class ToolPalette extends AbstractPalette {
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_resize.png")), "Resize"));
 			buttons.get(3).addMouseListener(new resizeListener());
 
+			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_zoomin.png")), "Zoom in"));
+			buttons.get(4).addMouseListener(new zoomListener(parent, 1));
+
+			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_zoomout.png")), "Zoom out"));
+			buttons.get(5).addMouseListener(new zoomListener(parent, -1));
+
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_save.png")), "Save"));
-			buttons.get(4).addMouseListener(new saveListener(this));
+			buttons.get(6).addMouseListener(new saveListener(this));
 
 			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_load.png")), "Load"));
-			buttons.get(5).addMouseListener(new loadListener(this));
+			buttons.get(7).addMouseListener(new loadListener(this));
 		} catch (IOException ignored) {
 
 		}
@@ -97,6 +107,22 @@ public class ToolPalette extends AbstractPalette {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			resizeWindow = new ResizeWindow();
+		}
+	}
+
+	public class zoomListener extends MouseInputAdapter {
+		private EditorDisplay parent;
+		private int zoom;
+
+		public zoomListener (EditorDisplay parent, int zoom) {
+			this.parent = parent;
+			this.zoom = zoom;
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			parent.getEditorMapDisplay().setScale(parent.getEditorMapDisplay().getScale() + 0.1f * this.zoom);
+			parent.getEditorMapDisplay().repaint();
 		}
 	}
 

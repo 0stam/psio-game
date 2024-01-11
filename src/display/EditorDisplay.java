@@ -1,5 +1,6 @@
 package display;
 
+import IO.IOManager;
 import event.EscapeEvent;
 import gamemanager.GameManager;
 
@@ -13,15 +14,31 @@ public class EditorDisplay extends JPanel {
 	private EditorMapDisplay editorDisplay;
 	private PaletteTabs paletteTabs;
 	private ToolPalette toolPalette;
+	private JSplitPane vSplitPane;
+	private JSplitPane hSplitPane;
+	private JScrollPane mapScrollPane;
 	public EditorDisplay() {
+		vSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
+		vSplitPane.setDividerLocation(750);
+		hSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		hSplitPane.setDividerLocation(1000);
+
 		editorDisplay = new EditorMapDisplay();
 		paletteTabs = new PaletteTabs();
-		toolPalette = new ToolPalette();
+		toolPalette = new ToolPalette(this);
+
+		mapScrollPane = new JScrollPane(editorDisplay);
+		mapScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		mapScrollPane.getHorizontalScrollBar().setUnitIncrement(16);
 
 		this.setLayout(new BorderLayout());
-		this.add(editorDisplay, BorderLayout.CENTER);
-		this.add(paletteTabs.getTabs(), BorderLayout.SOUTH);
-		this.add(toolPalette, BorderLayout.EAST);
+		this.add(vSplitPane, BorderLayout.CENTER);
+		hSplitPane.setLeftComponent(mapScrollPane);
+		hSplitPane.setRightComponent(toolPalette);
+		vSplitPane.setTopComponent(hSplitPane);
+		vSplitPane.setBottomComponent(paletteTabs.getTabs());
+		//this.add(paletteTabs.getTabs(), BorderLayout.SOUTH);
+		//this.add(toolPalette, BorderLayout.EAST);
 
 		createKeyBinding();
 	}

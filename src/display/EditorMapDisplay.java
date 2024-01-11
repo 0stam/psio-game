@@ -35,10 +35,6 @@ public class EditorMapDisplay extends JPanel {
         g.setColor(Color.white);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        float scaleX = (float) this.getWidth() / (32.0f * GameManager.getInstance().getMap().getWidth());
-        float scaleY = (float) this.getHeight() / (32.0f * GameManager.getInstance().getMap().getHeight());
-
-        scale = Math.min(scaleX, scaleY);
         container.setPreferredSize(new Dimension((int) (32 * scale * GameManager.getInstance().getMap().getWidth()), (int) (32 * (scale-0.01) * GameManager.getInstance().getMap().getHeight())));
     }
     public void refresh()
@@ -96,5 +92,13 @@ public class EditorMapDisplay extends JPanel {
 
     public void setContainer(JPanel container) {
         this.container = container;
+    }
+
+    public static float getScale() {
+        return scale;
+    }
+
+    public static void setScale(float scale) {
+        EditorMapDisplay.scale = scale;
     }
 }

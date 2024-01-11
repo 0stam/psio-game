@@ -17,11 +17,10 @@ public class EditorDisplay extends JPanel {
 	private JSplitPane vSplitPane;
 	private JSplitPane hSplitPane;
 	private JScrollPane mapScrollPane;
+
 	public EditorDisplay() {
 		vSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-		vSplitPane.setDividerLocation(750);
 		hSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-		hSplitPane.setDividerLocation(1000);
 
 		editorDisplay = new EditorMapDisplay();
 		paletteTabs = new PaletteTabs();
@@ -37,8 +36,9 @@ public class EditorDisplay extends JPanel {
 		hSplitPane.setRightComponent(toolPalette);
 		vSplitPane.setTopComponent(hSplitPane);
 		vSplitPane.setBottomComponent(paletteTabs.getTabs());
-		//this.add(paletteTabs.getTabs(), BorderLayout.SOUTH);
-		//this.add(toolPalette, BorderLayout.EAST);
+
+		vSplitPane.setResizeWeight(0.9f);
+		hSplitPane.setResizeWeight(0.9f);
 
 		createKeyBinding();
 	}

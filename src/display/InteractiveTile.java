@@ -56,9 +56,8 @@ public class InteractiveTile extends JPanel {
             }
         }
         @Override
-        public void mouseReleased(MouseEvent e)
-        {
-            GameManager.getInstance().getEditor().setMode(EditorMode.DEFAULT);
+        public void mouseReleased(MouseEvent e) {
+            GameManager.getInstance().getEditor().setModeEnabled(false);
         }
         public void sendTilePressedEvent (MouseEvent e) {
             if (!GameManager.getInstance().getEditor().isModeEnabled()) {

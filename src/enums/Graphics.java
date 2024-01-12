@@ -15,5 +15,9 @@ public enum Graphics {
 	DOOR_CLOSED,
 	GOAL,
 	EMPTY,
+	ARROW_UP,
+	ARROW_DOWN,
+	ARROW_LEFT,
+	ARROW_RIGHT,
 	OUT_OF_BOUNDS
 }

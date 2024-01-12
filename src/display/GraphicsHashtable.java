@@ -40,6 +40,10 @@ public class GraphicsHashtable {
             images.put(GOAL, ImageIO.read(new File("src/graphics/goal.png")));
             images.put(DEFAULT, ImageIO.read(new File("src/graphics/default.png")));
             images.put(EMPTY, ImageIO.read(new File("src/graphics/empty.png")));
+            images.put(ARROW_UP, ImageIO.read(new File("src/graphics/arrow_up.png")));
+            images.put(ARROW_DOWN, ImageIO.read(new File("src/graphics/arrow_down.png")));
+            images.put(ARROW_LEFT, ImageIO.read(new File("src/graphics/arrow_left.png")));
+            images.put(ARROW_RIGHT, ImageIO.read(new File("src/graphics/arrow_right.png")));
             images.put(OUT_OF_BOUNDS, ImageIO.read(new File("src/graphics/oob.png")));
         } catch (IOException e) {
             System.out.println("Nie udalo sie zaladowac grafiki");

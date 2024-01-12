@@ -1,6 +1,6 @@
 package enums;
 
-public enum EditableTile {
+public enum EditableTile implements EditorGraphics{
     EMPTY(true, true, Layer.BOTH, false,"EMPTY", Graphics.EMPTY),
     FLOOR(true, true, Layer.BOTTOM, false,"FLOOR", Graphics.FLOOR),
     WALL(true, true, Layer.BOTTOM, true,"WALL", Graphics.WALL),
@@ -31,5 +31,15 @@ public enum EditableTile {
         this.fullTileWhenBoth = fullTileWhenBoth;
         this.name = name;
         this.graphics = graphics;
+    }
+
+    @Override
+    public Graphics getGraphics() {
+        return this.graphics;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

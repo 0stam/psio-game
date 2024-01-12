@@ -1,30 +1,30 @@
 package display;
 
-import editor.Editor;
+import enums.EditableTile;
 import enums.EditorMode;
 import gamemanager.GameManager;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PaletteTabs {
 	private JTabbedPane tabs;
 
 	private TilePalette tilePalette;
 	private ConnectionsPalette connectionsPalette;
+	private PathEditPalette pathEditPalette;
 
 	public PaletteTabs () {
 		tabs = new JTabbedPane();
 
-		tilePalette = new TilePalette();
+		tilePalette = new TilePalette(EditableTile.values());
 		connectionsPalette = new ConnectionsPalette();
+		pathEditPalette = new PathEditPalette();
 
 		tabs.addTab("", new ImageIcon("src/graphics/tool_tiles.png"), tilePalette, "Tiles");
 		tabs.addTab("", new ImageIcon("src/graphics/tool_connect.png"), connectionsPalette, "Connections");
-		tabs.addTab("", new ImageIcon("src/graphics/tool_path.png"), new JPanel(), "Pathedit");
+		tabs.addTab("", new ImageIcon("src/graphics/tool_path.png"), pathEditPalette, "Pathedit");
 
 		tabs.addChangeListener(new ModeListener());
 	}

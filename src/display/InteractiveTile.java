@@ -1,6 +1,7 @@
 package display;
 
 import enums.EditorMode;
+import enums.Layer;
 import event.TilePressedEvent;
 import gamemanager.GameManager;
 
@@ -44,12 +45,25 @@ public class InteractiveTile extends JPanel {
     public class EventListener extends MouseInputAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
-            GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
-            sendTilePressedEvent (e);
+            switch (GameManager.getInstance().getEditor().getMode())
+            {
+                case PREADD:
+                {
+                    GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
+                    sendTilePressedEvent(e);
+                    break;
+                }
+                case PREPATHEDIT:
+                {
+                    GameManager.getInstance().getEditor().setMode(EditorMode.PATHEDIT);
+                    sendTilePressedEvent(e);
+                    break;
+                }
+            }
         }
         @Override
         public void mouseEntered(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e))
+            if ((SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e))&&(GameManager.getInstance().getEditor().getMode() == EditorMode.ADD || GameManager.getInstance().getEditor().getMode() == EditorMode.PATHEDIT))
             {
                 sendTilePressedEvent (e);
             }
@@ -57,13 +71,36 @@ public class InteractiveTile extends JPanel {
         @Override
         public void mouseReleased(MouseEvent e)
         {
-            GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
+            switch (GameManager.getInstance().getEditor().getMode())
+            {
+                case ADD:
+                {
+                    GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
+                    break;
+                }
+                case PATHEDIT:
+                {
+                    GameManager.getInstance().getEditor().setMode(EditorMode.PREPATHEDIT);
+                    break;
+                }
+            }
         }
         public void sendTilePressedEvent (MouseEvent e) {
-            if (GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {
-                TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
-                GameManager.getInstance().onEvent(editorEvent);
+            TilePressedEvent editorEvent = null;
+            switch (GameManager.getInstance().getEditor().getMode())
+            {
+                case ADD:
+                {
+                    editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
+                    break;
+                }
+                case PATHEDIT:
+                {
+                    editorEvent = new TilePressedEvent(coords.x, coords.y, Layer.PATH, SwingUtilities.isRightMouseButton(e));
+                }
             }
+            if (editorEvent != null)
+                GameManager.getInstance().onEvent(editorEvent);
         }
     }
     public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper) {

@@ -1,10 +1,7 @@
 package editor;
 
 import IO.IOManager;
-import enums.ConnectableTile;
-import enums.EditableTile;
-import enums.EditorMode;
-import enums.Layer;
+import enums.*;
 import event.*;
 import levelloader.LevelLoader;
 import levelloader.LevelNotSaved;
@@ -12,34 +9,49 @@ import tile.*;
 import gamemanager.GameManager;
 import map.Map;
 import tile.Box;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import turnstrategy.Follower;
 
+import java.util.ArrayList;
+
+import static enums.Arrow.*;
+import static enums.Arrow.EMPTY;
+import static enums.Direction.*;
 import static enums.EditableTile.*;
+import static enums.Layer.UPPER;
 
 
 public class Editor implements EventObserver {
     // Variables required for the graphics to work
     private Layer layer = Layer.BOTH;
     private EditorMode mode = EditorMode.PREADD;
-    private EditableTile heldTile;
+    private EditorGraphics heldTile;
     private ConnectableTile connectingTile;
+    private EditorGraphics[][] currentPath;
+    private SmartEnemy currentEnemy = null;
 
     // Variables required for the logic to work
     private boolean change;
     private int playerCount;
+    private TreeModel treeModel;
 
     public Editor() {
         this.setHeldTile(EMPTY);
         change=false;
         setDefaultMap(10, 10);
         playerCount = 1;
+        treeModel = new TreeModel();
     }
 
-    public EditableTile getHeldTile() {
+    public EditorGraphics getHeldTile() {
         return heldTile;
     }
 
-    public void setHeldTile(EditableTile heldTile) {
+    public void setHeldTile(EditorGraphics heldTile) {
         this.heldTile = heldTile;
     }
 
@@ -62,7 +74,7 @@ public class Editor implements EventObserver {
     public EditableTile objectToEnum(Tile tile)
     {
         if (tile == null){
-            return EMPTY;
+            return enums.EditableTile.EMPTY;
         }
         return switch (tile.getClass().getSimpleName())
         {
@@ -76,7 +88,7 @@ public class Editor implements EventObserver {
             case "Goal" -> GOAL;
             case "PlayerCharacter" -> PLAYER;
             case "Wall" -> WALL;
-            default -> EMPTY;
+            default -> enums.EditableTile.EMPTY;
         };
     }
 
@@ -167,28 +179,43 @@ public class Editor implements EventObserver {
                 ((Button) connectionEvent.getFrom()).removeObserver((Door) connectionEvent.getTo());
                 break;
             }
+            case "EnemySelectedEvent":
+            {
+                updateEnemyPath();
+                EnemySelectedEvent enemySelectedEvent = (EnemySelectedEvent) event;
+                currentEnemy = enemySelectedEvent.getSmartEnemy();
+                currentPath = listToPath();
+                break;
+            }
+            case "SavePathEvent":
+            {
+                updateEnemyPath();
+                break;
+            }
             default: return;
         }
     }
 
-    private void editorPlaceTile(EditableTile tile, Layer layer, int x, int y) {
+    private void editorPlaceTile(EditorGraphics incomingTile, Layer layer, int x, int y) {
         switch (layer) {
             case BOTH:
-                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.UPPER) {
-                    editorPlaceTile(tile, Layer.UPPER, x, y);
-                    if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x,y)).fullTileWhenBoth)
+                if (incomingTile instanceof EditableTile tile) {
                     {
-                        editorPlaceTile(EMPTY, Layer.BOTTOM, x, y);
+                        if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == UPPER) {
+                            editorPlaceTile(tile, UPPER, x, y);
+                            if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)).fullTileWhenBoth) {
+                                editorPlaceTile(EMPTY, Layer.BOTTOM, x, y);
+                            }
+                        }
+                        if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
+                            editorPlaceTile(tile, Layer.BOTTOM, x, y);
+                            if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)).fullTileWhenBoth) {
+                                editorPlaceTile(EMPTY, UPPER, x, y);
+                            }
+                        }
+                        this.layer = Layer.BOTH;
                     }
                 }
-                if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
-                    editorPlaceTile(tile, Layer.BOTTOM, x, y);
-                    if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x,y)).fullTileWhenBoth)
-                    {
-                        editorPlaceTile(EMPTY, Layer.UPPER, x, y);
-                    }
-                }
-                this.layer = Layer.BOTH;
                 break;
             case UPPER:
                 if (tile.isPlaceableUpper && tile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
@@ -215,19 +242,66 @@ public class Editor implements EventObserver {
                     else {
                         GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
                     }
+                if (incomingTile instanceof EditableTile tile) {
+                    if (tile.isPlaceableUpper && tile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
+                        switch (tile) {
+                            case PLAYER: {
+                                playerCount++;
+                                break;
+                            }
+                            case SMART: {
+                                treeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                break;
+                            }
+                        }
+                        Tile mapTile = GameManager.getInstance().getMap().getUpperLayer(x, y);
+                        switch (objectToEnum(mapTile)) {
+                            case SMART: {
+                                treeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                break;
+                            }
+                            //moze w przyszlosci bedzie wiecej
+                        }
+                        if (GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter) {
+                            playerCount--;
+                            GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
+                            for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
+                                for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
+                                    if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof ChasingEnemy enemy) {
+                                        if (((PlayerFollower) enemy.getTurnStrategy()).getTargetTile().getX() == x && ((PlayerFollower) (enemy.getTurnStrategy())).getTargetTile().getY() == y) {
+                                            ((PlayerFollower) (((ChasingEnemy) (GameManager.getInstance().getMap().getUpperLayer(i, j))).getTurnStrategy())).setTargetTile(findPlayer());
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
+                        }
 
-                    change = true;
+                        change = true;
+                    }
                 }
                 break;
             case BOTTOM:
-                if (tile == EMPTY)
-                {
-                    tile = FLOOR;
+                if (incomingTile instanceof EditableTile tile) {
+                    if (tile == enums.EditableTile.EMPTY) {
+                        tile = FLOOR;
+                    }
+                    if (tile.isPlaceableBottom && tile != objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) && !(tile == enums.EditableTile.EMPTY && objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) == FLOOR)) {
+                        GameManager.getInstance().getMap().setBottomLayer(x, y, enumToObject(tile, x, y));
+                        change = true;
+                    }
                 }
-                if (tile.isPlaceableBottom && tile != objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) && !(tile == EMPTY && objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) == FLOOR)) {
-                    GameManager.getInstance().getMap().setBottomLayer(x, y, enumToObject(tile, x, y));
-                    change = true;
+                break;
+            case PATH:
+            {
+                if (incomingTile instanceof Arrow) {
+                    if (currentPath!=null) {
+                        currentPath[x][y] = incomingTile;
+                        change = true;
+                    }
                 }
+            }
         }
     }
 
@@ -253,6 +327,94 @@ public class Editor implements EventObserver {
         }
         return null;
     }
+    //metody do pathow
+    public EditorGraphics[][] generateEmptyPath()
+    {
+        EditorGraphics[][] path = new EditorGraphics[GameManager.getInstance().getMap().getWidth()][GameManager.getInstance().getMap().getHeight()];
+        for (int i = 0 ; i < path.length ; ++i)
+        {
+            for (int j = 0 ; j < path[0].length ; ++j)
+            {
+                path[i][j] = EMPTY;
+            }
+        }
+        return path;
+    }
+    public EditorGraphics[][] listToPath()
+    {
+        if (currentEnemy != null) {
+            EditorGraphics[][] path = generateEmptyPath();
+            ArrayList<PathTile> pathTiles = currentEnemy.getPathTileList();
+            if (pathTiles != null)
+            {
+                for (PathTile i : pathTiles) {
+                    EditorGraphics arrow = null;
+                    switch (i.getDirection()) {
+                        case UP: {
+                            arrow = ARROW_UP;
+                            break;
+                        }
+                        case DOWN: {
+                            arrow = ARROW_DOWN;
+                            break;
+                        }
+                        case LEFT: {
+                            arrow = ARROW_LEFT;
+                            break;
+                        }
+                        case RIGHT: {
+                            arrow = ARROW_RIGHT;
+                            break;
+                        }
+                    }
+                    path[i.getX()][i.getY()] = arrow;
+                }
+            }
+            else
+                path = generateEmptyPath();
+            return path;
+        }
+        return null;
+    }
+    public ArrayList<PathTile> pathToList()
+    {
+        ArrayList<PathTile> toReturn = new ArrayList<>();
+        for (int i = 0 ; i < currentPath.length ; ++i)
+        {
+            for (int j = 0 ; j < currentPath[0].length ; ++j)
+            {
+                if (currentPath[i][j] != EMPTY && currentPath[i][j] != null)
+                {
+                    Direction dir;
+                    /*
+                        java: patterns in switch statements are a preview feature and are disabled by default.
+                        (use --enable-preview to enable patterns in switch statements)
+
+                        jak macie cos takiego to zmiencie java machine na najnowsza wersje dodatkowo moze pomoc
+                        zmienienie w ustawieniach projektu wersj
+                     */
+                    switch (currentPath[i][j])
+                    {
+                        case ARROW_UP -> dir = UP;
+                        case ARROW_DOWN -> dir = DOWN;
+                        case ARROW_LEFT -> dir = LEFT;
+                        case ARROW_RIGHT -> dir = RIGHT;
+                        default -> throw new IllegalStateException("Unexpected value: " + currentPath[i][j]);
+                    }
+                    toReturn.add((new PathTile(i, j, dir)));
+                }
+            }
+        }
+        return toReturn;
+    }
+    public void updateEnemyPath()
+    {
+        if (currentEnemy != null && currentPath!=null)
+        {
+            currentEnemy.setPathTileList(pathToList());
+        }
+    }
+
 
     public Tile[] getConnectibleTilesInCategory(ConnectableTile category) {
         // TODO: return all tiles belonging to a given category, eg. buttons, enemies etc.
@@ -279,4 +441,29 @@ public class Editor implements EventObserver {
     public void setConnectingTile(ConnectableTile connectingTile) {
         this.connectingTile = connectingTile;
     }
+
+    public TreeModel getTreeModel() {
+        return treeModel;
+    }
+
+    public void setTreeModel(TreeModel treeModel) {
+        this.treeModel = treeModel;
+    }
+
+    public SmartEnemy getCurrentEnemy() {
+        return currentEnemy;
+    }
+
+    public void setCurrentEnemy(SmartEnemy currentEnemy) {
+        this.currentEnemy = currentEnemy;
+    }
+
+    public EditorGraphics[][] getCurrentPath() {
+        return currentPath;
+    }
+
+    public void setCurrentPath(EditorGraphics[][] currentPath) {
+        this.currentPath = currentPath;
+    }
+
 }

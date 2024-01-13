@@ -5,5 +5,6 @@ public enum EditorMode {
 	PREADD,
 	ADD,
 	CONNECT,
+	PREPATHEDIT,
 	PATHEDIT
 }

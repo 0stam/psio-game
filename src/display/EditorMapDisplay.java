@@ -4,6 +4,9 @@ import gamemanager.GameManager;
 
 import javax.swing.*;
 import java.awt.*;
+
+import static enums.Arrow.EMPTY;
+
 public class EditorMapDisplay extends JPanel {
     private JPanel container = new JPanel();
     //skala chyba powinna tu zostac bo oblicza ja EditorMapDisplay
@@ -70,6 +73,30 @@ public class EditorMapDisplay extends JPanel {
                             mapTiles[i][j].updateGraphics(enums.Graphics.EMPTY, null);
                         else
                             mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), null);
+                    }
+                }
+                break;
+            }
+            case PATH:
+            {
+                for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
+                    for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
+                        switch (GameManager.getInstance().getEditor().getCurrentPath()[i][j])
+                        {
+                            case null:
+                            {
+                                mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), enums.Graphics.EMPTY);
+                                break;
+                            }
+                            case EMPTY:
+                            {
+                                mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), enums.Graphics.EMPTY);
+                            }
+                            default: {
+                                mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), GameManager.getInstance().getEditor().getCurrentPath()[i][j].getGraphics());
+                                break;
+                            }
+                        }
                     }
                 }
                 break;

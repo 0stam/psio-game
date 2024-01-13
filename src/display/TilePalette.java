@@ -1,10 +1,8 @@
 package display;
 
 import enums.EditorGraphics;
-import event.EventFactory;
 import event.PalettePressedEvent;
 import gamemanager.GameManager;
-import enums.EditableTile;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class TilePalette extends AbstractPalette {
-	//majic
 	public TilePalette (EditorGraphics[] values) {
 		buttons = new ArrayList<>(values.length);
 
@@ -55,7 +52,7 @@ public class TilePalette extends AbstractPalette {
 		public void mousePressed(MouseEvent e) {
 			TilePalette.this.selectOne((ImageButton) e.getSource());
 			TilePalette.this.repaint();
-			GameManager.getInstance().onEvent(EventFactory.createPaletteEvent(changeGraphic));
+			GameManager.getInstance().onEvent(new PalettePressedEvent(changeGraphic));
 		}
 	}
 }

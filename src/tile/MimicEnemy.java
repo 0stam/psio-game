@@ -2,7 +2,6 @@ package tile;
 
 import enterablestrategy.Solid;
 import enums.Graphics;
-import turnstrategy.PlayerFollower;
 import turnstrategy.PlayerMovement;
 
 public class MimicEnemy extends ActionTile {

@@ -1,10 +1,9 @@
 package tile;
 
-import Connectable_interface.Connectable;
+import connectableinterface.Connectable;
 import enterablestrategy.Empty;
 import enums.Graphics;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import event.ButtonEvent;
 import event.EventObserver;
 import event.EventSource;
 import enums.Direction;
-import gamemanager.GameManager;
 
 public class Button extends Tile implements EventSource, Connectable {
     private final List<EventObserver> observers = new ArrayList<>();

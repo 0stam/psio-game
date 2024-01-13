@@ -1,4 +1,4 @@
-package Connectable_interface;
+package connectableinterface;
 
 import tile.Tile;
 

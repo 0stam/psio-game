@@ -1,6 +1,6 @@
 package tile;
 
-import Connectable_interface.Connectable;
+import connectableinterface.Connectable;
 import enterablestrategy.Solid;
 import enums.Graphics;
 import turnstrategy.PlayerFollower;

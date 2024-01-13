@@ -1,6 +1,6 @@
 package editor;
 
-import Connectable_interface.Connectable;
+import connectableinterface.Connectable;
 import IO.IOManager;
 import enums.ConnectableTile;
 import enums.EditableTile;

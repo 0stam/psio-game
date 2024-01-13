@@ -1,5 +1,6 @@
 package editor;
 
+import Connectable_interface.Connectable;
 import IO.IOManager;
 import enums.ConnectableTile;
 import enums.EditableTile;
@@ -169,15 +170,28 @@ public class Editor implements EventObserver {
                 }
                 break;
             }
-            //TODO: change casting from button/door to more general statements
             case "LegacyConnectionCreatedEvent": {
                 LegacyConnectionEvent connectionEvent = (LegacyConnectionEvent) event;
-                ((Button) connectionEvent.getFrom()).addObserver((Door) connectionEvent.getTo());
+                if (connectionEvent.getFrom() instanceof Connectable source)
+                {
+                    source.addConnection(connectionEvent.getTo());
+                }
+                else if (connectionEvent.getTo() instanceof Connectable source)
+                {
+                    source.addConnection(connectionEvent.getFrom());
+                }
                 break;
             }
-            case "LegacyConnectionDeletedEvent": {
+            case "ConnectionDeletedEvent": {
                 LegacyConnectionEvent connectionEvent = (LegacyConnectionEvent) event;
-                ((Button) connectionEvent.getFrom()).removeObserver((Door) connectionEvent.getTo());
+                if (connectionEvent.getFrom() instanceof Connectable source)
+                {
+                    source.removeConnection(connectionEvent.getTo());
+                }
+                else if (connectionEvent.getTo() instanceof Connectable source)
+                {
+                    source.removeConnection(connectionEvent.getFrom());
+                }
                 break;
             }
             default: return;
@@ -281,11 +295,6 @@ public class Editor implements EventObserver {
             }
         }
         return list;
-    }
-
-    public List<Tile> getTileConnections(Tile tile) {
-        // TODO: return all tiles connected to the tile passed as an argument
-        return null;
     }
 
     public EditorMode getMode() {

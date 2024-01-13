@@ -12,9 +12,7 @@ import tile.*;
 import gamemanager.GameManager;
 import map.Map;
 import tile.Box;
-import turnstrategy.PlayerFollower;
-
-import javax.swing.*;
+import turnstrategy.Follower;
 
 import static enums.EditableTile.*;
 
@@ -207,8 +205,8 @@ public class Editor implements EventObserver {
                             {
                                 if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof ChasingEnemy enemy)
                                 {
-                                    if (((PlayerFollower) enemy.getTurnStrategy()).getTargetTile().getX() == x && ((PlayerFollower) (enemy.getTurnStrategy())).getTargetTile().getY() == y) {
-                                        ((PlayerFollower) (((ChasingEnemy) (GameManager.getInstance().getMap().getUpperLayer(i, j))).getTurnStrategy())).setTargetTile(findPlayer());
+                                    if (((Follower) enemy.getTurnStrategy()).getTargetTile().getX() == x && ((Follower) (enemy.getTurnStrategy())).getTargetTile().getY() == y) {
+                                        ((Follower) (((ChasingEnemy) (GameManager.getInstance().getMap().getUpperLayer(i, j))).getTurnStrategy())).setTargetTile(findPlayer());
                                     }
                                 }
                             }

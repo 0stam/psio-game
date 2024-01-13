@@ -256,8 +256,15 @@ public class Editor implements EventObserver {
         return null;
     }
 
-    public Tile[] getConnectibleTilesInCategory(ConnectableTile category) {
+    public Tile[] getConnectableTilesInCategory(ConnectableTile category) {
         // TODO: return all tiles belonging to a given category, eg. buttons, enemies etc.
+        //PLACEHOLDER SORKI
+        if (category == ConnectableTile.BUTTON) {
+            return new Tile[]{new Button(0, 0), new Button(2, 3), new Button(5,3)};
+        } else if (category == ConnectableTile.ENEMY) {
+            return new Tile[]{new ChasingEnemy(0, 0, findPlayer())};
+        }
+
         return null;
     }
 

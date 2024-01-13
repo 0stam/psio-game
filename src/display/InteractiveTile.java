@@ -66,6 +66,7 @@ public class InteractiveTile extends JPanel {
         }
         @Override
         public void mouseEntered(MouseEvent e) {
+            if (GameManager.getInstance().getEditor().getMode()!=EditorMode.PREPATHEDIT)
                 sendTilePressedEvent (e);
         }
         @Override

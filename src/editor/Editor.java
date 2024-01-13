@@ -25,7 +25,7 @@ public class Editor implements EventObserver {
     private EditorMode mode = EditorMode.DEFAULT;
     private boolean modeEnabled = false;
     private EditableTile heldTile;
-    private ConnectableTile connectingTile;
+    private Tile connectingTile;
 
     // Variables required for the logic to work
     private boolean change;
@@ -170,27 +170,31 @@ public class Editor implements EventObserver {
                 }
                 break;
             }
-            case "LegacyConnectionCreatedEvent": {
-                LegacyConnectionEvent connectionEvent = (LegacyConnectionEvent) event;
-                if (connectionEvent.getFrom() instanceof Connectable source)
+            case "ConnectableTileSelectedEvent": {
+                ConnectableTileSelectedEvent connectableTileSelectedEvent = (ConnectableTileSelectedEvent) event;
+                setConnectingTile(connectableTileSelectedEvent.getTile());
+            }
+            case "ConnectionCreatedEvent": {
+                ConnectionEvent connectionEvent = (ConnectionEvent) event;
+                if (connectingTile instanceof Connectable source)
                 {
-                    source.addConnection(connectionEvent.getTo());
+                    source.addConnection(connectionEvent.getTile());
                 }
-                else if (connectionEvent.getTo() instanceof Connectable source)
+                else if (connectionEvent.getTile() instanceof Connectable source)
                 {
-                    source.addConnection(connectionEvent.getFrom());
+                    source.addConnection(connectingTile);
                 }
                 break;
             }
             case "ConnectionDeletedEvent": {
-                LegacyConnectionEvent connectionEvent = (LegacyConnectionEvent) event;
-                if (connectionEvent.getFrom() instanceof Connectable source)
+                ConnectionEvent connectionEvent = (ConnectionEvent) event;
+                if (connectingTile instanceof Connectable source)
                 {
-                    source.removeConnection(connectionEvent.getTo());
+                    source.removeConnection(connectionEvent.getTile());
                 }
-                else if (connectionEvent.getTo() instanceof Connectable source)
+                else if (connectionEvent.getTile() instanceof Connectable source)
                 {
-                    source.removeConnection(connectionEvent.getFrom());
+                    source.removeConnection(connectingTile);
                 }
                 break;
             }
@@ -313,11 +317,11 @@ public class Editor implements EventObserver {
         this.modeEnabled = modeEnabled;
     }
 
-    public ConnectableTile getConnectingTile() {
+    public Tile getConnectingTile() {
         return connectingTile;
     }
 
-    public void setConnectingTile(ConnectableTile connectingTile) {
+    public void setConnectingTile(Tile connectingTile) {
         this.connectingTile = connectingTile;
     }
 }

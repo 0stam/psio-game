@@ -2,7 +2,6 @@ package display;
 
 import IO.IOManager;
 import enums.EditableTile;
-import enums.EditorGraphics;
 import enums.EditorMode;
 import enums.Layer;
 import event.PalettePressedEvent;
@@ -55,6 +54,7 @@ public class PaletteTabs {
 					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 					//zrobic cos madrzejszego
 					GameManager.getInstance().onEvent(new SavePathEvent());
+					GameManager.getInstance().getEditor().setCurrentEnemy(null);
 					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
 					pathEditPalette.getArrows().selectOne(pathEditPalette.getArrows().buttons.get(0));
 					IOManager.getInstance().drawEditor();
@@ -66,15 +66,17 @@ public class PaletteTabs {
 					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 					//zrobic cos madrzejszego pozniej
 					GameManager.getInstance().onEvent(new SavePathEvent());
+					GameManager.getInstance().getEditor().setCurrentEnemy(null);
 					GameManager.getInstance().getEditor().setMode(EditorMode.CONNECT);
 					IOManager.getInstance().drawEditor();
 					break;
 				}
 				case "Pathedit":
 				{
-					GameManager.getInstance().getEditor().setMode(EditorMode.PATHEDIT);
+					GameManager.getInstance().getEditor().setMode(EditorMode.PREPATHEDIT);
 					GameManager.getInstance().getEditor().setLayer(Layer.PATH);
 					//zrobic cos madrzejszego pozniej
+					pathEditPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
 					tilePalette.selectOne(tilePalette.buttons.get(0));
 					IOManager.getInstance().drawEditor();

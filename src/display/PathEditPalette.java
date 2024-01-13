@@ -14,33 +14,38 @@ import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
 public class PathEditPalette extends JPanel{
+    private JSplitPane splitPane;
     private JTree jTree;
     private TilePalette arrows;
     private float scale = 1;
     PathEditPalette ()
     {
+        setPreferredSize(new Dimension(0, 200));
+        setLayout(new BorderLayout());
         //TODO: podmienic ikonki na ikonki z gry zamiast javowych
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Enemy list");
-        DefaultMutableTreeNode enemy1 = new DefaultMutableTreeNode("enemy1");
-        root.add(enemy1);
+
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+        splitPane.setResizeWeight(0.4f);
 
         jTree = new JTree(GameManager.getInstance().getEditor().getTreeModel().getDefaultTreeModel());
-        jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         //roamingEnemyTree.setEditable(true);
         jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.setShowsRootHandles(true);
         //roboczo
-        jTree.setBackground(Color.RED);
+        jTree.setBackground(Color.WHITE);
+        jTree.setFont(new Font("Arial", Font.PLAIN, 25));
+        jTree.setRowHeight(30);
 
         arrows = new TilePalette(Arrow.values());
-        JPanel container = new JPanel();
-        container.setLayout(new BorderLayout());
-        container.add(arrows, BorderLayout.CENTER);
-        container.setPreferredSize(new Dimension(100, 100));
 
         jTree.addTreeSelectionListener(new SelectionListener());
-        this.add(jTree);
-        this.add(container);
+
+        JScrollPane scrollPane = new JScrollPane(jTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setMinimumSize(new Dimension(300, 0));
+        splitPane.setLeftComponent(scrollPane);
+        splitPane.setRightComponent(arrows);
+        this.add(splitPane);
         this.revalidate();
     }
     @Override
@@ -55,7 +60,7 @@ public class PathEditPalette extends JPanel{
             DefaultMutableTreeNode selected = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
             if (selected == null)
                 return;
-            if (selected.isLeaf())
+            if (selected.isLeaf() && !((String) selected.getUserObject()).isEmpty())
             {
                 String chosen = (String) selected.getUserObject();
                 chosen = chosen.substring(13, chosen.length()-1);
@@ -75,5 +80,13 @@ public class PathEditPalette extends JPanel{
 
     public void setArrows(TilePalette arrows) {
         this.arrows = arrows;
+    }
+
+    public JTree getTree() {
+        return jTree;
+    }
+
+    public void setTree(JTree jTree) {
+        this.jTree = jTree;
     }
 }

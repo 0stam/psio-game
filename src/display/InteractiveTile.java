@@ -1,9 +1,13 @@
 package display;
 
+import IO.IOManager;
+import editor.Editor;
 import enums.EditorMode;
 import enums.Layer;
+import event.EnemySelectedEvent;
 import event.TilePressedEvent;
 import gamemanager.GameManager;
+import tile.SmartEnemy;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -50,20 +54,19 @@ public class InteractiveTile extends JPanel {
                 case PREADD:
                 {
                     GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
-                    sendTilePressedEvent(e);
                     break;
                 }
-                case PREPATHEDIT:
+                case PRESELECT:
                 {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.PATHEDIT);
-                    sendTilePressedEvent(e);
+                    GameManager.getInstance().getEditor().setMode(EditorMode.SELECT);
                     break;
                 }
             }
+            sendTilePressedEvent(e);
         }
         @Override
         public void mouseEntered(MouseEvent e) {
-            if ((SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e))&&(GameManager.getInstance().getEditor().getMode() == EditorMode.ADD || GameManager.getInstance().getEditor().getMode() == EditorMode.PATHEDIT))
+            if ((SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e))&&(GameManager.getInstance().getEditor().getMode() == EditorMode.ADD || GameManager.getInstance().getEditor().getMode() == EditorMode.PRESELECT))
             {
                 sendTilePressedEvent (e);
             }
@@ -78,9 +81,9 @@ public class InteractiveTile extends JPanel {
                     GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
                     break;
                 }
-                case PATHEDIT:
+                case PRESELECT:
                 {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.PREPATHEDIT);
+                    GameManager.getInstance().getEditor().setMode(EditorMode.SELECT);
                     break;
                 }
             }
@@ -94,9 +97,18 @@ public class InteractiveTile extends JPanel {
                     editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
                     break;
                 }
-                case PATHEDIT:
+                case SELECT:
                 {
                     editorEvent = new TilePressedEvent(coords.x, coords.y, Layer.PATH, SwingUtilities.isRightMouseButton(e));
+                    break;
+                }
+                case PREPATHEDIT: {
+                    if (GameManager.getInstance().getMap().getUpperLayer((int)coords.getX(), (int)coords.getY()) instanceof SmartEnemy enemy) {
+                        GameManager.getInstance().getEditor().setMode(EditorMode.PRESELECT);
+                        GameManager.getInstance().onEvent(new EnemySelectedEvent(enemy));
+                        IOManager.getInstance().drawEditor();
+                    }
+                    break;
                 }
             }
             if (editorEvent != null)

@@ -25,16 +25,4 @@ public class PathTile extends Tile{
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PathTile pathTile = (PathTile) obj;
-        return this.getX() == pathTile.getX() && this.getY() == pathTile.getY() && this.direction == pathTile.direction;
-    }
 }

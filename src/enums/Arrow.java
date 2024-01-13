@@ -1,10 +1,10 @@
 package enums;
 
 public enum Arrow implements EditorGraphics{
-    ARROW_UP("ARROW_UP", Graphics.ARROW_UP),
-    ARROW_DOWN("ARROW_DOWN", Graphics.ARROW_DOWN),
-    ARROW_LEFT("ARROW_LEFT", Graphics.ARROW_LEFT),
-    ARROW_RIGHT("ARROW_RIGHT", Graphics.ARROW_RIGHT),
+    ARROW_UP("UP", Graphics.ARROW_UP),
+    ARROW_DOWN("DOWN", Graphics.ARROW_DOWN),
+    ARROW_LEFT("LEFT", Graphics.ARROW_LEFT),
+    ARROW_RIGHT("RIGHT", Graphics.ARROW_RIGHT),
     EMPTY("EMPTY", Graphics.EMPTY);
     public final String name;
     public final Graphics graphics;

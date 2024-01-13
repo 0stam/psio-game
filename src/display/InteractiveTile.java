@@ -66,10 +66,7 @@ public class InteractiveTile extends JPanel {
         }
         @Override
         public void mouseEntered(MouseEvent e) {
-            if ((SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e))&&(GameManager.getInstance().getEditor().getMode() == EditorMode.ADD || GameManager.getInstance().getEditor().getMode() == EditorMode.PRESELECT))
-            {
                 sendTilePressedEvent (e);
-            }
         }
         @Override
         public void mouseReleased(MouseEvent e)
@@ -81,9 +78,9 @@ public class InteractiveTile extends JPanel {
                     GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
                     break;
                 }
-                case PRESELECT:
+                case SELECT:
                 {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.SELECT);
+                    GameManager.getInstance().getEditor().setMode(EditorMode.PRESELECT);
                     break;
                 }
             }

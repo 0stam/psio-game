@@ -218,30 +218,6 @@ public class Editor implements EventObserver {
                 }
                 break;
             case UPPER:
-                if (tile.isPlaceableUpper && tile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
-                    if (tile == PLAYER) {
-                        playerCount++;
-                    }
-                    if (GameManager.getInstance().getMap().getUpperLayer(x,y) instanceof PlayerCharacter)
-                    {
-                        playerCount--;
-                        GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
-                        for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
-                        {
-                            for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)
-                            {
-                                if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof ChasingEnemy enemy)
-                                {
-                                    if (((Follower) enemy.getTurnStrategy()).getTargetTile().getX() == x && ((Follower) (enemy.getTurnStrategy())).getTargetTile().getY() == y) {
-                                        ((Follower) (((ChasingEnemy) (GameManager.getInstance().getMap().getUpperLayer(i, j))).getTurnStrategy())).setTargetTile(findPlayer());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
-                    }
                 if (incomingTile instanceof EditableTile tile) {
                     if (tile.isPlaceableUpper && tile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
                         switch (tile) {
@@ -267,9 +243,10 @@ public class Editor implements EventObserver {
                             GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
                             for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
                                 for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
-                                    if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof ChasingEnemy enemy) {
-                                        if (((PlayerFollower) enemy.getTurnStrategy()).getTargetTile().getX() == x && ((PlayerFollower) (enemy.getTurnStrategy())).getTargetTile().getY() == y) {
-                                            ((PlayerFollower) (((ChasingEnemy) (GameManager.getInstance().getMap().getUpperLayer(i, j))).getTurnStrategy())).setTargetTile(findPlayer());
+                                    if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof ChasingEnemy enemy)
+                                    {
+                                        if (((Follower) enemy.getTurnStrategy()).getTargetTile().getX() == x && ((Follower) (enemy.getTurnStrategy())).getTargetTile().getY() == y) {
+                                            ((Follower) (((ChasingEnemy) (GameManager.getInstance().getMap().getUpperLayer(i, j))).getTurnStrategy())).setTargetTile(findPlayer());
                                         }
                                     }
                                 }

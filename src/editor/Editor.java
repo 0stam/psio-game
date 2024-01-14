@@ -53,6 +53,7 @@ public class Editor implements EventObserver {
         setDefaultMap(10, 10);
         playerCount = 1;
         treeModel = new TreeModel();
+        connectingTile = null;
     }
 
     public EditorGraphics getHeldTile() {
@@ -203,6 +204,7 @@ public class Editor implements EventObserver {
             case "ConnectableTileSelectedEvent": {
                 ConnectableTileSelectedEvent connectableTileSelectedEvent = (ConnectableTileSelectedEvent) event;
                 setConnectingTile(connectableTileSelectedEvent.getTile());
+                IOManager.getInstance().drawEditor();
                 break;
             }
             case "ConnectionCreatedEvent": {

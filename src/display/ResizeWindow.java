@@ -72,6 +72,7 @@ public class ResizeWindow {
 					GameManager.getInstance().onEvent(new SavePathEvent());
 				}
 				GameManager.getInstance().getEditor().setCurrentEnemy(null);
+				GameManager.getInstance().getEditor().setConnectingTile(null);
 				GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
 				GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 

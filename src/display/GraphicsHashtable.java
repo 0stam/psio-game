@@ -45,6 +45,8 @@ public class GraphicsHashtable {
             images.put(ARROW_LEFT, ImageIO.read(new File("src/graphics/arrow_left.png")));
             images.put(ARROW_RIGHT, ImageIO.read(new File("src/graphics/arrow_right.png")));
             images.put(SMART_SELECTED, ImageIO.read(new File("src/graphics/enemy_zmart_selected.png")));
+            images.put(BUTTON_SELECTED, ImageIO.read(new File("src/graphics/button_released_selected.png")));
+            images.put(ENEMY_SELECTED, ImageIO.read(new File("src/graphics/enemy_selected.png")));
             images.put(OUT_OF_BOUNDS, ImageIO.read(new File("src/graphics/oob.png")));
             images.put(MINUS, ImageIO.read(new File("src/graphics/minus.png")));
         } catch (IOException e) {

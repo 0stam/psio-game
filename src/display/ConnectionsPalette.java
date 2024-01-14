@@ -74,7 +74,11 @@ public class ConnectionsPalette extends JPanel {
             tree.setShowsRootHandles(true);
             add(new JScrollPane(tree));
         }
+        @Override
+        public void paintComponent(java.awt.Graphics g)
+        {
 
+        }
         // Helper method to find a node with a given user object
         private DefaultMutableTreeNode findNode(DefaultMutableTreeNode parent, Object userObject) {
             Enumeration<TreeNode> children = parent.children();
@@ -95,7 +99,6 @@ public class ConnectionsPalette extends JPanel {
                 if (tile.name().equals("DEFAULT")) {
                     continue;
                 }
-
                 DefaultMutableTreeNode categoryNode = findNode(root, tile.name());
 
                 if (categoryNode == null) {
@@ -204,6 +207,7 @@ public class ConnectionsPalette extends JPanel {
                 HashSet<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
                 GameManager.getInstance().getEditor().onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
                 connectablesContainer.refresh(tileConnections);
+                //emittersContainer.tree.setSelectionPath(new TreePath(node));
             }
         });
 

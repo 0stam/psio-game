@@ -1,6 +1,7 @@
 package display;
 
 import gamemanager.GameManager;
+import tile.ChasingEnemy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +47,20 @@ public class EditorMapDisplay extends JPanel {
             case BOTH: {
                 for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                     for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
-                        mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), null, GameManager.getInstance().getMap().getUpperLayer(i,j) == null ? enums.Graphics.EMPTY : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID());
+                        enums.Graphics newBottom = ((GameManager.getInstance().getMap().getBottomLayer(i, j) == null) ? enums.Graphics.DEFAULT : GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID());
+                        enums.Graphics newUpper = ((GameManager.getInstance().getMap().getUpperLayer(i, j) == null) ? enums.Graphics.EMPTY : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID());
+
+                        if (GameManager.getInstance().getEditor().getConnectingTile() != null) {
+                            if (GameManager.getInstance().getMap().getBottomLayer(i, j) == GameManager.getInstance().getEditor().getConnectingTile()) {
+                                newBottom = ((GameManager.getInstance().getEditor().getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
+                            }
+
+                            if (GameManager.getInstance().getMap().getUpperLayer(i, j) == GameManager.getInstance().getEditor().getConnectingTile()) {
+                                newUpper = ((GameManager.getInstance().getEditor().getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
+                            }
+                        }
+
+                        mapTiles[i][j].updateGraphics(newBottom, null, newUpper);
                     }
                 }
                 break;

@@ -1,9 +1,9 @@
 package tile;
 
+import connectableinterface.Connectable;
 import enterablestrategy.Empty;
 import enums.Graphics;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import event.EventObserver;
 import event.EventSource;
 import enums.Direction;
 
-public class Button extends Tile implements EventSource {
+public class Button extends Tile implements EventSource, Connectable {
     private final List<EventObserver> observers = new ArrayList<>();
     private boolean isPressed = false;
 
@@ -21,6 +21,25 @@ public class Button extends Tile implements EventSource {
         this.setEnterableStrategy(new Empty());
         this.setGraphicsID(Graphics.BUTTON_RELEASED);
     }
+
+    public void addConnection (Tile tile) {
+        if (tile instanceof EventObserver)
+        {
+            addObserver((EventObserver) tile);
+        }
+    }
+    public void removeConnection(Tile tile)
+    {
+        if (observers.contains((EventObserver)tile)) {
+            removeObserver((EventObserver) tile);
+        }
+    }
+    public List<Tile> getConnections()
+    {
+        return ( (List<Tile>) ( (List<?>)  observers));
+    }
+
+
 
     public void addObserver(EventObserver observer) {
         observers.add(observer);

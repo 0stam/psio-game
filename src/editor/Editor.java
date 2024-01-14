@@ -1,20 +1,20 @@
 package editor;
 
+import connectableinterface.Connectable;
 import IO.IOManager;
 import enums.ConnectableTile;
 import enums.EditableTile;
 import enums.EditorMode;
 import enums.Layer;
 import event.*;
-import levelloader.LevelLoader;
-import levelloader.LevelNotSaved;
+import levelloader.*;
 import tile.*;
 import gamemanager.GameManager;
 import map.Map;
 import tile.Box;
 import turnstrategy.PlayerFollower;
-
-import javax.swing.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import static enums.EditableTile.*;
 
@@ -22,9 +22,10 @@ import static enums.EditableTile.*;
 public class Editor implements EventObserver {
     // Variables required for the graphics to work
     private Layer layer = Layer.BOTH;
-    private EditorMode mode = EditorMode.PREADD;
+    private EditorMode mode = EditorMode.DEFAULT;
+    private boolean modeEnabled = false;
     private EditableTile heldTile;
-    private ConnectableTile connectingTile;
+    private Tile connectingTile;
 
     // Variables required for the logic to work
     private boolean change;
@@ -46,7 +47,7 @@ public class Editor implements EventObserver {
     }
 
     //pewnie powinno być gdzie indziej
-    public Tile enumToObject(EditableTile editableTile, int x, int y) {
+    public Tile editableToObject(EditableTile editableTile, int x, int y) {
         return switch (editableTile) {
             case BOX ->  new Box(x, y);
             case GOAL ->  new Goal(x, y);
@@ -61,7 +62,7 @@ public class Editor implements EventObserver {
             default ->  null;
         };
     }
-    public EditableTile objectToEnum(Tile tile)
+    public EditableTile objectToEditable(Tile tile)
     {
         if (tile == null){
             return EMPTY;
@@ -81,7 +82,18 @@ public class Editor implements EventObserver {
             default -> EMPTY;
         };
     }
-
+    public ConnectableTile objectToConnectable(Tile tile)
+    {
+        if (tile == null){
+            return ConnectableTile.DEFAULT;
+        }
+        return switch (tile.getClass().getSimpleName())
+        {
+            case "Button" -> ConnectableTile.BUTTON;
+            case "ChasingEnemy" -> ConnectableTile.ENEMY;
+            default -> ConnectableTile.DEFAULT;
+        };
+    }
     public void setDefaultMap(int x, int y) {
         Map map = new Map(x, y);
 
@@ -103,6 +115,7 @@ public class Editor implements EventObserver {
                 this.setHeldTile(palettePressedEvent.getType());
                 break;
             }
+            //TODO: IMPORTANT: implement mode handling
             //TODO: fix edge case where second button is pressed while the other is still pressed down (no idea why it happens)
             case "TilePressedEvent": {
                 TilePressedEvent tilePressedEvent = (TilePressedEvent) event;
@@ -141,7 +154,6 @@ public class Editor implements EventObserver {
                 }
                 catch (levelloader.LevelNotLoaded e)
                 {
-                    //TODO: Zrobić tu coś mądrzejszego
                     System.err.println("Błąd wczytywania poziomu");
                     setDefaultMap(10, 10);
                 }
@@ -158,15 +170,32 @@ public class Editor implements EventObserver {
                 }
                 break;
             }
-            //TODO: change casting from button/door to more general statements
+            case "ConnectableTileSelectedEvent": {
+                ConnectableTileSelectedEvent connectableTileSelectedEvent = (ConnectableTileSelectedEvent) event;
+                setConnectingTile(connectableTileSelectedEvent.getTile());
+            }
             case "ConnectionCreatedEvent": {
                 ConnectionEvent connectionEvent = (ConnectionEvent) event;
-                ((Button) connectionEvent.getFrom()).addObserver((Door) connectionEvent.getTo());
+                if (connectingTile instanceof Connectable source)
+                {
+                    source.addConnection(connectionEvent.getTile());
+                }
+                else if (connectionEvent.getTile() instanceof Connectable source)
+                {
+                    source.addConnection(connectingTile);
+                }
                 break;
             }
             case "ConnectionDeletedEvent": {
                 ConnectionEvent connectionEvent = (ConnectionEvent) event;
-                ((Button) connectionEvent.getFrom()).removeObserver((Door) connectionEvent.getTo());
+                if (connectingTile instanceof Connectable source)
+                {
+                    source.removeConnection(connectionEvent.getTile());
+                }
+                else if (connectionEvent.getTile() instanceof Connectable source)
+                {
+                    source.removeConnection(connectingTile);
+                }
                 break;
             }
             default: return;
@@ -178,14 +207,14 @@ public class Editor implements EventObserver {
             case BOTH:
                 if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.UPPER) {
                     editorPlaceTile(tile, Layer.UPPER, x, y);
-                    if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x,y)).fullTileWhenBoth)
+                    if (tile.fullTileWhenBoth || objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x,y)).fullTileWhenBoth)
                     {
                         editorPlaceTile(EMPTY, Layer.BOTTOM, x, y);
                     }
                 }
                 if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
                     editorPlaceTile(tile, Layer.BOTTOM, x, y);
-                    if (tile.fullTileWhenBoth || objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x,y)).fullTileWhenBoth)
+                    if (tile.fullTileWhenBoth || objectToEditable(GameManager.getInstance().getMap().getUpperLayer(x,y)).fullTileWhenBoth)
                     {
                         editorPlaceTile(EMPTY, Layer.UPPER, x, y);
                     }
@@ -193,14 +222,14 @@ public class Editor implements EventObserver {
                 this.layer = Layer.BOTH;
                 break;
             case UPPER:
-                if (tile.isPlaceableUpper && tile != objectToEnum(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
+                if (tile.isPlaceableUpper && tile != objectToEditable(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
                     if (tile == PLAYER) {
                         playerCount++;
                     }
                     if (GameManager.getInstance().getMap().getUpperLayer(x,y) instanceof PlayerCharacter)
                     {
                         playerCount--;
-                        GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
+                        GameManager.getInstance().getMap().setUpperLayer(x, y, editableToObject(tile, x, y));
                         for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
                         {
                             for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)
@@ -215,19 +244,18 @@ public class Editor implements EventObserver {
                         }
                     }
                     else {
-                        GameManager.getInstance().getMap().setUpperLayer(x, y, enumToObject(tile, x, y));
+                        GameManager.getInstance().getMap().setUpperLayer(x, y, editableToObject(tile, x, y));
                     }
 
                     change = true;
                 }
                 break;
             case BOTTOM:
-                if (tile == EMPTY)
-                {
+                if (tile == EMPTY) {
                     tile = FLOOR;
                 }
-                if (tile.isPlaceableBottom && tile != objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) && !(tile == EMPTY && objectToEnum(GameManager.getInstance().getMap().getBottomLayer(x, y)) == FLOOR)) {
-                    GameManager.getInstance().getMap().setBottomLayer(x, y, enumToObject(tile, x, y));
+                if (tile.isPlaceableBottom && tile != objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x, y))) {
+                    GameManager.getInstance().getMap().setBottomLayer(x, y, editableToObject(tile, x, y));
                     change = true;
                 }
         }
@@ -256,24 +284,21 @@ public class Editor implements EventObserver {
         return null;
     }
 
-    public Tile[] getConnectableTilesInCategory(ConnectableTile category) {
-        // TODO: return all tiles belonging to a given category, eg. buttons, enemies etc.
-        //PLACEHOLDER SORKI
-        if (category == ConnectableTile.BUTTON) {
-            return new Tile[]{new Button(0, 0), new Button(2, 3), new Button(5,3)};
-        } else if (category == ConnectableTile.ENEMY) {
-            return new Tile[]{new ChasingEnemy(0, 0, findPlayer())};
+    public List<Tile> getTilesInConnectableCategory(ConnectableTile category) {
+        ArrayList<Tile> list = new ArrayList<>();
+        for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
+        {
+            for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)
+            {
+                if (objectToConnectable(GameManager.getInstance().getMap().getBottomLayer(i,j)) == category) {
+                    list.add(GameManager.getInstance().getMap().getBottomLayer(i,j));
+                }
+                else if (objectToConnectable(GameManager.getInstance().getMap().getUpperLayer(i,j)) == category) {
+                    list.add(GameManager.getInstance().getMap().getBottomLayer(i, j));
+                }
+            }
         }
-
-        return null;
-    }
-
-    public Tile[] getTileConnections(Tile tile) {
-        if (tile.getX() == 0 && tile.getY() == 0) {
-            return new Tile[]{new Door(0, 1), new Door(1, 0), new Door(1, 1)};
-        }
-        // TODO: return all tiles connected to the tile passed as an argument
-        return null;
+        return list;
     }
 
     public EditorMode getMode() {
@@ -284,11 +309,19 @@ public class Editor implements EventObserver {
         this.mode = mode;
     }
 
-    public ConnectableTile getConnectingTile() {
+    public boolean isModeEnabled() {
+        return modeEnabled;
+    }
+
+    public void setModeEnabled(boolean modeEnabled) {
+        this.modeEnabled = modeEnabled;
+    }
+
+    public Tile getConnectingTile() {
         return connectingTile;
     }
 
-    public void setConnectingTile(ConnectableTile connectingTile) {
+    public void setConnectingTile(Tile connectingTile) {
         this.connectingTile = connectingTile;
     }
 }

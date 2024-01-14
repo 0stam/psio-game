@@ -74,6 +74,7 @@ public class PaletteTabs {
 					GameManager.getInstance().onEvent(new SavePathEvent());
 					GameManager.getInstance().getEditor().setCurrentEnemy(null);
 					GameManager.getInstance().getEditor().setMode(EditorMode.CONNECT);
+					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 					IOManager.getInstance().drawEditor();
 					break;
 				}

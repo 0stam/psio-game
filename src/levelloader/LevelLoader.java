@@ -36,7 +36,7 @@ public class LevelLoader {
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
             RawMap loadedMap = (RawMap)is.readObject();
-            return MapConverter.loadConvert(loadedMap);
+            return MapConverter.oldLoadConvert(loadedMap);
         } catch(IOException | ClassNotFoundException e) {
             throw new LevelNotLoaded("Failed to load level " + name);
         }
@@ -62,7 +62,7 @@ public class LevelLoader {
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
             RawMap loadedMap = (RawMap)is.readObject();
-            return MapConverter.loadConvert(loadedMap);
+            return MapConverter.oldLoadConvert(loadedMap);
         } catch(IOException | ClassNotFoundException e) {
             throw new LevelNotLoaded("Failed to load level " + index);
         }

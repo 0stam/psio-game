@@ -37,7 +37,7 @@ public class Editor implements EventObserver {
     private Layer layer = Layer.BOTH;
     private EditorMode mode = PREADD;
     private EditorGraphics heldTile;
-    private ConnectableTile connectingTile;
+    private Tile connectingTile;
     private EditorGraphics[][] currentPath;
     private SmartEnemy currentEnemy = null;
     //private JTree referenceTree = null;
@@ -97,6 +97,19 @@ public class Editor implements EventObserver {
             case "PlayerCharacter" -> PLAYER;
             case "Wall" -> WALL;
             default -> enums.EditableTile.EMPTY;
+        };
+    }
+
+    public ConnectableTile objectToConnectable(Tile tile)
+    {
+        if (tile == null){
+            return ConnectableTile.DEFAULT;
+        }
+        return switch (tile.getClass().getSimpleName())
+        {
+            case "Button" -> ConnectableTile.BUTTON;
+            case "ChasingEnemy" -> ConnectableTile.ENEMY;
+            default -> ConnectableTile.DEFAULT;
         };
     }
 
@@ -484,14 +497,6 @@ public class Editor implements EventObserver {
 
     public void setMode(EditorMode mode) {
         this.mode = mode;
-    }
-
-    public boolean isModeEnabled() {
-        return modeEnabled;
-    }
-
-    public void setModeEnabled(boolean modeEnabled) {
-        this.modeEnabled = modeEnabled;
     }
 
     public Tile getConnectingTile() {

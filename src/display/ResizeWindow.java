@@ -1,9 +1,14 @@
 package display;
 
 import IO.IOManager;
+import editor.TreeModel;
+import enums.EditorMode;
+import enums.Layer;
+import event.SavePathEvent;
 import gamemanager.GameManager;
 import map.Map;
 import tile.Floor;
+import tile.SmartEnemy;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -52,7 +57,21 @@ public class ResizeWindow {
 					}
 				}
 
+				for (int i = 0;i < GameManager.getInstance().getMap().getWidth(); i++) {
+					for (int j = 0;j < GameManager.getInstance().getMap().getHeight();j++) {
+						if (i >= newWidth && j >= newHeight && ((GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof SmartEnemy) || (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof SmartEnemy))) {
+
+							GameManager.getInstance().getEditor().getTreeModel().removeNode("Smart enemy (" + i + ", " + j + ")");
+						}
+					}
+				}
+
 				GameManager.getInstance().setMap(newMap);
+				GameManager.getInstance().getEditor().setCurrentPath(GameManager.getInstance().getEditor().resizePath());
+				GameManager.getInstance().onEvent(new SavePathEvent());
+				GameManager.getInstance().getEditor().setCurrentEnemy(null);
+				GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
+				GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 
 				IOManager.getInstance().drawGame();
 				IOManager.getInstance().drawEditor();

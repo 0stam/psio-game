@@ -315,8 +315,28 @@ public class Editor implements EventObserver {
                 path[i][j] = EMPTY;
             }
         }
+
         return path;
     }
+
+    public EditorGraphics[][] resizePath()
+    {
+        EditorGraphics[][] path = new EditorGraphics[GameManager.getInstance().getMap().getWidth()][GameManager.getInstance().getMap().getHeight()];
+        for (int i = 0 ; i < path.length ; ++i)
+        {
+            for (int j = 0 ; j < path[0].length ; ++j)
+            {
+                if (i < currentPath.length && j < currentPath[0].length) {
+                    path[i][j] = currentPath[i][j];
+                } else {
+                    path[i][j] = EMPTY;
+                }
+            }
+        }
+
+        return path;
+    }
+
     public EditorGraphics[][] listToPath()
     {
         if (currentEnemy != null) {

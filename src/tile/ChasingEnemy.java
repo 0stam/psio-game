@@ -7,7 +7,7 @@ import turnstrategy.Follower;
 import java.util.Collections;
 import java.util.List;
 
-public class ChasingEnemy extends ActionTile {
+public class ChasingEnemy extends ActionTile implements Connectable {
     public ChasingEnemy(int x, int y, Tile player) {
         super(x, y, 1);
         setGraphicsID(Graphics.ENEMY);
@@ -17,7 +17,7 @@ public class ChasingEnemy extends ActionTile {
 
     @Override
     public List<Tile> getConnections() {
-        return Collections.singletonList(((PlayerFollower) getTurnStrategy()).getTargetTile());
+        return Collections.singletonList(((Follower) getTurnStrategy()).getTargetTile());
     }
 
     @Override

@@ -21,6 +21,5 @@ public enum Graphics {
 	ARROW_DOWN,
 	ARROW_LEFT,
 	ARROW_RIGHT,
-	OUT_OF_BOUNDS,
 	SMART_SELECTED
 }

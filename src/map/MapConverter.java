@@ -42,7 +42,7 @@ public class MapConverter {
 						connection = new RawConnection();
 						connection.setSourcePos(new Point(i, j));
 
-						for (EventObserver observer : (map.getBottomLayer(i, j)).)
+						//for (EventObserver observer : (map.getBottomLayer(i, j)).)
 					}
 				} else {
 					result.setBottom(i, j, EditableTile.EMPTY);

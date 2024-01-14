@@ -154,7 +154,6 @@ public class ConnectionsPalette extends JPanel {
 
             if (connectedTiles != null) {
                 for (Tile tile : connectedTiles) {
-                    System.out.println(tile);
                     listModel.addElement(tile);
                 }
             }

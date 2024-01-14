@@ -1,5 +1,6 @@
 package display;
 
+import connectableinterface.Connectable;
 import enums.ConnectableTile;
 import enums.EditableTile;
 import enums.Graphics;
@@ -11,6 +12,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 
 public class ConnectionsPalette extends JPanel {
     EmittersContainer emittersContainer;
@@ -94,7 +96,7 @@ public class ConnectionsPalette extends JPanel {
         public void refresh() {
             //setLayout(new BorderLayout());
             for (ConnectableTile tile : ConnectableTile.values()) {
-                Tile[] tilesInCategory = GameManager.getInstance().getEditor().getConnectableTilesInCategory(tile);
+                List<Tile> tilesInCategory = GameManager.getInstance().getEditor().getTilesInConnectableCategory(tile);
                 DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
 
                 if (tile.name().equals("DEFAULT")) {
@@ -160,7 +162,7 @@ public class ConnectionsPalette extends JPanel {
 
             add(new JScrollPane(list));
         }
-        public void refresh(Tile[] connectedTiles) {
+        public void refresh(List<Tile> connectedTiles) {
             listModel = new DefaultListModel<>();
 
             if (connectedTiles != null) {
@@ -191,7 +193,7 @@ public class ConnectionsPalette extends JPanel {
                     Tile from = (Tile) connectablesContainer.list.getSelectedValue();
                     Tile to = (Tile) emittersContainer.getLastSelectedNode().getUserObject();
                     connectablesContainer.listModel.remove(selectedIndex);
-                    GameManager.getInstance().onEvent(new event.ConnectionDeletedEvent(from, to));
+                    GameManager.getInstance().onEvent(new event.ConnectionDeletedEvent(to)); //TODO: idk if it should be 'from' or 'to'
                 }
             }
         });
@@ -201,9 +203,8 @@ public class ConnectionsPalette extends JPanel {
             emittersContainer.setLastSelectedNode(node);
             // Check if the node is a tile and thus has connections
             if (node.getUserObject() instanceof Tile) {
-                Tile tile = (Tile) node.getUserObject();
-                Tile[] connectedTiles = GameManager.getInstance().getEditor().getTileConnections(tile);
-                connectablesContainer.refresh(connectedTiles);
+                List<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
+                connectablesContainer.refresh(tileConnections);
             }
 
             // Store the expanded state before refreshing the tree

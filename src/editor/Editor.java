@@ -22,6 +22,7 @@ import static enums.Arrow.*;
 import static enums.Arrow.EMPTY;
 import static enums.Direction.*;
 import static enums.EditableTile.*;
+import static enums.Layer.PATH;
 import static enums.Layer.UPPER;
 
 
@@ -364,7 +365,9 @@ public class Editor implements EventObserver {
                             break;
                         }
                     }
-                    path[i.getX()][i.getY()] = arrow;
+                    if (i.getX() < GameManager.getInstance().getMap().getWidth() && i.getY() < GameManager.getInstance().getMap().getHeight()) {
+                        path[i.getX()][i.getY()] = arrow;
+                    }
                 }
             }
             else

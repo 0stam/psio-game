@@ -37,7 +37,7 @@ public class EditorDisplay extends JPanel {
 		vSplitPane.setTopComponent(hSplitPane);
 		vSplitPane.setBottomComponent(paletteTabs.getTabs());
 
-		vSplitPane.setResizeWeight(0.9f);
+		vSplitPane.setResizeWeight(1f);
 		hSplitPane.setResizeWeight(0.9f);
 
 		createKeyBinding();

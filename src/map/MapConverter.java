@@ -2,6 +2,7 @@ package map;
 
 import connectableinterface.Connectable;
 import enums.EditableTile;
+import enums.Graphics;
 import event.EventObserver;
 import tile.*;
 import tile.Button;
@@ -33,6 +34,7 @@ public class MapConverter {
 
 		NewRawMap result = new NewRawMap(map.getWidth(), map.getHeight());
 		RawConnection connection;
+		RawPath path;
 
 		for (int i = 0;i < map.getWidth();i++) {
 			for (int j = 0;j < map.getHeight();j++) {
@@ -43,11 +45,26 @@ public class MapConverter {
 						connection = new RawConnection();
 						connection.setSourcePos(new Point(i, j));
 
-						for (Tile tile : ((Connectable)(map.getBottomLayer(i, j))).getConnections()) {
-							connection.addDestination(new Point(tile.getX(), tile.getY()));
+						if (((Connectable)(map.getBottomLayer(i, j))).getConnections() != null) {
+							for (Tile tile : ((Connectable) (map.getBottomLayer(i, j))).getConnections()) {
+								connection.addDestination(new Point(tile.getX(), tile.getY()));
+							}
 						}
 
 						result.addConnection(connection);
+					}
+
+					if (map.getBottomLayer(i, j) instanceof SmartEnemy) {
+						path = new RawPath();
+						path.setEnemyPos(new Point(i, j));
+
+						if (((SmartEnemy)map.getBottomLayer(i, j)).getPathTileList() != null) {
+							for (PathTile tile : ((SmartEnemy) map.getBottomLayer(i, j)).getPathTileList()) {
+								path.addPath(tile);
+							}
+						}
+
+						result.addPath(path);
 					}
 				} else {
 					result.setBottom(i, j, EditableTile.EMPTY);
@@ -60,11 +77,26 @@ public class MapConverter {
 						connection = new RawConnection();
 						connection.setSourcePos(new Point(i, j));
 
-						for (Tile tile : ((Connectable)(map.getBottomLayer(i, j))).getConnections()) {
-							connection.addDestination(new Point(tile.getX(), tile.getY()));
+						if (((Connectable)(map.getUpperLayer(i, j))).getConnections() != null) {
+							for (Tile tile : ((Connectable) (map.getUpperLayer(i, j))).getConnections()) {
+								connection.addDestination(new Point(tile.getX(), tile.getY()));
+							}
 						}
 
 						result.addConnection(connection);
+					}
+
+					if (map.getUpperLayer(i, j) instanceof SmartEnemy) {
+						path = new RawPath();
+						path.setEnemyPos(new Point(i, j));
+
+						if (((SmartEnemy)map.getUpperLayer(i, j)).getPathTileList() != null) {
+							for (PathTile tile : ((SmartEnemy) map.getUpperLayer(i, j)).getPathTileList()) {
+								path.addPath(tile);
+							}
+						}
+
+						result.addPath(path);
 					}
 				} else {
 					result.setTop(i, j, EditableTile.EMPTY);
@@ -87,6 +119,7 @@ public class MapConverter {
 					case BUTTON -> result.setBottomLayer(i, j, new Button(i, j));
 					case ENEMY -> result.setBottomLayer(i, j, new ChasingEnemy(i, j, null));
 					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
+					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR -> result.setBottomLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
 					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
@@ -134,6 +167,14 @@ public class MapConverter {
 						((Connectable)(result.getUpperLayer(connection.getSourcePos().x, connection.getSourcePos().y))).addConnection(result.getUpperLayer(destination.x, destination.y));
 					}
 				}
+			}
+		}
+
+		for (RawPath path : map.getPaths()) {
+			if (result.getBottomLayer(path.getEnemyPos().x, path.getEnemyPos().y) instanceof SmartEnemy) {
+				((SmartEnemy)result.getBottomLayer(path.getEnemyPos().x, path.getEnemyPos().y)).setPathTileList(path.getPath());
+			} else if (result.getUpperLayer(path.getEnemyPos().x, path.getEnemyPos().y) instanceof SmartEnemy) {
+				((SmartEnemy)result.getUpperLayer(path.getEnemyPos().x, path.getEnemyPos().y)).setPathTileList(path.getPath());
 			}
 		}
 
@@ -199,20 +240,20 @@ public class MapConverter {
 		while (it.hasNext()) {
 			java.util.Map.Entry<Point, List<Point>> entry = it.next();
 
-			if (result.getBottomLayer(entry.getKey().x, entry.getKey().y) instanceof Button) {
+			if (isConnectableTile(map.getBottom(entry.getKey().x, entry.getKey().y))) {
 				for (Point point : entry.getValue()) {
-					if (result.getBottomLayer(point.x, point.y) instanceof Door) {
-						((Button) result.getBottomLayer(entry.getKey().x, entry.getKey().y)).addObserver((Door)result.getBottomLayer(point.x, point.y));
-					} else if (result.getUpperLayer(point.x, point.y) instanceof Door) {
-						((Button) result.getBottomLayer(entry.getKey().x, entry.getKey().y)).addObserver((Door)result.getUpperLayer(point.x, point.y));
+					if (canBeConnected(map.getBottom(point.x, point.y))) {
+						((Button) result.getBottomLayer(entry.getKey().x, entry.getKey().y)).addConnection(result.getBottomLayer(point.x, point.y));
+					} else if (canBeConnected(map.getTop(point.x, point.y))) {
+						((Button) result.getBottomLayer(entry.getKey().x, entry.getKey().y)).addConnection(result.getUpperLayer(point.x, point.y));
 					}
 				}
-			} else if (result.getUpperLayer(entry.getKey().x, entry.getKey().y) instanceof Button) {
+			} else if (isConnectableTile(map.getTop(entry.getKey().x, entry.getKey().y))) {
 				for (Point point : entry.getValue()) {
-					if (result.getBottomLayer(point.x, point.y) instanceof Door) {
-						((Button) result.getUpperLayer(entry.getKey().x, entry.getKey().y)).addObserver((Door)result.getBottomLayer(point.x, point.y));
-					} else if (result.getUpperLayer(point.x, point.y) instanceof Door) {
-						((Button) result.getUpperLayer(entry.getKey().x, entry.getKey().y)).addObserver((Door)result.getUpperLayer(point.x, point.y));
+					if (canBeConnected(map.getBottom(point.x, point.y))) {
+						((Button) result.getUpperLayer(entry.getKey().x, entry.getKey().y)).addConnection(result.getBottomLayer(point.x, point.y));
+					} else if (canBeConnected(map.getTop(point.x, point.y))) {
+						((Button) result.getUpperLayer(entry.getKey().x, entry.getKey().y)).addConnection(result.getUpperLayer(point.x, point.y));
 					}
 				}
 			}
@@ -221,6 +262,25 @@ public class MapConverter {
 		}
 
 		return result;
+	}
+	public static boolean isConnectableTile(Graphics t)
+	{
+		switch (t)
+		{
+			case BUTTON_RELEASED, ENEMY -> {return true;}
+		}
+		return false;
+	}
+	public static boolean canBeConnected(Graphics t)
+	{
+		switch (t)
+		{
+			case DOOR_CLOSED,PLAYER,MIMIC:
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	public static boolean isConnectableTile(EditableTile t)
 	{

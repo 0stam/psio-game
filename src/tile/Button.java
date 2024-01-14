@@ -5,6 +5,7 @@ import enterablestrategy.Empty;
 import enums.Graphics;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import event.ButtonEvent;
@@ -13,7 +14,7 @@ import event.EventSource;
 import enums.Direction;
 
 public class Button extends Tile implements EventSource, Connectable {
-    private final List<EventObserver> observers = new ArrayList<>();
+    private final HashSet<EventObserver> observers = new HashSet<>();
     private boolean isPressed = false;
 
     public Button(int x, int y) {
@@ -34,9 +35,9 @@ public class Button extends Tile implements EventSource, Connectable {
             removeObserver((EventObserver) tile);
         }
     }
-    public List<Tile> getConnections()
+    public HashSet<Tile> getConnections()
     {
-        return ( (List<Tile>) ( (List<?>)  observers));
+        return ( (HashSet<Tile>) ( (HashSet<?>)  observers));
     }
 
 
@@ -49,7 +50,7 @@ public class Button extends Tile implements EventSource, Connectable {
         observers.remove(observer);
     }
 
-    public List<EventObserver> getObservers() {
+    public HashSet<EventObserver> getObservers() {
         return observers;
     }
 

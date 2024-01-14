@@ -11,7 +11,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
+
 
 public class PathEditPalette extends JPanel{
     private JSplitPane splitPane;
@@ -22,7 +24,6 @@ public class PathEditPalette extends JPanel{
     {
         setPreferredSize(new Dimension(0, 200));
         setLayout(new BorderLayout());
-        //TODO: podmienic ikonki na ikonki z gry zamiast javowych
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
         splitPane.setResizeWeight(0.4f);
@@ -34,7 +35,10 @@ public class PathEditPalette extends JPanel{
         jTree.setBackground(Color.WHITE);
         jTree.setFont(new Font("Arial", Font.PLAIN, 25));
         jTree.setRowHeight(30);
-
+        DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) jTree.getCellRenderer();
+        renderer.setClosedIcon(new ImageIcon(GraphicsHashtable.getInstance().getImage(enums.Graphics.SMART)));
+        renderer.setOpenIcon(new ImageIcon(GraphicsHashtable.getInstance().getImage(enums.Graphics.SMART)));
+        renderer.setLeafIcon(null);
 
         arrows = new TilePalette(Arrow.values());
 

@@ -97,6 +97,10 @@ public class GameManager implements EventObserver {
         }
     }
 
+    public void resetLevel() {
+        startLevel(currentLevel);
+    }
+
     public void onEvent(Event event) {
         if (!(event instanceof InputEvent)) {
             return;
@@ -132,7 +136,7 @@ public class GameManager implements EventObserver {
         }
 
         if (event instanceof ResetEvent) {
-            startLevel(currentLevel);
+            resetLevel();
             return;
         }
     }

@@ -19,6 +19,8 @@ public class ConnectionsPalette extends JPanel {
     EmittersContainer emittersContainer;
     ConnectablesContainer connectablesContainer;
 
+    JSplitPane splitPane;
+
     /**
      * A JPanel for the tree of tiles we can connect other tiles to
      */
@@ -40,7 +42,7 @@ public class ConnectionsPalette extends JPanel {
                         return label;
                     }
                     label.setIcon(new ImageIcon(GraphicsHashtable.getInstance().getImages().get(EditableTile.valueOf(value.toString()).graphics)));
-                    label.setFont(getFont().deriveFont(Font.BOLD));
+                    //label.setFont(getFont().deriveFont(Font.BOLD));
                 }
                 else {
                     label.setIcon(null);
@@ -150,7 +152,7 @@ public class ConnectionsPalette extends JPanel {
             add(new JScrollPane(list));
         }
 
-        public void refresh(List<Tile> connectedTiles) {
+        public void refresh(HashSet<Tile> connectedTiles) {
             listModel = new DefaultListModel<>();
 
             if (connectedTiles != null) {
@@ -163,13 +165,24 @@ public class ConnectionsPalette extends JPanel {
     }
 
     public ConnectionsPalette() {
-        setLayout(new GridLayout(1, 2));
+        setPreferredSize(new Dimension(0, 200));
+        setLayout(new BorderLayout());
 
         emittersContainer = new EmittersContainer();
+        emittersContainer.setMinimumSize(new Dimension(300, 0));
         connectablesContainer = new ConnectablesContainer();
+        connectablesContainer.setMinimumSize(new Dimension(300, 0));
 
-        add(emittersContainer, BorderLayout.WEST);
-        add(connectablesContainer, BorderLayout.EAST);
+        emittersContainer.tree.setRowHeight(30);
+        emittersContainer.tree.setFont(new Font("Arial", Font.PLAIN, 25));
+
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+        splitPane.setResizeWeight(0.4f);
+
+        splitPane.setLeftComponent(emittersContainer);
+        splitPane.setRightComponent(connectablesContainer);
+
+        this.add(splitPane, BorderLayout.CENTER);
 
         connectablesContainer.list.addListSelectionListener(listSelectionEvent -> {
             if (!listSelectionEvent.getValueIsAdjusting()) {
@@ -188,25 +201,13 @@ public class ConnectionsPalette extends JPanel {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeSelectionEvent.getPath().getLastPathComponent();
             // Check if the node is a tile and thus has connections
             if (node.getUserObject() instanceof Connectable) {
-                List<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
+                HashSet<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
                 GameManager.getInstance().getEditor().onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
                 connectablesContainer.refresh(tileConnections);
             }
-
-            // Store the expanded state before refreshing the tree
-            for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
-                TreePath path = emittersContainer.tree.getPathForRow(i);
-                emittersContainer.tree.expandPath(path);
-                if (emittersContainer.tree.isExpanded(path)) {
-                    expandedPaths.add(path);
-                }
-            }
-
-            // Restore the expanded state after refreshing the tree
-            for (TreePath path : expandedPaths) {
-                emittersContainer.tree.expandPath(path);
-            }
         });
+
+
     }
 
     public void refresh() {

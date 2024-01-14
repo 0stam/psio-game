@@ -4,7 +4,10 @@ import connectableinterface.Connectable;
 import enterablestrategy.Solid;
 import enums.Graphics;
 import turnstrategy.Follower;
+
+import javax.tools.ForwardingFileObject;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 public class ChasingEnemy extends ActionTile implements Connectable {
@@ -16,8 +19,10 @@ public class ChasingEnemy extends ActionTile implements Connectable {
     }
 
     @Override
-    public List<Tile> getConnections() {
-        return Collections.singletonList(((Follower) getTurnStrategy()).getTargetTile());
+    public HashSet<Tile> getConnections() {
+        HashSet<Tile> result = new HashSet<>();
+        result.add(((Follower) getTurnStrategy()).getTargetTile());
+        return result;
     }
 
     @Override

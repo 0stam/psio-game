@@ -58,11 +58,9 @@ public class PaletteTabs {
 				//FIXME: zrobmy cos z tym pozniej bo to obrzydliwe
 				case "Tiles":
 				{
-					GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
-					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 					//zrobic cos madrzejszego
 					GameManager.getInstance().onEvent(new SavePathEvent());
-					GameManager.getInstance().getEditor().setCurrentEnemy(null);
+					resetState(EditorMode.PREADD);
 					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
 					pathEditPalette.getArrows().selectOne(pathEditPalette.getArrows().buttons.get(0));
 					IOManager.getInstance().drawEditor();
@@ -72,16 +70,13 @@ public class PaletteTabs {
 				{
 					//zrobic cos madrzejszego pozniej
 					GameManager.getInstance().onEvent(new SavePathEvent());
-					GameManager.getInstance().getEditor().setCurrentEnemy(null);
-					GameManager.getInstance().getEditor().setMode(EditorMode.CONNECT);
-					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
+					resetState(EditorMode.PRECONNECT);
 					IOManager.getInstance().drawEditor();
 					break;
 				}
 				case "Pathedit":
 				{
-					GameManager.getInstance().getEditor().setMode(EditorMode.PREPATHEDIT);
-					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
+					resetState(EditorMode.PREPATHEDIT);
 					//zrobic cos madrzejszego pozniej
 					pathEditPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
@@ -99,4 +94,13 @@ public class PaletteTabs {
 			toolPalette.selectOne(toolPalette.buttons.get(0));
 		}
 	}
+
+	public void resetState (EditorMode m)
+	{
+		GameManager.getInstance().getEditor().setMode(m);
+		GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
+		GameManager.getInstance().getEditor().setCurrentEnemy(null);
+	}
+
+
 }

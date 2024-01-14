@@ -12,4 +12,12 @@ public enum ConnectableTile {
         this.allowedTiles = allowedTiles;
         this.exactlyOne = exactlyOne;
     }
+
+    public boolean canConnect(EditableTile tile) {
+        for (EditableTile allowedTile : allowedTiles) {
+            if (allowedTile == tile) return true;
+        }
+
+        return false;
+    }
 }

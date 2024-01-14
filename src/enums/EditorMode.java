@@ -5,6 +5,7 @@ public enum EditorMode {
 	ADD,
 	PREADD,
 	CONNECT,
+	PRECONNECT,
 	PREPATHEDIT,
 	PRESELECT,
 	SELECT

@@ -6,6 +6,7 @@ import enums.EditorMode;
 import enums.Layer;
 import event.EnemySelectedEvent;
 import event.ConnectionDeletedEvent;
+import event.PlaceholderConnectionCreatedEvent;
 import event.TilePressedEvent;
 import gamemanager.GameManager;
 import tile.SmartEnemy;
@@ -61,6 +62,10 @@ public class InteractiveTile extends JPanel {
                     GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
                     break;
                 }
+                case PRECONNECT: {
+                    GameManager.getInstance().getEditor().setMode(EditorMode.CONNECT);
+                    break;
+                }
                 case PRESELECT:
                 {
                     GameManager.getInstance().getEditor().setMode(EditorMode.SELECT);
@@ -84,6 +89,10 @@ public class InteractiveTile extends JPanel {
                     GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
                     break;
                 }
+                case CONNECT: {
+                    GameManager.getInstance().getEditor().setMode(EditorMode.PRECONNECT);
+                    break;
+                }
                 case SELECT:
                 {
                     GameManager.getInstance().getEditor().setMode(EditorMode.PRESELECT);
@@ -95,7 +104,7 @@ public class InteractiveTile extends JPanel {
             TilePressedEvent editorEvent = null;
             switch (GameManager.getInstance().getEditor().getMode())
             {
-                case ADD:
+                case ADD, CONNECT:
                 {
                     editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
                     break;

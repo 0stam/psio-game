@@ -38,7 +38,7 @@ public class TilePalette extends AbstractPalette {
 			i.setScale(scale / 2);
 		}
 
-		this.setPreferredSize(new Dimension(0, (int) (32.0 * (scale - 1))));
+		//this.setPreferredSize(new Dimension(0, (int) (32.0 * (scale - 1))));
 		this.revalidate();
 	}
 	public class TileListener extends MouseInputAdapter {

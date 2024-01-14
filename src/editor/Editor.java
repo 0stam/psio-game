@@ -144,10 +144,17 @@ public class Editor implements EventObserver {
                         editorPlaceTile(EditableTile.EMPTY, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
                     else if (mode == PRESELECT || mode == SELECT)
                         editorPlaceTile(Arrow.EMPTY, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
+                    else if (mode == PRECONNECT || mode == CONNECT)
+                        handleConnection(tilePressedEvent.getX(), tilePressedEvent.getY(), false);
+
                 }
                 //left click functionality
                 else {
+                if (mode != CONNECT && mode != PRECONNECT)
                     editorPlaceTile(heldTile, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
+                else
+                    handleConnection(tilePressedEvent.getX(), tilePressedEvent.getY(), true);
+
                 }
                 if (change) {
                     IOManager.getInstance().drawEditor();
@@ -183,6 +190,7 @@ public class Editor implements EventObserver {
                 break;
             }
             case "LevelSavedEvent": {
+                GameManager.getInstance().onEvent(new SavePathEvent());
                 LevelEvent levelEvent = (LevelEvent) event;
                 try {
                     LevelLoader.saveLevel(levelEvent.getPath(),GameManager.getInstance().getMap());
@@ -251,6 +259,21 @@ public class Editor implements EventObserver {
                 IOManager.getInstance().drawEditor();
                 break;
             }
+
+            case "EditorStateEvent":
+            {
+                EditorStateEvent est = (EditorStateEvent) event;
+                layer = est.getLayer();
+                currentEnemy = est.getEnemy();
+                if (currentEnemy != null)
+                    currentPath = listToPath();
+                else
+                    currentPath = null;
+                mode = est.getMode();
+                IOManager.getInstance().drawEditor();
+                break;
+            }
+
             default: return;
         }
     }
@@ -337,6 +360,27 @@ public class Editor implements EventObserver {
                         change = true;
                     }
                 }
+            }
+        }
+    }
+
+    private void handleConnection(int x, int y, boolean add) {
+        ArrayList<Tile> potentialConnections = new ArrayList<>();
+
+        if (layer == Layer.BOTTOM || layer == Layer.BOTH) {
+            potentialConnections.add(GameManager.getInstance().getMap().getBottomLayer(x, y));
+        } else if (layer == UPPER || layer == Layer.BOTH) {
+            potentialConnections.add(GameManager.getInstance().getMap().getUpperLayer(x, y));
+        }
+
+        for (Tile to : potentialConnections) {
+            if (objectToConnectable(connectingTile).canConnect(objectToEnum(to))) {
+                if (add) {
+                    onEvent(new ConnectionCreatedEvent(to));
+                } else {
+                    onEvent(new ConnectionDeletedEvent(to));
+                }
+                change = true;
             }
         }
     }

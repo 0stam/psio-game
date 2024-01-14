@@ -17,14 +17,19 @@ public class StateMachine implements TurnStrategy {
     public StateMachine (Hashtable<Point, Direction> path) {this.path = path;}
     @Override
     public void onTurn(Direction direction, ActionTile owner) {
-        GameManager.getInstance().getMap().move(owner.getX(), owner.getY(), path.get(new Point(owner.getX(), owner.getY())));
+        Point point = new Point(owner.getX(), owner.getY());
+        if (path.keySet().contains(point))
+            GameManager.getInstance().getMap().move(owner.getX(), owner.getY(), path.get(point));
+        else
+            GameManager.getInstance().getMap().move(owner.getX(), owner.getY(), Direction.DEFAULT);
     }
     public void setPath(ArrayList<PathTile> path)
     {
         this.path = new Hashtable<>();
-        for (PathTile i : path)
-        {
-            this.path.put(new Point(i.getX(), i.getY()), i.getDirection());
+        if (path != null) {
+            for (PathTile i : path) {
+                this.path.put(new Point(i.getX(), i.getY()), i.getDirection());
+            }
         }
     }
     public Hashtable<Point, Direction> getPath() {

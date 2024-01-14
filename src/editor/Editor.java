@@ -173,6 +173,7 @@ public class Editor implements EventObserver {
             case "ConnectableTileSelectedEvent": {
                 ConnectableTileSelectedEvent connectableTileSelectedEvent = (ConnectableTileSelectedEvent) event;
                 setConnectingTile(connectableTileSelectedEvent.getTile());
+                break;
             }
             case "ConnectionCreatedEvent": {
                 ConnectionEvent connectionEvent = (ConnectionEvent) event;
@@ -294,7 +295,7 @@ public class Editor implements EventObserver {
                     list.add(GameManager.getInstance().getMap().getBottomLayer(i,j));
                 }
                 else if (objectToConnectable(GameManager.getInstance().getMap().getUpperLayer(i,j)) == category) {
-                    list.add(GameManager.getInstance().getMap().getBottomLayer(i, j));
+                    list.add(GameManager.getInstance().getMap().getUpperLayer(i, j));
                 }
             }
         }

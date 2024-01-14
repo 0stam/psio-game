@@ -1,10 +1,10 @@
 package editor;
 
+import connectableinterface.Connectable;
 import IO.IOManager;
 import enums.*;
 import event.*;
-import levelloader.LevelLoader;
-import levelloader.LevelNotSaved;
+import levelloader.*;
 import tile.*;
 import gamemanager.GameManager;
 import map.Map;
@@ -18,6 +18,8 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import turnstrategy.Follower;
+import java.util.List;
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 
@@ -177,15 +179,33 @@ public class Editor implements EventObserver {
                 }
                 break;
             }
-            //TODO: change casting from button/door to more general statements
+            case "ConnectableTileSelectedEvent": {
+                ConnectableTileSelectedEvent connectableTileSelectedEvent = (ConnectableTileSelectedEvent) event;
+                setConnectingTile(connectableTileSelectedEvent.getTile());
+                break;
+            }
             case "ConnectionCreatedEvent": {
                 ConnectionEvent connectionEvent = (ConnectionEvent) event;
-                ((Button) connectionEvent.getFrom()).addObserver((Door) connectionEvent.getTo());
+                if (connectingTile instanceof Connectable source)
+                {
+                    source.addConnection(connectionEvent.getTile());
+                }
+                else if (connectionEvent.getTile() instanceof Connectable source)
+                {
+                    source.addConnection(connectingTile);
+                }
                 break;
             }
             case "ConnectionDeletedEvent": {
                 ConnectionEvent connectionEvent = (ConnectionEvent) event;
-                ((Button) connectionEvent.getFrom()).removeObserver((Door) connectionEvent.getTo());
+                if (connectingTile instanceof Connectable source)
+                {
+                    source.removeConnection(connectionEvent.getTile());
+                }
+                else if (connectionEvent.getTile() instanceof Connectable source)
+                {
+                    source.removeConnection(connectingTile);
+                }
                 break;
             }
             case "EnemySelectedEvent":
@@ -441,14 +461,21 @@ public class Editor implements EventObserver {
     }
 
 
-    public Tile[] getConnectibleTilesInCategory(ConnectableTile category) {
-        // TODO: return all tiles belonging to a given category, eg. buttons, enemies etc.
-        return null;
-    }
-
-    public Tile[] getTileConnections(Tile tile) {
-        // TODO: return all tiles connected to the tile passed as an argument
-        return null;
+    public List<Tile> getTilesInConnectableCategory(ConnectableTile category) {
+        ArrayList<Tile> list = new ArrayList<>();
+        for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
+        {
+            for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)
+            {
+                if (objectToConnectable(GameManager.getInstance().getMap().getBottomLayer(i,j)) == category) {
+                    list.add(GameManager.getInstance().getMap().getBottomLayer(i,j));
+                }
+                else if (objectToConnectable(GameManager.getInstance().getMap().getUpperLayer(i,j)) == category) {
+                    list.add(GameManager.getInstance().getMap().getUpperLayer(i, j));
+                }
+            }
+        }
+        return list;
     }
 
     public EditorMode getMode() {
@@ -459,11 +486,19 @@ public class Editor implements EventObserver {
         this.mode = mode;
     }
 
-    public ConnectableTile getConnectingTile() {
+    public boolean isModeEnabled() {
+        return modeEnabled;
+    }
+
+    public void setModeEnabled(boolean modeEnabled) {
+        this.modeEnabled = modeEnabled;
+    }
+
+    public Tile getConnectingTile() {
         return connectingTile;
     }
 
-    public void setConnectingTile(ConnectableTile connectingTile) {
+    public void setConnectingTile(Tile connectingTile) {
         this.connectingTile = connectingTile;
     }
 

@@ -2,20 +2,14 @@ package event;
 
 import tile.Tile;
 
-public class ConnectionEvent extends EditorEvent {
-    private final Tile from;
-    private final Tile to;
+public abstract class ConnectionEvent extends EditorEvent {
+    private final Tile tile;
 
-    public ConnectionEvent(Tile from, Tile to) {
-        this.from = from;
-        this.to = to;
+    public ConnectionEvent(Tile tile) {
+        this.tile = tile;
     }
 
-    public Tile getFrom() {
-        return from;
-    }
-
-    public Tile getTo() {
-        return to;
+    public Tile getTile() {
+        return tile;
     }
 }

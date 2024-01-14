@@ -5,6 +5,7 @@ import editor.Editor;
 import enums.EditorMode;
 import enums.Layer;
 import event.EnemySelectedEvent;
+import event.ConnectionDeletedEvent;
 import event.TilePressedEvent;
 import gamemanager.GameManager;
 import tile.SmartEnemy;

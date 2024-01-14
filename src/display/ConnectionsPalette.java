@@ -4,6 +4,7 @@ import connectableinterface.Connectable;
 import enums.ConnectableTile;
 import enums.EditableTile;
 import enums.Graphics;
+import event.ConnectableTileSelectedEvent;
 import gamemanager.GameManager;
 import tile.Tile;
 
@@ -24,7 +25,6 @@ public class ConnectionsPalette extends JPanel {
     class EmittersContainer extends JPanel {
         JTree tree;
         JLabel label;
-        DefaultMutableTreeNode lastSelectedNode;
 
         // Set the graphics of the tree
         class MyTreeCellRenderer extends DefaultTreeCellRenderer {
@@ -64,8 +64,6 @@ public class ConnectionsPalette extends JPanel {
                 }
                 DefaultMutableTreeNode node = new DefaultMutableTreeNode(tile.name());
                 root.add(node);
-
-
             }
 
             tree = new JTree(root);
@@ -73,6 +71,7 @@ public class ConnectionsPalette extends JPanel {
             tree.setRootVisible(false);
             add(new JScrollPane(tree));
         }
+
         // Helper method to find a node with a given user object
         private DefaultMutableTreeNode findNode(DefaultMutableTreeNode parent, Object userObject) {
             Enumeration<TreeNode> children = parent.children();
@@ -85,16 +84,7 @@ public class ConnectionsPalette extends JPanel {
             return null;
         }
 
-        public void setLastSelectedNode(DefaultMutableTreeNode node) {
-            System.out.println("last selected node: " + node);
-            lastSelectedNode = node;
-        }
-        public DefaultMutableTreeNode getLastSelectedNode() {
-            return lastSelectedNode;
-        }
-
         public void refresh() {
-            //setLayout(new BorderLayout());
             for (ConnectableTile tile : ConnectableTile.values()) {
                 List<Tile> tilesInCategory = GameManager.getInstance().getEditor().getTilesInConnectableCategory(tile);
                 DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
@@ -120,10 +110,7 @@ public class ConnectionsPalette extends JPanel {
                 }
             }
             ((DefaultTreeModel) tree.getModel()).nodeStructureChanged((DefaultMutableTreeNode) tree.getModel().getRoot());
-
-            revalidate();
         }
-
     }
 
     /**
@@ -145,35 +132,33 @@ public class ConnectionsPalette extends JPanel {
 
                 if (value instanceof Tile) {
                     Tile tile = (Tile) value;
-                    label.setText("x: " + tile.getX() + ", y: " + tile.getY());
+                    label.setText(tile.getClass().getSimpleName() + " " + "x: " + tile.getX() + ", y: " + tile.getY());
                 }
                 return label;
             }
+
         }
 
         public ConnectablesContainer() {
             setLayout(new BorderLayout());
 
             list = new JList();
-            list.add(new JLabel("Select an emitter"));
-
             list.setCellRenderer(new MyListCellRenderer());
             list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
             add(new JScrollPane(list));
         }
+
         public void refresh(List<Tile> connectedTiles) {
             listModel = new DefaultListModel<>();
 
             if (connectedTiles != null) {
                 for (Tile tile : connectedTiles) {
+                    System.out.println(tile);
                     listModel.addElement(tile);
                 }
             }
-
             list.setModel(listModel);
-
-            revalidate();
         }
     }
 
@@ -191,19 +176,18 @@ public class ConnectionsPalette extends JPanel {
                 int selectedIndex = connectablesContainer.list.getSelectedIndex();
                 if (selectedIndex != -1) {
                     Tile from = (Tile) connectablesContainer.list.getSelectedValue();
-                    Tile to = (Tile) emittersContainer.getLastSelectedNode().getUserObject();
                     connectablesContainer.listModel.remove(selectedIndex);
-                    GameManager.getInstance().onEvent(new event.ConnectionDeletedEvent(to)); //TODO: idk if it should be 'from' or 'to'
+                    GameManager.getInstance().onEvent(new event.ConnectionDeletedEvent(from));
                 }
             }
         });
 
         emittersContainer.tree.addTreeSelectionListener(treeSelectionEvent -> {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeSelectionEvent.getPath().getLastPathComponent();
-            emittersContainer.setLastSelectedNode(node);
             // Check if the node is a tile and thus has connections
-            if (node.getUserObject() instanceof Tile) {
+            if (node.getUserObject() instanceof Connectable) {
                 List<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
+                GameManager.getInstance().getEditor().onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
                 connectablesContainer.refresh(tileConnections);
             }
 
@@ -216,21 +200,15 @@ public class ConnectionsPalette extends JPanel {
                 }
             }
 
-            refresh();
-
             // Restore the expanded state after refreshing the tree
             for (TreePath path : expandedPaths) {
                 emittersContainer.tree.expandPath(path);
             }
-
-
         });
     }
 
     public void refresh() {
-
         emittersContainer.refresh();
-        revalidate();
     }
 
 }

@@ -1,5 +1,6 @@
 package map;
 
+import connectableinterface.Connectable;
 import enums.EditableTile;
 import event.EventObserver;
 import tile.*;
@@ -42,7 +43,11 @@ public class MapConverter {
 						connection = new RawConnection();
 						connection.setSourcePos(new Point(i, j));
 
-						//for (EventObserver observer : (map.getBottomLayer(i, j)).)
+						for (Tile tile : ((Connectable)(map.getBottomLayer(i, j))).getConnections()) {
+							connection.addDestination(new Point(tile.getX(), tile.getY()));
+						}
+
+						result.addConnection(connection);
 					}
 				} else {
 					result.setBottom(i, j, EditableTile.EMPTY);
@@ -52,7 +57,14 @@ public class MapConverter {
 					result.setTop(i, j, graphicsConvert.get(map.getUpperLayer(i, j).getClass().getSimpleName()));
 
 					if (isConnectableTile(result.getTop(i, j))) {
+						connection = new RawConnection();
+						connection.setSourcePos(new Point(i, j));
 
+						for (Tile tile : ((Connectable)(map.getBottomLayer(i, j))).getConnections()) {
+							connection.addDestination(new Point(tile.getX(), tile.getY()));
+						}
+
+						result.addConnection(connection);
 					}
 				} else {
 					result.setTop(i, j, EditableTile.EMPTY);
@@ -99,6 +111,28 @@ public class MapConverter {
 						playerPos = new Point(i, j);
 					}
 					case WALL -> result.setUpperLayer(i, j, new Wall(i, j));
+				}
+			}
+		}
+
+		for (RawConnection connection : map.getConnections()) {
+			if (isConnectableTile(map.getBottom(connection.getSourcePos().x, connection.getSourcePos().y))) {
+				for (Point destination : connection.getDestinationPos())
+				{
+					if (canBeConnected(map.getBottom(destination.x, destination.y))) {
+						((Connectable)(result.getBottomLayer(connection.getSourcePos().x, connection.getSourcePos().y))).addConnection(result.getBottomLayer(destination.x, destination.y));
+					} else if (canBeConnected(map.getTop(destination.x, destination.y))) {
+						((Connectable)(result.getBottomLayer(connection.getSourcePos().x, connection.getSourcePos().y))).addConnection(result.getUpperLayer(destination.x, destination.y));
+					}
+				}
+			} else if (isConnectableTile(map.getTop(connection.getSourcePos().x, connection.getSourcePos().y))) {
+				for (Point destination : connection.getDestinationPos())
+				{
+					if (canBeConnected(map.getBottom(destination.x, destination.y))) {
+						((Connectable)(result.getUpperLayer(connection.getSourcePos().x, connection.getSourcePos().y))).addConnection(result.getBottomLayer(destination.x, destination.y));
+					} else if (canBeConnected(map.getTop(destination.x, destination.y))) {
+						((Connectable)(result.getUpperLayer(connection.getSourcePos().x, connection.getSourcePos().y))).addConnection(result.getUpperLayer(destination.x, destination.y));
+					}
 				}
 			}
 		}
@@ -192,8 +226,18 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case BUTTON -> {return true;}
-			case ENEMY -> {return true;}
+			case BUTTON, ENEMY -> {return true;}
+		}
+		return false;
+	}
+	public static boolean canBeConnected(EditableTile t)
+	{
+		switch (t)
+		{
+			case DOOR,PLAYER,MIMIC:
+			{
+				return true;
+			}
 		}
 		return false;
 	}

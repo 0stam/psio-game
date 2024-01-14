@@ -2,6 +2,7 @@ package levelloader;
 
 import map.Map;
 import map.MapConverter;
+import map.NewRawMap;
 import map.RawMap;
 
 import java.nio.file.Files;
@@ -35,9 +36,18 @@ public class LevelLoader {
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            RawMap loadedMap = (RawMap)is.readObject();
-            return MapConverter.oldLoadConvert(loadedMap);
-        } catch(IOException | ClassNotFoundException e) {
+            try {
+                NewRawMap loadedMap = (NewRawMap) is.readObject();
+                return MapConverter.loadConvert(loadedMap);
+            } catch (Exception ex) {
+                try {
+                    RawMap loadedMap = (RawMap) is.readObject();
+                    return MapConverter.oldLoadConvert(loadedMap);
+                } catch (Exception exc) {
+                    return null;
+                }
+            }
+        } catch(IOException e) {
             throw new LevelNotLoaded("Failed to load level " + name);
         }
     }
@@ -61,9 +71,18 @@ public class LevelLoader {
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            RawMap loadedMap = (RawMap)is.readObject();
-            return MapConverter.oldLoadConvert(loadedMap);
-        } catch(IOException | ClassNotFoundException e) {
+            try {
+                NewRawMap loadedMap = (NewRawMap) is.readObject();
+                return MapConverter.loadConvert(loadedMap);
+            } catch (Exception ex) {
+                try {
+                    RawMap loadedMap = (RawMap) is.readObject();
+                    return MapConverter.oldLoadConvert(loadedMap);
+                } catch (Exception exc) {
+                    return null;
+                }
+            }
+        } catch(Exception e) {
             throw new LevelNotLoaded("Failed to load level " + index);
         }
     }

@@ -2,9 +2,9 @@ package display;
 
 import IO.IOManager;
 //import enums.EditorModes;
+import enums.EditorMode;
 import enums.Layer;
-import event.LevelLoadedEvent;
-import event.LevelSavedEvent;
+import event.*;
 import gamemanager.GameManager;
 import levelloader.LevelLoader;
 import map.Map;
@@ -84,6 +84,7 @@ public class ToolPalette extends AbstractPalette {
 
 		this.setPreferredSize(new Dimension((int) (32 * scale), 0));
 		this.revalidate();
+
 	}
 
 	public class layerListener extends MouseInputAdapter {
@@ -95,10 +96,11 @@ public class ToolPalette extends AbstractPalette {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			ToolPalette.this.selectOne((ImageButton) e.getSource());
-			if (changeLayer != GameManager.getInstance().getEditor().getLayer()) {
-				GameManager.getInstance().getEditor().setLayer(changeLayer);
-				IOManager.getInstance().drawEditor();
+			if (GameManager.getInstance().getEditor().getMode() == EditorMode.PREADD || GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {
+				ToolPalette.this.selectOne((ImageButton) e.getSource());
+				if (changeLayer != GameManager.getInstance().getEditor().getLayer()) {
+					GameManager.getInstance().onEvent(new ChangeLayerEvent(changeLayer));
+				}
 			}
 
 		}
@@ -149,6 +151,10 @@ public class ToolPalette extends AbstractPalette {
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
+				GameManager.getInstance().onEvent(new SavePathEvent());
+				GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
+				GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
+				ToolPalette.this.selectOne(buttons.get(0));
 				GameManager.getInstance().getEditor().onEvent(new LevelLoadedEvent(file.getPath()));
 			}
 		}

@@ -3,6 +3,7 @@ package tile;
 import enterablestrategy.Solid;
 import enums.Graphics;
 import turnstrategy.Idle;
+import turnstrategy.StateMachine;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -19,7 +20,7 @@ public class SmartEnemy extends ActionTile {
 			Kazde pole musi miec kordy aby latwo bylo je wyswietlac podczas gry i wracac do sciezki
 			Przeciwnik podczas gry uzywalby listy kierunkow ze strategii aby szybciej wykonywal obliczenia
 		 */
-		setTurnStrategy(new Idle());
+		setTurnStrategy(new StateMachine());
 	}
 
 	public ArrayList<PathTile> getPathTileList() {
@@ -28,5 +29,6 @@ public class SmartEnemy extends ActionTile {
 
 	public void setPathTileList(ArrayList<PathTile> pathTileList) {
 		this.pathTileList = pathTileList;
+		setTurnStrategy(new StateMachine(pathTileList));
 	}
 }

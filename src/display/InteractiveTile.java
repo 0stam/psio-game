@@ -19,12 +19,14 @@ import static enums.Graphics.*;
 
 public class InteractiveTile extends JPanel {
     private enums.Graphics identifierBottom = DEFAULT;
+    private enums.Graphics identifierMiddle = DEFAULT;
     private enums.Graphics identifierUpper = DEFAULT;
     private Point coords;
-    public InteractiveTile(enums.Graphics idBottom, enums.Graphics idUpper, Point coords) {
+    public InteractiveTile(enums.Graphics idBottom, enums.Graphics idMiddle,enums.Graphics idUpper, Point coords) {
         if (idBottom != null)
             this.identifierBottom = idBottom;
         this.identifierUpper = idUpper;
+        this.identifierMiddle = idMiddle;
         this.coords = coords;
         this.setBorder(BorderFactory.createEmptyBorder());
         this.addMouseListener(new EventListener());
@@ -41,6 +43,8 @@ public class InteractiveTile extends JPanel {
         this.setPreferredSize(new Dimension((int)(32.0 * EditorMapDisplay.scale ), (int) (32.0 * EditorMapDisplay.scale)));
         this.revalidate();
         g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
+        if (identifierMiddle!=null)
+            g.drawImage(GraphicsHashtable.getInstance().getImage(identifierMiddle).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
         if (identifierUpper!=null)
             g.drawImage(GraphicsHashtable.getInstance().getImage(identifierUpper).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
 
@@ -102,9 +106,7 @@ public class InteractiveTile extends JPanel {
                 }
                 case PREPATHEDIT: {
                     if (GameManager.getInstance().getMap().getUpperLayer((int)coords.getX(), (int)coords.getY()) instanceof SmartEnemy enemy) {
-                        GameManager.getInstance().getEditor().setMode(EditorMode.PRESELECT);
                         GameManager.getInstance().onEvent(new EnemySelectedEvent(enemy));
-                        IOManager.getInstance().drawEditor();
                     }
                     break;
                 }
@@ -113,8 +115,9 @@ public class InteractiveTile extends JPanel {
                 GameManager.getInstance().onEvent(editorEvent);
         }
     }
-    public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper) {
+    public void updateGraphics(enums.Graphics idBottom, enums.Graphics idMiddle,enums.Graphics idUpper) {
         this.identifierBottom = idBottom;
         this.identifierUpper = idUpper;
+        this.identifierMiddle = idMiddle;
     }
 }

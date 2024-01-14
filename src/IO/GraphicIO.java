@@ -3,9 +3,14 @@ package IO;
 import javax.swing.*;
 
 import display.*;
+import enums.EditorMode;
+import enums.Layer;
+import event.SavePathEvent;
 import gamemanager.GameManager;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class GraphicIO implements IOStrategy {
 	private static JFrame window;

@@ -46,10 +46,7 @@ public class EditorMapDisplay extends JPanel {
             case BOTH: {
                 for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                     for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
-                        if (GameManager.getInstance().getMap().getUpperLayer(i, j) == null)
-                            mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), null);
-                        else
-                            mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID());
+                        mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), null, GameManager.getInstance().getMap().getUpperLayer(i,j) == null ? enums.Graphics.EMPTY : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID());
                     }
                 }
                 break;
@@ -57,10 +54,7 @@ public class EditorMapDisplay extends JPanel {
             case UPPER: {
                 for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                     for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
-                        if (GameManager.getInstance().getMap().getUpperLayer(i,j) == null)
-                            mapTiles[i][j].updateGraphics(enums.Graphics.EMPTY, enums.Graphics.EMPTY);
-                        else
-                            mapTiles[i][j].updateGraphics(enums.Graphics.EMPTY, GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID());
+                        mapTiles[i][j].updateGraphics(enums.Graphics.EMPTY, null, GameManager.getInstance().getMap().getUpperLayer(i,j) == null ? enums.Graphics.EMPTY : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID());
                     }
                 }
                 break;
@@ -69,10 +63,7 @@ public class EditorMapDisplay extends JPanel {
             {
                 for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                     for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
-                        if (GameManager.getInstance().getMap().getBottomLayer(i,j) == null)
-                            mapTiles[i][j].updateGraphics(enums.Graphics.EMPTY, null);
-                        else
-                            mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), null);
+                        mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i,j) == null ? enums.Graphics.EMPTY : GameManager.getInstance().getMap().getBottomLayer(i,j).getGraphicsID(), null, null);
                     }
                 }
                 break;
@@ -83,15 +74,14 @@ public class EditorMapDisplay extends JPanel {
                     for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                         for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
                             switch (GameManager.getInstance().getEditor().getCurrentPath()[i][j]) {
-                                case null: {
-                                    mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), enums.Graphics.EMPTY);
+                                //jednak da sie laczyc ale nie tak jak zwykle nie wiem w ogole co to jest XDD to nawet nie jest skladnia laczenia ktora byla wczesniej z przecinkami
+                                case null:
+                                case EMPTY: {
+                                    mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), enums.Graphics.EMPTY, GameManager.getInstance().getMap().getUpperLayer(i, j) == null ? null : (GameManager.getInstance().getMap().getUpperLayer(i, j) == GameManager.getInstance().getEditor().getCurrentEnemy() ? enums.Graphics.SMART_SELECTED : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID()));
                                     break;
                                 }
-                                case EMPTY: {
-                                    mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), enums.Graphics.EMPTY);
-                                }
                                 default: {
-                                    mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), GameManager.getInstance().getEditor().getCurrentPath()[i][j].getGraphics());
+                                    mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), GameManager.getInstance().getEditor().getCurrentPath()[i][j].getGraphics(), GameManager.getInstance().getMap().getUpperLayer(i, j) == null ? null : (GameManager.getInstance().getMap().getUpperLayer(i, j) == GameManager.getInstance().getEditor().getCurrentEnemy() ? enums.Graphics.SMART_SELECTED : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID()));
                                     break;
                                 }
                             }

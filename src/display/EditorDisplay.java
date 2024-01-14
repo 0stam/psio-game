@@ -23,8 +23,8 @@ public class EditorDisplay extends JPanel {
 		hSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 
 		editorDisplay = new EditorMapDisplay();
-		paletteTabs = new PaletteTabs();
 		toolPalette = new ToolPalette(this);
+		paletteTabs = new PaletteTabs(toolPalette);
 
 		mapScrollPane = new JScrollPane(editorDisplay);
 		mapScrollPane.getVerticalScrollBar().setUnitIncrement(16);

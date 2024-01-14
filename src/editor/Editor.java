@@ -11,9 +11,12 @@ import map.Map;
 import tile.Box;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
+
 import turnstrategy.Follower;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ import static enums.Arrow.*;
 import static enums.Arrow.EMPTY;
 import static enums.Direction.*;
 import static enums.EditableTile.*;
+import static enums.EditorMode.*;
 import static enums.Layer.PATH;
 import static enums.Layer.UPPER;
 
@@ -29,11 +33,12 @@ import static enums.Layer.UPPER;
 public class Editor implements EventObserver {
     // Variables required for the graphics to work
     private Layer layer = Layer.BOTH;
-    private EditorMode mode = EditorMode.PREADD;
+    private EditorMode mode = PREADD;
     private EditorGraphics heldTile;
     private ConnectableTile connectingTile;
     private EditorGraphics[][] currentPath;
     private SmartEnemy currentEnemy = null;
+    //private JTree referenceTree = null;
 
     // Variables required for the logic to work
     private boolean change;
@@ -120,7 +125,10 @@ public class Editor implements EventObserver {
                 this.setLayer(tilePressedEvent.getLayer());
                 //right click functionality
                 if (tilePressedEvent.isRightMouseButton()) {
-                    editorPlaceTile(EMPTY, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
+                    if (mode == PREADD || mode == ADD)
+                        editorPlaceTile(EditableTile.EMPTY, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
+                    else if (mode == PRESELECT || mode == SELECT)
+                        editorPlaceTile(Arrow.EMPTY, layer, tilePressedEvent.getX(), tilePressedEvent.getY());
                 }
                 //left click functionality
                 else {
@@ -182,15 +190,32 @@ public class Editor implements EventObserver {
             }
             case "EnemySelectedEvent":
             {
+                mode = PRESELECT;
+                layer = PATH;
                 updateEnemyPath();
                 EnemySelectedEvent enemySelectedEvent = (EnemySelectedEvent) event;
                 currentEnemy = enemySelectedEvent.getSmartEnemy();
                 currentPath = listToPath();
+                /*
+                DefaultMutableTreeNode path = new DefaultMutableTreeNode("Smart entities");
+                path.add(new DefaultMutableTreeNode("Smart enemy ("+enemySelectedEvent.getSmartEnemy().getX()+", "+enemySelectedEvent.getSmartEnemy().getY()+")"));
+                //DefaultMutableTreeNode path = new DefaultMutableTreeNode("Smart enemy ("+enemySelectedEvent.getSmartEnemy().getX()+", "+enemySelectedEvent.getSmartEnemy().getY()+")");
+                referenceTree.getSelectionModel().setSelectionPath(new TreePath(path));
+                */
+
+                IOManager.getInstance().drawEditor();
                 break;
             }
             case "SavePathEvent":
             {
                 updateEnemyPath();
+                break;
+            }
+            case "ChangeLayerEvent":
+            {
+                ChangeLayerEvent chlev = (ChangeLayerEvent) event;
+                layer = chlev.getLayer();
+                IOManager.getInstance().drawEditor();
                 break;
             }
             default: return;
@@ -465,5 +490,14 @@ public class Editor implements EventObserver {
     public void setCurrentPath(EditorGraphics[][] currentPath) {
         this.currentPath = currentPath;
     }
+    /*
+    public JTree getReferenceTree() {
+        return referenceTree;
+    }
 
+    public void setReferenceTree(JTree referenceTree) {
+        this.referenceTree = referenceTree;
+    }
+
+     */
 }

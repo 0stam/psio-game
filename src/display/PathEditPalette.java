@@ -31,10 +31,10 @@ public class PathEditPalette extends JPanel{
         //roamingEnemyTree.setEditable(true);
         jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.setShowsRootHandles(true);
-        //roboczo
         jTree.setBackground(Color.WHITE);
         jTree.setFont(new Font("Arial", Font.PLAIN, 25));
         jTree.setRowHeight(30);
+
 
         arrows = new TilePalette(Arrow.values());
 
@@ -43,6 +43,7 @@ public class PathEditPalette extends JPanel{
         JScrollPane scrollPane = new JScrollPane(jTree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setMinimumSize(new Dimension(300, 0));
+        //GameManager.getInstance().getEditor().setReferenceTree(jTree);
         splitPane.setLeftComponent(scrollPane);
         splitPane.setRightComponent(arrows);
         this.add(splitPane);
@@ -52,6 +53,7 @@ public class PathEditPalette extends JPanel{
     protected void paintComponent(java.awt.Graphics g) {
         g.setColor(Color.white);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        jTree.expandRow(0);
     }
     public class SelectionListener implements TreeSelectionListener
     {
@@ -69,7 +71,6 @@ public class PathEditPalette extends JPanel{
                 int x = Integer.parseInt(chosen.substring(0, dot));
                 int y = Integer.parseInt(chosen.substring(dot+2));
                 GameManager.getInstance().onEvent(new EnemySelectedEvent((SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(x, y)));
-                IOManager.getInstance().drawEditor();
             }
         }
     }

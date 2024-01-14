@@ -11,6 +11,7 @@ import gamemanager.GameManager;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.tools.Tool;
 
 public class PaletteTabs {
 	private JTabbedPane tabs;
@@ -18,9 +19,11 @@ public class PaletteTabs {
 	private TilePalette tilePalette;
 	private ConnectionsPalette connectionsPalette;
 	private PathEditPalette pathEditPalette;
-
-	public PaletteTabs () {
+	private ToolPalette toolPalette;
+	//trzeba to przemyslec, na razie zrobie tak
+	public PaletteTabs (ToolPalette toolPalette) {
 		tabs = new JTabbedPane();
+		this.toolPalette = toolPalette;
 
 		tilePalette = new TilePalette(EditableTile.values());
 		connectionsPalette = new ConnectionsPalette();
@@ -40,6 +43,11 @@ public class PaletteTabs {
 	public JTabbedPane getTabs() {
 		return tabs;
 	}
+
+	public ToolPalette getToolPalette() {
+		return toolPalette;
+	}
+
 	public class ModeListener implements ChangeListener
 	{
 		@Override
@@ -47,9 +55,9 @@ public class PaletteTabs {
 			String selectedTabTip = tabs.getToolTipTextAt(tabs.getSelectedIndex());
 			switch (selectedTabTip)
 			{
+				//FIXME: zrobmy cos z tym pozniej bo to obrzydliwe
 				case "Tiles":
 				{
-
 					GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
 					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 					//zrobic cos madrzejszego
@@ -62,8 +70,6 @@ public class PaletteTabs {
 				}
 				case "Connections":
 				{
-					//roboczo
-					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 					//zrobic cos madrzejszego pozniej
 					GameManager.getInstance().onEvent(new SavePathEvent());
 					GameManager.getInstance().getEditor().setCurrentEnemy(null);
@@ -74,7 +80,7 @@ public class PaletteTabs {
 				case "Pathedit":
 				{
 					GameManager.getInstance().getEditor().setMode(EditorMode.PREPATHEDIT);
-					GameManager.getInstance().getEditor().setLayer(Layer.PATH);
+					GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
 					//zrobic cos madrzejszego pozniej
 					pathEditPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
@@ -89,6 +95,7 @@ public class PaletteTabs {
 					break;
 				}
 			}
+			toolPalette.selectOne(toolPalette.buttons.get(0));
 		}
 	}
 }

@@ -42,7 +42,7 @@ public class LevelLoader {
         }
     }
 
-    public static String getFilePath(int index, boolean full) {
+    public static Map loadLevel(int index) throws LevelNotLoaded {
         String userHome = System.getProperty("user.home");
         String path;
         File baseLevels = new File("src/levels");
@@ -51,29 +51,13 @@ public class LevelLoader {
         File[] bfiles = baseLevels.listFiles();
         Arrays.sort(bfiles);
         if(index < bfiles.length) {
-            if (full) {
-                return bfiles[index].getAbsolutePath();
-            } else {
-                return bfiles[index].getName();
-            }
+            path = bfiles[index].getAbsolutePath();
         }
-
-        File[] ufiles = userLevels.listFiles();
-        Arrays.sort(ufiles);
-        path = ufiles[index-bfiles.length].getAbsolutePath();
-        if (full) {
-            return bfiles[index-bfiles.length].getAbsolutePath();
-        } else {
-            return bfiles[index-bfiles.length].getName();
+        else {
+            File[] ufiles = userLevels.listFiles();
+            Arrays.sort(ufiles);
+            path = ufiles[index-bfiles.length].getAbsolutePath();
         }
-    }
-
-    public static String getFilePath(int index) {
-        return getFilePath(index, true);
-    }
-
-    public static Map loadLevel(int index) throws LevelNotLoaded {
-        String path = getFilePath(index);
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));

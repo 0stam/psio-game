@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 
 public class PathEditPalette extends JPanel{
@@ -51,6 +52,9 @@ public class PathEditPalette extends JPanel{
         splitPane.setLeftComponent(scrollPane);
         splitPane.setRightComponent(arrows);
         this.add(splitPane);
+
+        createKeyBindings();
+
         this.revalidate();
     }
     @Override
@@ -77,6 +81,20 @@ public class PathEditPalette extends JPanel{
                 GameManager.getInstance().onEvent(new EnemySelectedEvent((SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(x, y)));
             }
         }
+    }
+
+    public void createKeyBindings() {
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("P"), "select_enemy");
+        actionMap.put("select_enemy", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: put code here
+                System.out.println("S pressed");
+            }
+        });
     }
 
     public TilePalette getArrows() {

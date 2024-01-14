@@ -59,7 +59,7 @@ public class ResizeWindow {
 
 				for (int i = 0;i < GameManager.getInstance().getMap().getWidth(); i++) {
 					for (int j = 0;j < GameManager.getInstance().getMap().getHeight();j++) {
-						if (i >= newWidth && j >= newHeight && ((GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof SmartEnemy) || (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof SmartEnemy))) {
+						if ((i >= newWidth || j >= newHeight) && ((GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof SmartEnemy) || (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof SmartEnemy))) {
 
 							GameManager.getInstance().getEditor().getTreeModel().removeNode("Smart enemy (" + i + ", " + j + ")");
 						}
@@ -67,8 +67,10 @@ public class ResizeWindow {
 				}
 
 				GameManager.getInstance().setMap(newMap);
-				GameManager.getInstance().getEditor().setCurrentPath(GameManager.getInstance().getEditor().resizePath());
-				GameManager.getInstance().onEvent(new SavePathEvent());
+				if (GameManager.getInstance().getEditor().getCurrentPath() != null) {
+					GameManager.getInstance().getEditor().setCurrentPath(GameManager.getInstance().getEditor().resizePath());
+					GameManager.getInstance().onEvent(new SavePathEvent());
+				}
 				GameManager.getInstance().getEditor().setCurrentEnemy(null);
 				GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
 				GameManager.getInstance().getEditor().setLayer(Layer.BOTH);

@@ -69,6 +69,7 @@ public class ConnectionsPalette extends JPanel {
             tree = new JTree(root);
             tree.setCellRenderer(new MyTreeCellRenderer());
             tree.setRootVisible(false);
+            tree.setShowsRootHandles(true);
             add(new JScrollPane(tree));
         }
 
@@ -181,6 +182,8 @@ public class ConnectionsPalette extends JPanel {
             }
         });
 
+        HashSet<TreePath> expandedPaths = new HashSet<>();
+
         emittersContainer.tree.addTreeSelectionListener(treeSelectionEvent -> {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeSelectionEvent.getPath().getLastPathComponent();
             // Check if the node is a tile and thus has connections
@@ -191,9 +194,9 @@ public class ConnectionsPalette extends JPanel {
             }
 
             // Store the expanded state before refreshing the tree
-            HashSet<TreePath> expandedPaths = new HashSet<>();
             for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
                 TreePath path = emittersContainer.tree.getPathForRow(i);
+                emittersContainer.tree.expandPath(path);
                 if (emittersContainer.tree.isExpanded(path)) {
                     expandedPaths.add(path);
                 }
@@ -209,5 +212,4 @@ public class ConnectionsPalette extends JPanel {
     public void refresh() {
         emittersContainer.refresh();
     }
-
 }

@@ -1,6 +1,7 @@
 package display;
 
 import IO.IOManager;
+import connectableinterface.Connectable;
 import enums.EditorMode;
 import enums.Layer;
 import event.display.ChangeLayerEvent;
@@ -13,6 +14,7 @@ import gamemanager.GameManager;
 import map.Map;
 import tile.Floor;
 import tile.SmartEnemy;
+import tile.Tile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,6 +52,11 @@ public class ResizeWindow {
 					for (int j = 0;j < newHeight;j++) {
 						if (i < GameManager.getInstance().getMap().getWidth() && j < GameManager.getInstance().getMap().getHeight()) {
 							newMap.setBottomLayer(i, j, GameManager.getInstance().getMap().getBottomLayer(i, j));
+							if (GameManager.getInstance().getMap().getBottomLayer(i, j) != null) {
+								if (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof Connectable) {
+									//for (Tile connection : GameManager.getInstance().getMap().getBottomLayer(i, j))
+								}
+							}
 							if (GameManager.getInstance().getMap().getUpperLayer(i, j) != null) {
 								newMap.setUpperLayer(i, j, GameManager.getInstance().getMap().getUpperLayer(i, j));
 							}
@@ -77,13 +84,13 @@ public class ResizeWindow {
 				}
 				GameManager.getInstance().getEditor().setCurrentEnemy(null);
 
+				IOManager.getInstance().drawGame();
+				IOManager.getInstance().drawEditor();
+
 				inputHandler.onEvent(new ModeChangedEvent(EditorMode.ADD));
 				inputHandler.onEvent(new ChangeLayerEvent(Layer.BOTH));
 				inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
 
-
-				IOManager.getInstance().drawGame();
-				IOManager.getInstance().drawEditor();
 			}
 
 			window.dispose();

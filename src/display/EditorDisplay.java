@@ -23,8 +23,8 @@ public class EditorDisplay extends JPanel {
 		hSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 
 		editorDisplay = new EditorMapDisplay();
-		paletteTabs = new PaletteTabs();
 		toolPalette = new ToolPalette(this);
+		paletteTabs = new PaletteTabs(toolPalette);
 
 		mapScrollPane = new JScrollPane(editorDisplay);
 		mapScrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -37,7 +37,7 @@ public class EditorDisplay extends JPanel {
 		vSplitPane.setTopComponent(hSplitPane);
 		vSplitPane.setBottomComponent(paletteTabs.getTabs());
 
-		vSplitPane.setResizeWeight(0.9f);
+		vSplitPane.setResizeWeight(1f);
 		hSplitPane.setResizeWeight(0.9f);
 
 		createKeyBinding();

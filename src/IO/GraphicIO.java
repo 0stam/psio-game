@@ -3,15 +3,17 @@ package IO;
 import javax.swing.*;
 
 import display.*;
+import event.EventObserver;
 import gamemanager.GameManager;
 
 import java.awt.*;
 
 public class GraphicIO implements IOStrategy {
-	private static JFrame window;
-	private static EditorDisplay editorDisplay;
-	private static GameMapDisplay gameDisplay;
-	private static MenuDisplay menuDisplay;
+	private JFrame window;
+	private EditorDisplay editorDisplay;
+	private GameMapDisplay gameDisplay;
+	private MenuDisplay menuDisplay;
+	private EventObserver inputHandler;
 
 	private void createWindow () {
 		try {
@@ -42,6 +44,7 @@ public class GraphicIO implements IOStrategy {
 			window.getContentPane().removeAll();
 
 			editorDisplay = null;
+			inputHandler = null;
 			menuDisplay = null;
 
 			gameDisplay = new GameMapDisplay();
@@ -69,6 +72,8 @@ public class GraphicIO implements IOStrategy {
 			gameDisplay = null;
 			menuDisplay = null;
 
+			inputHandler = new EditorInputHandler();
+
 			editorDisplay = new EditorDisplay();
 			editorDisplay.setMinimumSize(new Dimension(32 * GameManager.getInstance().getMap().getWidth()-1, 32 * GameManager.getInstance().getMap().getHeight()));
 
@@ -94,6 +99,7 @@ public class GraphicIO implements IOStrategy {
 
 			gameDisplay = null;
 			editorDisplay = null;
+			inputHandler = null;
 
 			menuDisplay = new MenuDisplay();
 			menuDisplay.setMinimumSize(new Dimension(300, 400));
@@ -106,19 +112,27 @@ public class GraphicIO implements IOStrategy {
 		}
 	}
 
-	public static JFrame getWindow() {
+	public JFrame getWindow() {
 		return window;
 	}
 
-	public static void setWindow(JFrame window) {
-		GraphicIO.window = window;
+	public void setWindow(JFrame window) {
+		window = window;
 	}
 
-	public static EditorDisplay getEditorDisplay() {
+	public EditorDisplay getEditorDisplay() {
 		return editorDisplay;
 	}
 
-	public static void setEditorDisplay(EditorDisplay editorDisplay) {
-		GraphicIO.editorDisplay = editorDisplay;
+	public void setEditorDisplay(EditorDisplay editorDisplay) {
+		editorDisplay = editorDisplay;
+	}
+
+	public EventObserver getInputHandler() {
+		return inputHandler;
+	}
+
+	public void setInputHandler(EventObserver inputHandler) {
+		this.inputHandler = inputHandler;
 	}
 }

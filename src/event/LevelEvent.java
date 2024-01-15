@@ -1,5 +1,7 @@
 package event;
 
+import event.editor.EditorEvent;
+
 public class LevelEvent extends EditorEvent {
     // Path relative to the directory with user-created levels
     private final String path;

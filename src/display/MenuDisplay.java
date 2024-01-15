@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import IO.IOManager;
-import event.EditorSelectedEvent;
+import event.editor.EditorSelectedEvent;
 import gamemanager.GameManager;
 
 public class MenuDisplay extends JPanel {

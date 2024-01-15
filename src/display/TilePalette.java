@@ -1,8 +1,9 @@
 package display;
 
-import event.PalettePressedEvent;
+import IO.IOManager;
+import enums.EditorGraphics;
+import event.display.PalettePressedEvent;
 import gamemanager.GameManager;
-import enums.EditableTile;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
@@ -10,15 +11,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class TilePalette extends AbstractPalette {
-	public TilePalette () {
-		buttons = new ArrayList<>(EditableTile.values().length);
+	public TilePalette (EditorGraphics[] values) {
+		buttons = new ArrayList<>(values.length);
 
-		this.setLayout(new GridLayout(1, EditableTile.values().length, 0, 0));
+		this.setLayout(new GridLayout(1, values.length, 0, 0));
 
-		for (int i = 0; i < EditableTile.values().length; i++) {
-			EditableTile editableTile = EditableTile.values()[i];
-			buttons.add(new ImageButton(GraphicsHashtable.getInstance().getImages().get(editableTile.graphics), editableTile.name));
-			buttons.get(i).addMouseListener(new TileListener(editableTile));
+		for (int i = 0; i < values.length; i++) {
+			EditorGraphics tile = values[i];
+			buttons.add(new ImageButton(GraphicsHashtable.getInstance().getImages().get(tile.getGraphics()), tile.getName()));
+			buttons.get(i).addMouseListener(new TileListener(tile));
 			this.add(buttons.get(i));
 		}
 		buttons.get(0).setSelected(true);
@@ -38,13 +39,13 @@ public class TilePalette extends AbstractPalette {
 			i.setScale(scale / 2);
 		}
 
-		this.setPreferredSize(new Dimension(0, (int) (32.0 * (scale - 1))));
+		//this.setPreferredSize(new Dimension(0, (int) (32.0 * (scale - 1))));
 		this.revalidate();
 	}
 	public class TileListener extends MouseInputAdapter {
-		private EditableTile changeGraphic;
+		private EditorGraphics changeGraphic;
 
-		TileListener(EditableTile changeGraphic) {
+		TileListener(EditorGraphics changeGraphic) {
 			this.changeGraphic = changeGraphic;
 		}
 
@@ -52,7 +53,8 @@ public class TilePalette extends AbstractPalette {
 		public void mousePressed(MouseEvent e) {
 			TilePalette.this.selectOne((ImageButton) e.getSource());
 			TilePalette.this.repaint();
-			GameManager.getInstance().onEvent(new PalettePressedEvent(changeGraphic));
+			EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+			inputHandler.onEvent(new PalettePressedEvent(changeGraphic));
 		}
 	}
 }

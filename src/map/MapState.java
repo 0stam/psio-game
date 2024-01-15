@@ -3,9 +3,11 @@ package map;
 import enums.Direction;
 import gamemanager.GameManager;
 import tile.ActionTile;
+import tile.PlayerCharacter;
 import tile.Tile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.io.Serializable;
 
@@ -17,6 +19,7 @@ public class MapState implements Serializable, Cloneable {
     private List<ActionTile> actionTiles = new ArrayList<>();
     private List<ActionTile> actionTilesToRemove = new ArrayList<>();
     private List<ActionTile> actionTilesToAdd = new ArrayList<>();
+    private PlayerCharacter player;
 
     public MapState(int x, int y) {
         this.x = x;
@@ -60,9 +63,19 @@ public class MapState implements Serializable, Cloneable {
         if (upperLayer[x][y] instanceof ActionTile) {
             deleteActionTile((ActionTile) upperLayer[x][y]);
         }
-        if (tile instanceof ActionTile && !actionTiles.contains(tile)) {
-            addActionTile((ActionTile) tile);
+        if (tile instanceof ActionTile actionTile) {
+            if (actionTile instanceof PlayerCharacter playerCharacter) {
+                if (player != null && player != playerCharacter) {
+                    deleteUpperLayer(player.getX(), player.getY());
+                }
+                player = playerCharacter;
+            }
+
+            if (!actionTiles.contains(actionTile)) {
+                addActionTile(actionTile);
+            }
         }
+
         upperLayer[x][y] = tile;
     }
     public void deleteBottomLayer(int x, int y) {
@@ -93,6 +106,7 @@ public class MapState implements Serializable, Cloneable {
     protected void updateActionTiles() {
         actionTiles.addAll(actionTilesToAdd);
         actionTiles.removeAll(actionTilesToRemove);
+        Collections.sort(actionTiles, Collections.reverseOrder());
 
         actionTilesToAdd = new ArrayList<>();
         actionTilesToRemove = new ArrayList<>();
@@ -120,7 +134,6 @@ public class MapState implements Serializable, Cloneable {
             {
                 destinationTileUpper.onEntered(direction, movedTile);
             }
-            deleteUpperLayer(x + direction.x, y + direction.y);
 
             // In case we are moving on an object, delete it
             deleteUpperLayer(x + direction.x, y + direction.y);
@@ -173,5 +186,9 @@ public class MapState implements Serializable, Cloneable {
             // Should never happen
             return new MapState(x, y);
         }
+    }
+
+    public PlayerCharacter getPlayer() {
+        return player;
     }
 }

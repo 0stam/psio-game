@@ -77,83 +77,85 @@ public class GameMapDisplay extends JPanel {
 	}
 
 	public void setupMap (Map map) {
-		if (useFollowingCamera) {
-			playerSearch(map);
-			width = followingWidth;
-			height = followingHeight;
-		} else {
-			width = map.getWidth();
-			height = map.getHeight();
-		}
+		if (map != null) {
+			if (useFollowingCamera) {
+				playerSearch(map);
+				width = followingWidth;
+				height = followingHeight;
+			} else {
+				width = map.getWidth();
+				height = map.getHeight();
+			}
 
-		if (playerX < width / 2 - 1) {
-			playerX = width / 2 - 1;
-		}
+			if (playerX < width / 2 - 1) {
+				playerX = width / 2 - 1;
+			}
 
-		if (playerX > map.getWidth() - width / 2) {
-			playerX = map.getWidth() - width / 2;
-		}
+			if (playerX > map.getWidth() - width / 2) {
+				playerX = map.getWidth() - width / 2;
+			}
 
-		if (playerY < height / 2 - 1) {
-			playerY = height / 2 - 1;
-		}
+			if (playerY < height / 2 - 1) {
+				playerY = height / 2 - 1;
+			}
 
-		if (playerY > map.getHeight() - height / 2) {
-			playerY = map.getHeight() - height / 2;
-		}
+			if (playerY > map.getHeight() - height / 2) {
+				playerY = map.getHeight() - height / 2;
+			}
 
-		if (map.getWidth() < width) {
-			playerX = map.getWidth() / 2;
-		}
+			if (map.getWidth() < width) {
+				playerX = map.getWidth() / 2;
+			}
 
-		if (map.getHeight() < height) {
-			playerY = map.getHeight() / 2;
-		}
+			if (map.getHeight() < height) {
+				playerY = map.getHeight() / 2;
+			}
 
-		int x = 0;
-		int y = 0;
+			int x = 0;
+			int y = 0;
 
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				if (useFollowingCamera) {
-					x = i + playerX - width / 2;
-					y = j + playerY - height / 2;
-				} else {
-					x = i;
-					y = j;
-				}
-
-				if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
-					images[i][j] = GraphicsHashtable.getInstance().getImage(OUT_OF_BOUNDS);
-					prevMapBottom[i][j] = OUT_OF_BOUNDS;
-					images2[i][j] = null;
-					prevMapFront[i][j] = null;
-				} else {
-					if ((map.getBottomLayer(x, y).getGraphicsID() != ((prevMapBottom[i][j] == null) ? DEFAULT : prevMapBottom[i][j])) || images[i][j] == null) {
-						if (map.getBottomLayer(x, y) != null) {
-							images[i][j] = GraphicsHashtable.getInstance().getImage(map.getBottomLayer(x, y).getGraphicsID());
-							prevMapBottom[i][j] = map.getBottomLayer(x, y).getGraphicsID();
-						} else {
-							images[i][j] = GraphicsHashtable.getInstance().getImage(DEFAULT);
-							prevMapBottom[i][j] = DEFAULT;
-						}
+			for (int i = 0; i < width; i++) {
+				for (int j = 0; j < height; j++) {
+					if (useFollowingCamera) {
+						x = i + playerX - width / 2;
+						y = j + playerY - height / 2;
+					} else {
+						x = i;
+						y = j;
 					}
 
-					if ((images2[i][j] == null) || (((map.getUpperLayer(x, y) == null) ? DEFAULT : map.getUpperLayer(x, y).getGraphicsID()) != prevMapFront[i][j])) {
-						if (map.getUpperLayer(x, y) != null) {
-							images2[i][j] = GraphicsHashtable.getInstance().getImage(map.getUpperLayer(x, y).getGraphicsID());
-							prevMapFront[i][j] = map.getUpperLayer(x, y).getGraphicsID();
-						} else {
-							images2[i][j] = null;
-							prevMapFront[i][j] = null;
+					if (x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()) {
+						images[i][j] = GraphicsHashtable.getInstance().getImage(OUT_OF_BOUNDS);
+						prevMapBottom[i][j] = OUT_OF_BOUNDS;
+						images2[i][j] = null;
+						prevMapFront[i][j] = null;
+					} else {
+						if ((map.getBottomLayer(x, y).getGraphicsID() != ((prevMapBottom[i][j] == null) ? DEFAULT : prevMapBottom[i][j])) || images[i][j] == null) {
+							if (map.getBottomLayer(x, y) != null) {
+								images[i][j] = GraphicsHashtable.getInstance().getImage(map.getBottomLayer(x, y).getGraphicsID());
+								prevMapBottom[i][j] = map.getBottomLayer(x, y).getGraphicsID();
+							} else {
+								images[i][j] = GraphicsHashtable.getInstance().getImage(DEFAULT);
+								prevMapBottom[i][j] = DEFAULT;
+							}
+						}
+
+						if ((images2[i][j] == null) || (((map.getUpperLayer(x, y) == null) ? DEFAULT : map.getUpperLayer(x, y).getGraphicsID()) != prevMapFront[i][j])) {
+							if (map.getUpperLayer(x, y) != null) {
+								images2[i][j] = GraphicsHashtable.getInstance().getImage(map.getUpperLayer(x, y).getGraphicsID());
+								prevMapFront[i][j] = map.getUpperLayer(x, y).getGraphicsID();
+							} else {
+								images2[i][j] = null;
+								prevMapFront[i][j] = null;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		container.add(this);
-		container.setBorder(BorderFactory.createEmptyBorder());
+			container.add(this);
+			container.setBorder(BorderFactory.createEmptyBorder());
+		}
 	}
 
 	private void playerSearch(Map map) {

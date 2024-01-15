@@ -2,6 +2,7 @@ package levelloader;
 
 import map.Map;
 import map.MapConverter;
+import map.NewRawMap;
 import map.RawMap;
 
 import java.nio.file.Files;
@@ -32,12 +33,28 @@ public class LevelLoader {
     public static Map loadLevel(String name) throws LevelNotLoaded {
         String userHome = System.getProperty("user.home");
         String path = name;
+        Object read = null;
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            RawMap loadedMap = (RawMap)is.readObject();
-            return MapConverter.loadConvert(loadedMap);
-        } catch(IOException | ClassNotFoundException e) {
+            try {
+                read = is.readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                NewRawMap loadedMap = (NewRawMap)read;
+                return MapConverter.loadConvert(loadedMap);
+            } catch (Exception ex) {
+                try {
+                    RawMap loadedMap = (RawMap)read;
+                    return MapConverter.oldLoadConvert(loadedMap);
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                    return null;
+                }
+            }
+        } catch(IOException e) {
             throw new LevelNotLoaded("Failed to load level " + name);
         }
     }
@@ -47,6 +64,7 @@ public class LevelLoader {
         String path;
         File baseLevels = new File("src/levels");
         File userLevels = new File(userHome + userLevelsPath);
+        Object read = null;
 
         File[] bfiles = baseLevels.listFiles();
         Arrays.sort(bfiles);
@@ -61,9 +79,23 @@ public class LevelLoader {
 
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
-            RawMap loadedMap = (RawMap)is.readObject();
-            return MapConverter.loadConvert(loadedMap);
-        } catch(IOException | ClassNotFoundException e) {
+            try {
+                read = is.readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                NewRawMap loadedMap = (NewRawMap)read;
+                return MapConverter.loadConvert(loadedMap);
+            } catch (Exception ex) {
+                try {
+                    RawMap loadedMap = (RawMap)read;
+                    return MapConverter.oldLoadConvert(loadedMap);
+                } catch (Exception exc) {
+                    return null;
+                }
+            }
+        } catch(Exception e) {
             throw new LevelNotLoaded("Failed to load level " + index);
         }
     }

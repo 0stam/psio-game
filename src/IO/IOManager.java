@@ -1,4 +1,7 @@
 package IO;
+
+import event.EventObserver;
+
 public class IOManager {
 	private static IOManager instance;
 	private IOStrategy strategy;
@@ -30,11 +33,14 @@ public class IOManager {
 	{
 		this.strategy.drawGame();
 	}
-	public void drawEditor () {
+	public void drawEditor() {
 		this.strategy.drawEditor();
 	}
-	public void drawMenu () {
+	public void drawMenu() {
 		this.strategy.drawMenu();
+	}
+	public EventObserver getInputHandler() {
+		return strategy.getInputHandler();
 	}
 
 	public IOStrategy getStrategy() {

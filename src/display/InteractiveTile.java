@@ -1,8 +1,9 @@
 package display;
 
+import IO.IOManager;
 import enums.EditorMode;
-import event.TilePressedEvent;
-import gamemanager.GameManager;
+import event.display.InteractiveTilePressedEvent;
+import event.display.ModeActiveChangedEvent;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -14,12 +15,14 @@ import static enums.Graphics.*;
 
 public class InteractiveTile extends JPanel {
     private enums.Graphics identifierBottom = DEFAULT;
+    private enums.Graphics identifierMiddle = DEFAULT;
     private enums.Graphics identifierUpper = DEFAULT;
     private Point coords;
-    public InteractiveTile(enums.Graphics idBottom, enums.Graphics idUpper, Point coords) {
+    public InteractiveTile(enums.Graphics idBottom, enums.Graphics idMiddle,enums.Graphics idUpper, Point coords) {
         if (idBottom != null)
             this.identifierBottom = idBottom;
         this.identifierUpper = idUpper;
+        this.identifierMiddle = idMiddle;
         this.coords = coords;
         this.setBorder(BorderFactory.createEmptyBorder());
         this.addMouseListener(new EventListener());
@@ -36,6 +39,8 @@ public class InteractiveTile extends JPanel {
         this.setPreferredSize(new Dimension((int)(32.0 * EditorMapDisplay.scale ), (int) (32.0 * EditorMapDisplay.scale)));
         this.revalidate();
         g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
+        if (identifierMiddle!=null)
+            g.drawImage(GraphicsHashtable.getInstance().getImage(identifierMiddle).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
         if (identifierUpper!=null)
             g.drawImage(GraphicsHashtable.getInstance().getImage(identifierUpper).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);
 
@@ -44,30 +49,53 @@ public class InteractiveTile extends JPanel {
     public class EventListener extends MouseInputAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
-            GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
-            sendTilePressedEvent (e);
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            inputHandler.onEvent(new ModeActiveChangedEvent(true));
+            sendTilePressedEvent(e);
         }
         @Override
         public void mouseEntered(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e) || SwingUtilities.isRightMouseButton(e))
-            {
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            if (inputHandler.getMode()!=EditorMode.PATHEDIT)
                 sendTilePressedEvent (e);
-            }
         }
         @Override
         public void mouseReleased(MouseEvent e)
         {
-            GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            inputHandler.onEvent(new ModeActiveChangedEvent(false));
         }
         public void sendTilePressedEvent (MouseEvent e) {
-            if (GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {
-                TilePressedEvent editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
-                GameManager.getInstance().onEvent(editorEvent);
-            }
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            InteractiveTilePressedEvent editorEvent = new InteractiveTilePressedEvent(coords.x, coords.y, SwingUtilities.isRightMouseButton(e));
+            inputHandler.onEvent(editorEvent);
+
+//            switch (GameManager.getInstance().getEditor().getMode())
+//            {
+//                case ADD, CONNECT:
+//                {
+//                    editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
+//                    break;
+//                }
+//                case SELECT:
+//                {
+//                    editorEvent = new TilePressedEvent(coords.x, coords.y, Layer.PATH, SwingUtilities.isRightMouseButton(e));
+//                    break;
+//                }
+//                case PREPATHEDIT: {
+//                    if (GameManager.getInstance().getMap().getUpperLayer((int)coords.getX(), (int)coords.getY()) instanceof SmartEnemy enemy) {
+//                        GameManager.getInstance().onEvent(new EnemySelectedEvent(enemy));
+//                    }
+//                    break;
+//                }
+//            }
+//            if (editorEvent != null)
+//                GameManager.getInstance().onEvent(editorEvent);
         }
     }
-    public void updateGraphics(enums.Graphics idBottom, enums.Graphics idUpper) {
+    public void updateGraphics(enums.Graphics idBottom, enums.Graphics idMiddle,enums.Graphics idUpper) {
         this.identifierBottom = idBottom;
         this.identifierUpper = idUpper;
+        this.identifierMiddle = idMiddle;
     }
 }

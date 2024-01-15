@@ -1,16 +1,9 @@
 package display;
 
-import event.TilePressedEvent;
-import gamemanager.GameManager;
-
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-
-import static enums.Graphics.*;
 
 public class ImageButton extends JPanel {
 	private float scale = 1;

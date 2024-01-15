@@ -1,12 +1,12 @@
-package event;
+package event.editor;
 
 import tile.Tile;
 
-public class ConnectionEvent extends EditorEvent {
+public class LegacyConnectionEvent extends EditorEvent {
     private final Tile from;
     private final Tile to;
 
-    public ConnectionEvent(Tile from, Tile to) {
+    public LegacyConnectionEvent(Tile from, Tile to) {
         this.from = from;
         this.to = to;
     }

@@ -1,17 +1,17 @@
 package enums;
 
-public enum EditableTile {
-    EMPTY(true, true, Layer.BOTH, false,"EMPTY", Graphics.EMPTY),
-    FLOOR(true, true, Layer.BOTTOM, false,"FLOOR", Graphics.FLOOR),
-    WALL(true, true, Layer.BOTTOM, true,"WALL", Graphics.WALL),
-    BUTTON(true, true, Layer.BOTTOM, false, "BUTTON", Graphics.BUTTON_RELEASED),
-    DOOR(true, true, Layer.BOTTOM, true, "DOOR", Graphics.DOOR_CLOSED),
-    ENEMY(false, true, Layer.UPPER, false, "CHASING ENEMY", Graphics.ENEMY),
-    MIMIC(false, true, Layer.UPPER, false,"MIMIC", Graphics.MIMIC),
-    SMART(false, true, Layer.UPPER, false,"SMART ENEMY", Graphics.SMART),
-    BOX(false, true, Layer.UPPER, false,"BOX", Graphics.BOX),
-    PLAYER(false, true, Layer.UPPER, false,"PLAYER", Graphics.PLAYER),
-    GOAL(true, true, Layer.BOTTOM, false,"GOAL", Graphics.GOAL);
+public enum EditableTile implements EditorGraphics{
+    EMPTY(true, true, Layer.BOTH, false,"Empty", Graphics.EMPTY),
+    FLOOR(true, true, Layer.BOTTOM, false,"Floor", Graphics.FLOOR),
+    WALL(true, true, Layer.BOTTOM, true,"Wall", Graphics.WALL),
+    BUTTON(true, true, Layer.BOTTOM, false, "Button", Graphics.BUTTON_RELEASED),
+    DOOR(true, true, Layer.BOTTOM, true, "Door", Graphics.DOOR_CLOSED),
+    ENEMY(false, true, Layer.UPPER, false, "Chasing enemy", Graphics.ENEMY),
+    MIMIC(false, true, Layer.UPPER, false,"Mimic", Graphics.MIMIC),
+    SMART(false, true, Layer.UPPER, false,"Smart enemy", Graphics.SMART),
+    BOX(false, true, Layer.UPPER, false,"Box", Graphics.BOX),
+    PLAYER(false, true, Layer.UPPER, false,"Player", Graphics.PLAYER),
+    GOAL(true, true, Layer.BOTTOM, false,"Goal", Graphics.GOAL);
 
     public final boolean isPlaceableBottom;
     public final boolean isPlaceableUpper;
@@ -31,5 +31,15 @@ public enum EditableTile {
         this.fullTileWhenBoth = fullTileWhenBoth;
         this.name = name;
         this.graphics = graphics;
+    }
+
+    @Override
+    public Graphics getGraphics() {
+        return this.graphics;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

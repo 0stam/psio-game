@@ -1,5 +1,6 @@
 package display;
 
+import IO.IOManager;
 import connectableinterface.Connectable;
 import editor.TreeModel;
 import enums.*;
@@ -109,6 +110,7 @@ public class EditorInputHandler implements EventObserver {
 
     private void onConnectingTileChanged(ConnectableTileSelectedEvent event) {
         connectingTile = event.getTile();
+        IOManager.getInstance().drawEditor();
     }
 
     private void onConnectionDeleted(ConnectionDeletedEvent event) {

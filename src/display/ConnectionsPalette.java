@@ -107,14 +107,23 @@ public class ConnectionsPalette extends JPanel {
                     // The category node doesn't exist, create it
                     categoryNode = new DefaultMutableTreeNode(tile.name());
                     root.add(categoryNode);
-                } else {
-                    // Clear existing child nodes
-                    categoryNode.removeAllChildren();
+                }
+
+                Enumeration<TreeNode> currentNodes = categoryNode.children();
+                while (currentNodes.hasMoreElements()) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) currentNodes.nextElement();
+                    if (!tilesInCategory.contains(node.getUserObject())) {
+                        categoryNode.remove(node);
+                    }
                 }
 
                 for (Tile tileInCategory : tilesInCategory) {
-                    DefaultMutableTreeNode tileNode = new DefaultMutableTreeNode(tileInCategory);
-                    categoryNode.add(tileNode);
+                    DefaultMutableTreeNode tileNode = findNode(categoryNode, tileInCategory);
+
+                    if (tileNode == null) {
+                        tileNode = new DefaultMutableTreeNode(tileInCategory);
+                        categoryNode.add(tileNode);
+                    }
                 }
             }
             ((DefaultTreeModel) tree.getModel()).nodeStructureChanged((DefaultMutableTreeNode) tree.getModel().getRoot());

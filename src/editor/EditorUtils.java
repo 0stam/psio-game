@@ -4,6 +4,7 @@ import IO.IOManager;
 import connectableinterface.Connectable;
 import enums.ConnectableTile;
 import enums.EditableTile;
+import enums.Graphics;
 import event.LevelEvent;
 import event.editor.SavePathEvent;
 import gamemanager.GameManager;
@@ -11,6 +12,8 @@ import levelloader.LevelLoader;
 import levelloader.LevelNotSaved;
 import map.Map;
 import tile.*;
+
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import static enums.EditableTile.*;
 import static enums.EditableTile.WALL;
@@ -82,6 +85,17 @@ public class EditorUtils {
     public static void loadLevel(String path) {
         try {
             GameManager.getInstance().setMap(LevelLoader.loadLevel(path));
+            GameManager.getInstance().getEditor().setTreeModel(new editor.TreeModel());
+            for (int i = 0 ; i < GameManager.getInstance().getMap().getWidth() ; ++i)
+            {
+                for (int j = 0 ; j < GameManager.getInstance().getMap().getWidth() ; ++j)
+                {
+                    if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy)
+                    {
+                        GameManager.getInstance().getEditor().getTreeModel().addNode("Smart enemy ("+i+", "+j+")");
+                    }
+                }
+            }
             IOManager.getInstance().drawGame();
             IOManager.getInstance().drawEditor();
         }

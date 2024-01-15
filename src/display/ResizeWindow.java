@@ -20,6 +20,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 
 public class ResizeWindow {
 	private JFrame window;
@@ -47,6 +48,7 @@ public class ResizeWindow {
 
 			if (newWidth > 0 && newHeight > 0) {
 				Map newMap = new Map(newWidth, newHeight);
+				HashSet<Tile> connections;
 
 				for (int i = 0;i < newWidth;i++) {
 					for (int j = 0;j < newHeight;j++) {
@@ -54,11 +56,30 @@ public class ResizeWindow {
 							newMap.setBottomLayer(i, j, GameManager.getInstance().getMap().getBottomLayer(i, j));
 							if (GameManager.getInstance().getMap().getBottomLayer(i, j) != null) {
 								if (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof Connectable) {
-									//for (Tile connection : GameManager.getInstance().getMap().getBottomLayer(i, j))
+									connections = new HashSet<>();
+									for (Tile connection : ((Connectable)GameManager.getInstance().getMap().getBottomLayer(i, j)).getConnections()) {
+										if (connection.getX() < newWidth && connection.getY() < newHeight) {
+											connections.add(connection);
+										}
+									}
+
+									((Connectable)GameManager.getInstance().getMap().getBottomLayer(i, j)).setConnections(connections);
 								}
 							}
 							if (GameManager.getInstance().getMap().getUpperLayer(i, j) != null) {
 								newMap.setUpperLayer(i, j, GameManager.getInstance().getMap().getUpperLayer(i, j));
+								if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof Connectable) {
+									if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof Connectable) {
+										connections = new HashSet<>();
+										for (Tile connection : ((Connectable)GameManager.getInstance().getMap().getUpperLayer(i, j)).getConnections()) {
+											if (connection.getX() < newWidth && connection.getY() < newHeight) {
+												connections.add(connection);
+											}
+										}
+
+										((Connectable)GameManager.getInstance().getMap().getUpperLayer(i, j)).setConnections(connections);
+									}
+								}
 							}
 						} else {
 							newMap.setBottomLayer(i, j, new Floor(i, j));

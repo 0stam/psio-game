@@ -6,6 +6,7 @@ import enums.Graphics;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import event.ButtonEvent;
@@ -14,7 +15,7 @@ import event.EventSource;
 import enums.Direction;
 
 public class Button extends Tile implements EventSource, Connectable {
-    private final HashSet<EventObserver> observers = new HashSet<>();
+    private HashSet<EventObserver> observers = new HashSet<>();
     private boolean isPressed = false;
 
     public Button(int x, int y) {
@@ -29,6 +30,17 @@ public class Button extends Tile implements EventSource, Connectable {
             addObserver((EventObserver) tile);
         }
     }
+
+    @Override
+    public void setConnections(HashSet<Tile> list) {
+        observers = new HashSet<>();
+
+        Iterator iter = list.iterator();
+        while (iter.hasNext()) {
+            this.addObserver((EventObserver)iter.next());
+        }
+    }
+
     public void removeConnection(Tile tile)
     {
         if (observers.contains((EventObserver)tile)) {

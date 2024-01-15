@@ -88,7 +88,7 @@ public class EditorUtils {
             GameManager.getInstance().getEditor().setTreeModel(new editor.TreeModel());
             for (int i = 0 ; i < GameManager.getInstance().getMap().getWidth() ; ++i)
             {
-                for (int j = 0 ; j < GameManager.getInstance().getMap().getWidth() ; ++j)
+                for (int j = 0 ; j < GameManager.getInstance().getMap().getHeight() ; ++j)
                 {
                     if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy)
                     {

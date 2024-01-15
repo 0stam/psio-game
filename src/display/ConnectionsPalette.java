@@ -2,6 +2,7 @@ package display;
 
 import IO.IOManager;
 import connectableinterface.Connectable;
+import editor.EditorUtils;
 import enums.ConnectableTile;
 import enums.EditableTile;
 import enums.Graphics;
@@ -149,7 +150,7 @@ public class ConnectionsPalette extends JPanel {
 
                 if (value instanceof Tile) {
                     Tile tile = (Tile) value;
-                    label.setText(tile.getClass().getSimpleName() + " " + "x: " + tile.getX() + ", y: " + tile.getY());
+                    label.setText(EditorUtils.objectToEditable(tile).name + " (x: " + tile.getX() + ", y: " + tile.getY() + ")");
                 }
                 return label;
             }

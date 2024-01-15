@@ -21,7 +21,8 @@ import java.util.List;
 public class ConnectionsPalette extends JPanel {
     EmittersContainer emittersContainer;
     ConnectablesContainer connectablesContainer;
-
+    Tile lastSelectedTile;
+    HashSet<TreePath> expandedPaths = new HashSet<>();
     JSplitPane splitPane;
 
     /**
@@ -50,10 +51,15 @@ public class ConnectionsPalette extends JPanel {
                 else {
                     label.setIcon(null);
                 }
+                label.setFont(getFont().deriveFont(Font.PLAIN, 25));
                 if (node.getUserObject() instanceof Tile) {
                     Tile tile = (Tile) node.getUserObject();
                     label.setText("x: " + tile.getX() + ", y: " + tile.getY());
+                    if (lastSelectedTile != null && tile == lastSelectedTile) {
+                        label.setFont(getFont().deriveFont(Font.BOLD));
+                    }
                 }
+
                 return label;
             }
         }
@@ -95,6 +101,7 @@ public class ConnectionsPalette extends JPanel {
         }
 
         public void refresh() {
+
             for (ConnectableTile tile : ConnectableTile.values()) {
                 List<Tile> tilesInCategory = GameManager.getInstance().getEditor().getTilesInConnectableCategory(tile);
                 DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
@@ -128,6 +135,7 @@ public class ConnectionsPalette extends JPanel {
                 }
             }
             ((DefaultTreeModel) tree.getModel()).nodeStructureChanged((DefaultMutableTreeNode) tree.getModel().getRoot());
+            expandTree();
         }
     }
 
@@ -139,6 +147,7 @@ public class ConnectionsPalette extends JPanel {
         DefaultListModel listModel;
         JList list;
         JLabel label;
+
 
         class MyListCellRenderer extends DefaultListCellRenderer {
 
@@ -176,9 +185,15 @@ public class ConnectionsPalette extends JPanel {
                 }
             }
             list.setModel(listModel);
+//            expandTree();
         }
     }
 
+    public void expandTree() {
+        for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
+            emittersContainer.tree.expandRow(i);
+        }
+    }
     public ConnectionsPalette() {
         setPreferredSize(new Dimension(0, 200));
         setLayout(new BorderLayout());
@@ -209,9 +224,9 @@ public class ConnectionsPalette extends JPanel {
                     inputHandler.onEvent(new ConnectionDeletedEvent(from));
                 }
             }
+
         });
 
-        HashSet<TreePath> expandedPaths = new HashSet<>();
 
         emittersContainer.tree.addTreeSelectionListener(treeSelectionEvent -> {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeSelectionEvent.getPath().getLastPathComponent();
@@ -224,19 +239,22 @@ public class ConnectionsPalette extends JPanel {
                 connectablesContainer.refresh(tileConnections);
                 //emittersContainer.tree.setSelectionPath(new TreePath(node));
 
-                // Store the expanded state before refreshing the tree
-                for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
-                    TreePath path = emittersContainer.tree.getPathForRow(i);
-                    emittersContainer.tree.expandPath(path);
-                    if (emittersContainer.tree.isExpanded(path)) {
-                        expandedPaths.add(path);
-                    }
-                }
+            }
+            if (node.getUserObject() instanceof Tile) {
+                lastSelectedTile = (Tile) node.getUserObject();
+            }
 
-                // Restore the expanded state after refreshing the tree
-                for (TreePath path : expandedPaths) {
-                    emittersContainer.tree.expandPath(path);
+            // Store the expanded state before refreshing the tree
+            for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
+                TreePath path = emittersContainer.tree.getPathForRow(i);
+                if (emittersContainer.tree.isExpanded(path)) {
+                    expandedPaths.add(path);
                 }
+            }
+
+            // Restore the expanded state after refreshing the tree
+            for (TreePath path : expandedPaths) {
+                emittersContainer.tree.expandPath(path);
             }
         });
 

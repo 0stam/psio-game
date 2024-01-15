@@ -134,8 +134,10 @@ public class Map implements Serializable{
     public void addActionTile(ActionTile actionTile) {
         nextMapState.addActionTile(actionTile);
     }
-
     public void addCurrentActionTile(ActionTile actionTile) {actionTiles.add(actionTile);}
+    public PlayerCharacter getPlayer() {
+        return nextMapState.getPlayer();
+    }
 
     public void move(int x, int y, Direction direction) {
         nextMapState.move(x, y, direction);

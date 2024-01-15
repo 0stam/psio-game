@@ -4,14 +4,15 @@ import IO.IOManager;
 import enums.EditableTile;
 import enums.EditorMode;
 import enums.Layer;
-import event.PalettePressedEvent;
-import event.SavePathEvent;
+import event.display.ChangeLayerEvent;
+import event.display.ModeChangedEvent;
+import event.display.PalettePressedEvent;
+import event.editor.SavePathEvent;
 import gamemanager.GameManager;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.tools.Tool;
 
 public class PaletteTabs {
 	private JTabbedPane tabs;
@@ -53,6 +54,7 @@ public class PaletteTabs {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			String selectedTabTip = tabs.getToolTipTextAt(tabs.getSelectedIndex());
+			EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
 			switch (selectedTabTip)
 			{
 				//FIXME: zrobmy cos z tym pozniej bo to obrzydliwe
@@ -60,7 +62,7 @@ public class PaletteTabs {
 				{
 					//zrobic cos madrzejszego
 					GameManager.getInstance().onEvent(new SavePathEvent());
-					resetState(EditorMode.PREADD);
+					resetState(EditorMode.ADD);
 					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
 					pathEditPalette.getArrows().selectOne(pathEditPalette.getArrows().buttons.get(0));
 					IOManager.getInstance().drawEditor();
@@ -70,13 +72,13 @@ public class PaletteTabs {
 				{
 					//zrobic cos madrzejszego pozniej
 					GameManager.getInstance().onEvent(new SavePathEvent());
-					resetState(EditorMode.PRECONNECT);
+					resetState(EditorMode.CONNECT);
 					IOManager.getInstance().drawEditor();
 					break;
 				}
 				case "Pathedit":
 				{
-					resetState(EditorMode.PREPATHEDIT);
+					resetState(EditorMode.PATHEDIT);
 					//zrobic cos madrzejszego pozniej
 					pathEditPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
@@ -87,7 +89,7 @@ public class PaletteTabs {
 				default:
 				{
 					System.out.println("Ustawiono tryb na default - prawdopodobnie nieporzadane\nPaletteTabs line 63");
-					GameManager.getInstance().getEditor().setMode(EditorMode.DEFAULT);
+					inputHandler.onEvent(new ModeChangedEvent(EditorMode.DEFAULT));
 					break;
 				}
 			}
@@ -97,8 +99,10 @@ public class PaletteTabs {
 
 	public void resetState (EditorMode m)
 	{
-		GameManager.getInstance().getEditor().setMode(m);
-		GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
+		EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+
+		inputHandler.onEvent(new ModeChangedEvent(m));
+		inputHandler.onEvent(new ChangeLayerEvent(Layer.BOTH));
 		GameManager.getInstance().getEditor().setCurrentEnemy(null);
 	}
 

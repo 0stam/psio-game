@@ -1,5 +1,6 @@
 package display;
 
+import IO.IOManager;
 import gamemanager.GameManager;
 
 import javax.swing.*;
@@ -42,7 +43,8 @@ public class EditorMapDisplay extends JPanel {
     }
     public void refresh()
     {
-        switch (GameManager.getInstance().getEditor().getLayer()) {
+        EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+        switch (inputHandler.getLayer()) {
             case BOTH: {
                 for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                     for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {

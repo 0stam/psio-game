@@ -1,30 +1,25 @@
 package display;
 
-import IO.IOManager;
 //import enums.EditorModes;
+import IO.IOManager;
 import enums.EditorMode;
 import enums.Layer;
-import event.*;
+import event.display.ChangeLayerEvent;
+import event.display.ModeChangedEvent;
+import event.editor.LevelLoadedEvent;
+import event.editor.LevelSavedEvent;
+import event.editor.SavePathEvent;
 import gamemanager.GameManager;
 import levelloader.LevelLoader;
-import map.Map;
 
-import javax.imageio.ImageIO;
+        import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.tools.Tool;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
+        import java.awt.*;
+        import java.awt.event.MouseEvent;
+        import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Hashtable;
-
-import static enums.Graphics.*;
 
 public class ToolPalette extends AbstractPalette {
 	private EditorDisplay parent;
@@ -96,9 +91,10 @@ public class ToolPalette extends AbstractPalette {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			if (GameManager.getInstance().getEditor().getMode() == EditorMode.PREADD || GameManager.getInstance().getEditor().getMode() == EditorMode.ADD) {
+			EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+			if (inputHandler.getMode() == EditorMode.ADD) {
 				ToolPalette.this.selectOne((ImageButton) e.getSource());
-				if (changeLayer != GameManager.getInstance().getEditor().getLayer()) {
+				if (changeLayer != inputHandler.getLayer()) {
 					GameManager.getInstance().onEvent(new ChangeLayerEvent(changeLayer));
 				}
 			}
@@ -150,10 +146,12 @@ public class ToolPalette extends AbstractPalette {
 			int returnVal = fc.showOpenDialog(this.parent);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+
 				File file = fc.getSelectedFile();
 				GameManager.getInstance().onEvent(new SavePathEvent());
-				GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
-				GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
+				inputHandler.onEvent(new ModeChangedEvent(EditorMode.ADD));
+				inputHandler.onEvent(new ChangeLayerEvent(Layer.BOTH));
 				ToolPalette.this.selectOne(buttons.get(0));
 				GameManager.getInstance().getEditor().onEvent(new LevelLoadedEvent(file.getPath()));
 			}

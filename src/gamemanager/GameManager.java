@@ -1,15 +1,12 @@
 package gamemanager;
-import IO.ConsoleIO;
-import IO.GraphicIO;
 import IO.IOManager;
-import display.GraphicsHashtable;
 import editor.Editor;
 import enums.Direction;
+import event.editor.EditorEvent;
+import event.editor.EditorSelectedEvent;
 import levelloader.*;
 import map.Map;
 import event.*;
-
-import java.io.IOException;
 
 public class GameManager implements EventObserver {
     private static GameManager gameManager;

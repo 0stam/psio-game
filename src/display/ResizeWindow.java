@@ -1,21 +1,22 @@
 package display;
 
 import IO.IOManager;
-import editor.TreeModel;
 import enums.EditorMode;
 import enums.Layer;
-import event.SavePathEvent;
+import event.display.ChangeLayerEvent;
+import event.display.ModeChangedEvent;
+import event.display.PalettePressedEvent;
+import event.editor.EditorEvent;
+import event.editor.SavePathEvent;
 import gamemanager.GameManager;
 import map.Map;
 import tile.Floor;
 import tile.SmartEnemy;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 public class ResizeWindow {
 	private JFrame window;
@@ -66,14 +67,17 @@ public class ResizeWindow {
 					}
 				}
 
+				EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+
 				GameManager.getInstance().setMap(newMap);
 				if (GameManager.getInstance().getEditor().getCurrentPath() != null) {
 					GameManager.getInstance().getEditor().setCurrentPath(GameManager.getInstance().getEditor().resizePath());
 					GameManager.getInstance().onEvent(new SavePathEvent());
 				}
 				GameManager.getInstance().getEditor().setCurrentEnemy(null);
-				GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
-				GameManager.getInstance().getEditor().setLayer(Layer.BOTH);
+
+				inputHandler.onEvent(new ModeChangedEvent(EditorMode.ADD));
+				inputHandler.onEvent(new ChangeLayerEvent(Layer.BOTH));
 
 				IOManager.getInstance().drawGame();
 				IOManager.getInstance().drawEditor();

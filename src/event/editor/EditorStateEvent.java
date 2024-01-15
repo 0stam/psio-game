@@ -1,6 +1,5 @@
-package event;
+package event.editor;
 
-import editor.Editor;
 import tile.SmartEnemy;
 import enums.Layer;
 import enums.EditorMode;

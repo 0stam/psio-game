@@ -1,6 +1,4 @@
-package event;
-
-import tile.PlayerCharacter;
+package event.editor;
 
 public class PlaceholderConnectionCreatedEvent extends EditorEvent {
 	private final int x;

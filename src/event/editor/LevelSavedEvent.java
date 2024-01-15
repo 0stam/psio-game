@@ -1,4 +1,6 @@
-package event;
+package event.editor;
+
+import event.LevelEvent;
 
 public class LevelSavedEvent extends LevelEvent {
     public LevelSavedEvent(String path) {

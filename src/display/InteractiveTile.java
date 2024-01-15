@@ -1,15 +1,9 @@
 package display;
 
 import IO.IOManager;
-import editor.Editor;
 import enums.EditorMode;
-import enums.Layer;
-import event.EnemySelectedEvent;
-import event.ConnectionDeletedEvent;
-import event.PlaceholderConnectionCreatedEvent;
-import event.TilePressedEvent;
-import gamemanager.GameManager;
-import tile.SmartEnemy;
+import event.display.InteractiveTilePressedEvent;
+import event.display.ModeActiveChangedEvent;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -55,74 +49,48 @@ public class InteractiveTile extends JPanel {
     public class EventListener extends MouseInputAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
-            switch (GameManager.getInstance().getEditor().getMode())
-            {
-                case PREADD:
-                {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.ADD);
-                    break;
-                }
-                case PRECONNECT: {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.CONNECT);
-                    break;
-                }
-                case PRESELECT:
-                {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.SELECT);
-                    break;
-                }
-            }
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            inputHandler.onEvent(new ModeActiveChangedEvent(true));
             sendTilePressedEvent(e);
         }
         @Override
         public void mouseEntered(MouseEvent e) {
-            if (GameManager.getInstance().getEditor().getMode()!=EditorMode.PREPATHEDIT)
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            if (inputHandler.getMode()!=EditorMode.PATHEDIT)
                 sendTilePressedEvent (e);
         }
         @Override
         public void mouseReleased(MouseEvent e)
         {
-            switch (GameManager.getInstance().getEditor().getMode())
-            {
-                case ADD:
-                {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.PREADD);
-                    break;
-                }
-                case CONNECT: {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.PRECONNECT);
-                    break;
-                }
-                case SELECT:
-                {
-                    GameManager.getInstance().getEditor().setMode(EditorMode.PRESELECT);
-                    break;
-                }
-            }
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            inputHandler.onEvent(new ModeActiveChangedEvent(false));
         }
         public void sendTilePressedEvent (MouseEvent e) {
-            TilePressedEvent editorEvent = null;
-            switch (GameManager.getInstance().getEditor().getMode())
-            {
-                case ADD, CONNECT:
-                {
-                    editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
-                    break;
-                }
-                case SELECT:
-                {
-                    editorEvent = new TilePressedEvent(coords.x, coords.y, Layer.PATH, SwingUtilities.isRightMouseButton(e));
-                    break;
-                }
-                case PREPATHEDIT: {
-                    if (GameManager.getInstance().getMap().getUpperLayer((int)coords.getX(), (int)coords.getY()) instanceof SmartEnemy enemy) {
-                        GameManager.getInstance().onEvent(new EnemySelectedEvent(enemy));
-                    }
-                    break;
-                }
-            }
-            if (editorEvent != null)
-                GameManager.getInstance().onEvent(editorEvent);
+            EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+            InteractiveTilePressedEvent editorEvent = new InteractiveTilePressedEvent(coords.x, coords.y, SwingUtilities.isRightMouseButton(e));
+            inputHandler.onEvent(editorEvent);
+
+//            switch (GameManager.getInstance().getEditor().getMode())
+//            {
+//                case ADD, CONNECT:
+//                {
+//                    editorEvent = new TilePressedEvent(coords.x, coords.y, GameManager.getInstance().getEditor().getLayer(), SwingUtilities.isRightMouseButton(e));
+//                    break;
+//                }
+//                case SELECT:
+//                {
+//                    editorEvent = new TilePressedEvent(coords.x, coords.y, Layer.PATH, SwingUtilities.isRightMouseButton(e));
+//                    break;
+//                }
+//                case PREPATHEDIT: {
+//                    if (GameManager.getInstance().getMap().getUpperLayer((int)coords.getX(), (int)coords.getY()) instanceof SmartEnemy enemy) {
+//                        GameManager.getInstance().onEvent(new EnemySelectedEvent(enemy));
+//                    }
+//                    break;
+//                }
+//            }
+//            if (editorEvent != null)
+//                GameManager.getInstance().onEvent(editorEvent);
         }
     }
     public void updateGraphics(enums.Graphics idBottom, enums.Graphics idMiddle,enums.Graphics idUpper) {

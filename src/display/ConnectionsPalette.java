@@ -1,10 +1,12 @@
 package display;
 
+import IO.IOManager;
 import connectableinterface.Connectable;
 import enums.ConnectableTile;
 import enums.EditableTile;
 import enums.Graphics;
-import event.ConnectableTileSelectedEvent;
+import event.display.ConnectableTileSelectedEvent;
+import event.display.ConnectionDeletedEvent;
 import gamemanager.GameManager;
 import tile.Tile;
 
@@ -190,7 +192,8 @@ public class ConnectionsPalette extends JPanel {
                 if (selectedIndex != -1) {
                     Tile from = (Tile) connectablesContainer.list.getSelectedValue();
                     connectablesContainer.listModel.remove(selectedIndex);
-                    GameManager.getInstance().onEvent(new event.ConnectionDeletedEvent(from));
+                    EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+                    inputHandler.onEvent(new ConnectionDeletedEvent(from));
                 }
             }
         });
@@ -201,8 +204,10 @@ public class ConnectionsPalette extends JPanel {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeSelectionEvent.getPath().getLastPathComponent();
             // Check if the node is a tile and thus has connections
             if (node.getUserObject() instanceof Connectable) {
+                EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+
                 HashSet<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
-                GameManager.getInstance().getEditor().onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
+                inputHandler.onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
                 connectablesContainer.refresh(tileConnections);
             }
         });

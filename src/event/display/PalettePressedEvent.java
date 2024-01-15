@@ -1,9 +1,9 @@
-package event;
+package event.display;
 
-import enums.EditableTile;
 import enums.EditorGraphics;
+import event.editor.EditorEvent;
 
-public class PalettePressedEvent extends EditorEvent {
+public class PalettePressedEvent extends DisplayEvent {
     private final EditorGraphics type;
 
     public PalettePressedEvent(EditorGraphics type) {

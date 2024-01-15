@@ -1,8 +1,7 @@
 package display;
 import IO.IOManager;
 import enums.Arrow;
-import event.EnemySelectedEvent;
-import event.PalettePressedEvent;
+import event.editor.EnemySelectedEvent;
 import gamemanager.GameManager;
 import tile.SmartEnemy;
 
@@ -78,7 +77,8 @@ public class PathEditPalette extends JPanel{
                 String s = chosen.substring(0, dot);
                 int x = Integer.parseInt(chosen.substring(0, dot));
                 int y = Integer.parseInt(chosen.substring(dot+2));
-                GameManager.getInstance().onEvent(new EnemySelectedEvent((SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(x, y)));
+                EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+                inputHandler.onEvent(new EnemySelectedEvent((SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(x, y)));
             }
         }
     }

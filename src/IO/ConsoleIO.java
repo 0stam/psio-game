@@ -2,6 +2,7 @@ package IO;
 
 import enums.Graphics;
 import enums.Direction;
+import event.EventObserver;
 import event.LevelSelectedEvent;
 import event.MoveEvent;
 import event.ResetEvent;
@@ -102,6 +103,11 @@ public class ConsoleIO implements IOStrategy {
 				System.out.println("Incorrect level number.");
 			}
 		}
+	}
+
+	@Override
+	public EventObserver getInputHandler() {
+		return null;
 	}
 
 	public char idToChar(Graphics graphics)	{

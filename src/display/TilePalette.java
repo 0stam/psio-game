@@ -1,7 +1,8 @@
 package display;
 
+import IO.IOManager;
 import enums.EditorGraphics;
-import event.PalettePressedEvent;
+import event.display.PalettePressedEvent;
 import gamemanager.GameManager;
 
 import javax.swing.event.MouseInputAdapter;
@@ -52,7 +53,8 @@ public class TilePalette extends AbstractPalette {
 		public void mousePressed(MouseEvent e) {
 			TilePalette.this.selectOne((ImageButton) e.getSource());
 			TilePalette.this.repaint();
-			GameManager.getInstance().onEvent(new PalettePressedEvent(changeGraphic));
+			EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+			inputHandler.onEvent(new PalettePressedEvent(changeGraphic));
 		}
 	}
 }

@@ -147,12 +147,6 @@ public class Editor implements EventObserver {
             case UPPER:
                 if (incomingTile instanceof EditableTile tile) {
                     if (tile.isPlaceableUpper && tile != EditorUtils.objectToEditable(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
-                        switch (tile) {
-                            case SMART: {
-                                treeModel.addNode("Smart enemy (" + x + ", " + y + ")");
-                                break;
-                            }
-                        }
                         Tile mapTile = GameManager.getInstance().getMap().getUpperLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
@@ -164,6 +158,22 @@ public class Editor implements EventObserver {
                         if (!(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter)) {
                             GameManager.getInstance().getMap().setUpperLayer(x, y, EditorUtils.editableToObject(tile, x, y));
                             change = true;
+                        }
+
+                        switch (tile) {
+                            case SMART: {
+                                treeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                break;
+                            }
+                            case PLAYER: {
+                                for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
+                                    for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
+                                        if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof ChasingEnemy enemy) {
+                                            enemy.addConnection(GameManager.getInstance().getMap().getUpperLayer(x, y));
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

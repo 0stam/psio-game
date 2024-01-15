@@ -4,7 +4,7 @@ import enterablestrategy.Solid;
 import enums.Graphics;
 import turnstrategy.PlayerMovement;
 
-public class MimicEnemy extends ActionTile {
+public class MimicEnemy extends ActionTile<PlayerMovement> {
 	public MimicEnemy(int x, int y) {
 		super(x, y, 1);
 		setGraphicsID(Graphics.MIMIC);

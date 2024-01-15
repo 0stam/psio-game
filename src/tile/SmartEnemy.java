@@ -4,12 +4,13 @@ import enterablestrategy.Solid;
 import enums.Graphics;
 import turnstrategy.Idle;
 import turnstrategy.StateMachine;
+import turnstrategy.TurnStrategy;
 
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class SmartEnemy extends ActionTile {
+public class SmartEnemy extends ActionTile<TurnStrategy> {
 	private ArrayList<PathTile> pathTileList;
 	public SmartEnemy(int x, int y) {
 		super(x, y, 1);

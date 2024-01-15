@@ -223,6 +223,20 @@ public class ConnectionsPalette extends JPanel {
                 inputHandler.onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
                 connectablesContainer.refresh(tileConnections);
                 //emittersContainer.tree.setSelectionPath(new TreePath(node));
+
+                // Store the expanded state before refreshing the tree
+                for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
+                    TreePath path = emittersContainer.tree.getPathForRow(i);
+                    emittersContainer.tree.expandPath(path);
+                    if (emittersContainer.tree.isExpanded(path)) {
+                        expandedPaths.add(path);
+                    }
+                }
+
+                // Restore the expanded state after refreshing the tree
+                for (TreePath path : expandedPaths) {
+                    emittersContainer.tree.expandPath(path);
+                }
             }
         });
 

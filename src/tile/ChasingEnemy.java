@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-public class ChasingEnemy extends ActionTile implements Connectable {
+public class ChasingEnemy extends ActionTile<Follower> implements Connectable {
     public ChasingEnemy(int x, int y, Tile player) {
         super(x, y, 1);
         setGraphicsID(Graphics.ENEMY);
@@ -21,17 +21,18 @@ public class ChasingEnemy extends ActionTile implements Connectable {
     @Override
     public HashSet<Tile> getConnections() {
         HashSet<Tile> result = new HashSet<>();
-        result.add(((Follower) getTurnStrategy()).getTargetTile());
+        result.add(getTurnStrategy().getTargetTile());
         return result;
     }
 
     @Override
     public void addConnection(Tile tile) {
-        ((Follower) getTurnStrategy()).setTargetTile(tile);
+        getTurnStrategy().setTargetTile(tile);
+        System.out.println(tile);
     }
 
     @Override
     public void removeConnection(Tile tile) {
-        ((Follower) getTurnStrategy()).setTargetTile(null);
+        getTurnStrategy().setTargetTile(null);
     }
 }

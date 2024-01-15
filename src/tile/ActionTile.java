@@ -3,8 +3,8 @@ import enterablestrategy.*;
 import turnstrategy.*;
 import enums.Direction;
 
-public class ActionTile extends Tile implements Comparable<ActionTile> {
-	private TurnStrategy turnStrategy;
+public class ActionTile<T extends TurnStrategy> extends Tile implements Comparable<ActionTile> {
+	private T turnStrategy;
 	private int priority;
 	
 	//konstruktor
@@ -25,11 +25,11 @@ public class ActionTile extends Tile implements Comparable<ActionTile> {
 		this.priority = priority;
 	}
 
-	public TurnStrategy getTurnStrategy() {
+	public T getTurnStrategy() {
 		return turnStrategy;
 	}
 
-	public void setTurnStrategy(TurnStrategy turnStrategy) {
+	public void setTurnStrategy(T turnStrategy) {
 		this.turnStrategy = turnStrategy;
 	}
 

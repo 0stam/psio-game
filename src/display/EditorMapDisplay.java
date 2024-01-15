@@ -52,13 +52,13 @@ public class EditorMapDisplay extends JPanel {
                         enums.Graphics newBottom = ((GameManager.getInstance().getMap().getBottomLayer(i, j) == null) ? enums.Graphics.DEFAULT : GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID());
                         enums.Graphics newUpper = ((GameManager.getInstance().getMap().getUpperLayer(i, j) == null) ? enums.Graphics.EMPTY : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID());
 
-                        if (GameManager.getInstance().getEditor().getConnectingTile() != null) {
-                            if (GameManager.getInstance().getMap().getBottomLayer(i, j) == GameManager.getInstance().getEditor().getConnectingTile()) {
-                                newBottom = ((GameManager.getInstance().getEditor().getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
+                        if (inputHandler.getConnectingTile() != null) {
+                            if (GameManager.getInstance().getMap().getBottomLayer(i, j) == inputHandler.getConnectingTile()) {
+                                newBottom = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
                             }
 
-                            if (GameManager.getInstance().getMap().getUpperLayer(i, j) == GameManager.getInstance().getEditor().getConnectingTile()) {
-                                newUpper = ((GameManager.getInstance().getEditor().getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
+                            if (GameManager.getInstance().getMap().getUpperLayer(i, j) == inputHandler.getConnectingTile()) {
+                                newUpper = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
                             }
                         }
 

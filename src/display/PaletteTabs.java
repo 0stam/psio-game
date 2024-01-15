@@ -5,6 +5,7 @@ import enums.EditableTile;
 import enums.EditorMode;
 import enums.Layer;
 import event.display.ChangeLayerEvent;
+import event.display.ConnectableTileSelectedEvent;
 import event.display.ModeChangedEvent;
 import event.display.PalettePressedEvent;
 import event.editor.SavePathEvent;
@@ -61,7 +62,7 @@ public class PaletteTabs {
 				case "Tiles":
 				{
 					//zrobic cos madrzejszego
-					GameManager.getInstance().getEditor().setConnectingTile(null);
+					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
 					GameManager.getInstance().onEvent(new SavePathEvent());
 					resetState(EditorMode.ADD);
 					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
@@ -72,7 +73,7 @@ public class PaletteTabs {
 				case "Connections":
 				{
 					//zrobic cos madrzejszego pozniej
-					GameManager.getInstance().getEditor().setConnectingTile(null);
+					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
 					GameManager.getInstance().onEvent(new SavePathEvent());
 					resetState(EditorMode.CONNECT);
 					IOManager.getInstance().drawEditor();
@@ -82,7 +83,7 @@ public class PaletteTabs {
 				{
 					resetState(EditorMode.PATHEDIT);
 					//zrobic cos madrzejszego pozniej
-					GameManager.getInstance().getEditor().setConnectingTile(null);
+					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
 					pathEditPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
 					tilePalette.selectOne(tilePalette.buttons.get(0));

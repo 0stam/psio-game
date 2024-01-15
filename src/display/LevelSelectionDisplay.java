@@ -44,7 +44,7 @@ public class LevelSelectionDisplay extends JPanel {
         for (int i = 0; i < levelsPerPage; i++) {
             int levelNumber = startLevel + i;
             if (levelNumber < totalLevels) {
-                JButton levelButton = new JButton("Level " + (levelNumber + 1));
+                JButton levelButton = new JButton(getLevelName(LevelLoader.getPath(levelNumber, false)));
                 levelButton.addActionListener(e -> {
                     LevelSelectedEvent levelSelectedEvent = new LevelSelectedEvent(levelNumber);
                     GameManager.getInstance().onEvent(levelSelectedEvent);
@@ -99,5 +99,32 @@ public class LevelSelectionDisplay extends JPanel {
             revalidate();
             repaint();
         }
+    }
+
+    private String capitalize(String text) {
+        return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+    }
+
+    private String getLevelName(String fileName) {
+        StringBuilder result = new StringBuilder();
+        String[] words = fileName.split("[\s_-]");
+
+        try {
+            int number = Integer.parseInt(words[0]);
+            if (words.length == 1) {
+                return "Level: " + number;
+            }
+        } catch (NumberFormatException e) {
+            result.append(capitalize(words[0]));
+        }
+
+        for (int i = 1; i < words.length; i++) {
+            if (result.length() > 0) {
+                result.append(" ");
+            }
+            result.append(capitalize(words[i]));
+        }
+
+        return result.toString();
     }
 }

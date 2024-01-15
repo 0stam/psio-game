@@ -263,5 +263,9 @@ public class ConnectionsPalette extends JPanel {
 
     public void refresh() {
         emittersContainer.refresh();
+        if (lastSelectedTile instanceof Connectable connectable)
+            connectablesContainer.refresh(connectable.getConnections());
+        else
+            connectablesContainer.refresh(null);
     }
 }

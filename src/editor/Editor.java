@@ -198,7 +198,8 @@ public class Editor implements EventObserver {
 
         if (event.getLayer() == Layer.BOTTOM || event.getLayer() == Layer.BOTH) {
             potentialConnections.add(GameManager.getInstance().getMap().getBottomLayer(event.getX(), event.getY()));
-        } else if (event.getLayer() == UPPER || event.getLayer() == Layer.BOTH) {
+        }
+        if (event.getLayer() == UPPER || event.getLayer() == Layer.BOTH) {
             potentialConnections.add(GameManager.getInstance().getMap().getUpperLayer(event.getX(), event.getY()));
         }
 

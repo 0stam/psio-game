@@ -4,6 +4,7 @@ import IO.IOManager;
 import enums.EditorMode;
 import enums.Layer;
 import event.display.ChangeLayerEvent;
+import event.display.ConnectableTileSelectedEvent;
 import event.display.ModeChangedEvent;
 import event.display.PalettePressedEvent;
 import event.editor.EditorEvent;
@@ -78,6 +79,8 @@ public class ResizeWindow {
 
 				inputHandler.onEvent(new ModeChangedEvent(EditorMode.ADD));
 				inputHandler.onEvent(new ChangeLayerEvent(Layer.BOTH));
+				inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
+
 
 				IOManager.getInstance().drawGame();
 				IOManager.getInstance().drawEditor();

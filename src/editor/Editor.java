@@ -64,7 +64,6 @@ public class Editor implements EventObserver {
                 EditorUtils.saveLevel(((LevelSavedEvent) event).getPath());
                 break;
 
-
             case "EnemySelectedEvent":
             {
                 updateEnemyPath();

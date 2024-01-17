@@ -1,6 +1,7 @@
 package editor;
 
 import IO.IOManager;
+import display.EditorInputHandler;
 import enums.*;
 import event.*;
 import event.display.ChangeLayerEvent;
@@ -88,7 +89,7 @@ public class Editor implements EventObserver {
             case "ChangeLayerEvent":
             {
                 ChangeLayerEvent chlev = (ChangeLayerEvent) event;
-                //layer = chlev.getLayer();
+                ((EditorInputHandler) IOManager.getInstance().getInputHandler()).onEvent(event);
                 IOManager.getInstance().drawEditor();
                 break;
             }

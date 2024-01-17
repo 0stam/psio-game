@@ -2,6 +2,7 @@ package gamemanager;
 import IO.IOManager;
 import editor.Editor;
 import enums.Direction;
+import event.display.ChangeLayerEvent;
 import event.editor.EditorEvent;
 import event.editor.EditorSelectedEvent;
 import levelloader.*;
@@ -104,6 +105,11 @@ public class GameManager implements EventObserver {
         }
 
         if (event instanceof EditorEvent) {
+            editor.onEvent(event);
+            return;
+        }
+
+        if (event instanceof ChangeLayerEvent) {
             editor.onEvent(event);
             return;
         }

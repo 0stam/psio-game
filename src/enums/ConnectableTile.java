@@ -2,7 +2,7 @@ package enums;
 
 public enum ConnectableTile {
     DEFAULT(new EditableTile[]{}, false),
-    BUTTON(new EditableTile[]{EditableTile.DOOR}, false),
+    BUTTON(new EditableTile[]{EditableTile.DOOR, EditableTile.REVERSE}, false),
     ENEMY(new EditableTile[]{EditableTile.PLAYER, EditableTile.MIMIC, EditableTile.SMART}, true);
 
     public final EditableTile[] allowedTiles; // Must be EditableTile and not ConnectibleTile to avoid forward references

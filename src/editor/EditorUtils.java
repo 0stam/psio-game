@@ -30,6 +30,7 @@ public class EditorUtils {
             case FLOOR ->  new Floor(x, y);
             case PLAYER ->  new PlayerCharacter(x, y);
             case DOOR ->  new Door(x, y);
+            case REVERSE ->  new ReverseDoor(x, y);
             case BUTTON ->  new Button(x, y);
             default ->  null;
         };
@@ -46,6 +47,7 @@ public class EditorUtils {
             case "ChasingEnemy" -> ENEMY;
             case "MimicEnemy" -> MIMIC;
             case "SmartEnemy" -> SMART;
+            case "ReverseDoor" -> REVERSE;
             case "Door" -> DOOR;
             case "Floor" -> FLOOR;
             case "Goal" -> GOAL;

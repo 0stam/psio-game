@@ -27,6 +27,7 @@ public class MapConverter {
 		graphicsConvert.put("MimicEnemy", EditableTile.MIMIC);
 		graphicsConvert.put("SmartEnemy", EditableTile.SMART);
 		graphicsConvert.put("Door", EditableTile.DOOR);
+		graphicsConvert.put("ReverseDoor", EditableTile.REVERSE);
 		graphicsConvert.put("Floor", EditableTile.FLOOR);
 		graphicsConvert.put("Goal", EditableTile.GOAL);
 		graphicsConvert.put("PlayerCharacter", EditableTile.PLAYER);
@@ -121,6 +122,7 @@ public class MapConverter {
 					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR -> result.setBottomLayer(i, j, new Door(i, j));
+					case REVERSE -> result.setBottomLayer(i, j, new ReverseDoor(i, j));
 					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
 					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
@@ -294,7 +296,7 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case DOOR,PLAYER,MIMIC:
+			case DOOR,PLAYER,MIMIC,REVERSE:
 			{
 				return true;
 			}

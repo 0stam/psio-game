@@ -2,6 +2,7 @@ package enums;
 
 public enum EditableTile implements EditorGraphics{
     EMPTY(true, true, Layer.BOTH, false,"Empty", Graphics.EMPTY),
+    DANGER(true, true, Layer.BOTTOM, false, "Dangerous floor", Graphics.DANGER),
     FLOOR(true, true, Layer.BOTTOM, false,"Floor", Graphics.FLOOR),
     WALL(true, true, Layer.BOTTOM, true,"Wall", Graphics.WALL),
     BUTTON(true, true, Layer.BOTTOM, false, "Button", Graphics.BUTTON_RELEASED),

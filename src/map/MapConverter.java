@@ -29,6 +29,7 @@ public class MapConverter {
 		graphicsConvert.put("Door", EditableTile.DOOR);
 		graphicsConvert.put("ReverseDoor", EditableTile.REVERSE);
 		graphicsConvert.put("Floor", EditableTile.FLOOR);
+		graphicsConvert.put("DangerFloor", EditableTile.DANGER);
 		graphicsConvert.put("Goal", EditableTile.GOAL);
 		graphicsConvert.put("PlayerCharacter", EditableTile.PLAYER);
 		graphicsConvert.put("Wall", EditableTile.WALL);
@@ -124,6 +125,7 @@ public class MapConverter {
 					case DOOR -> result.setBottomLayer(i, j, new Door(i, j));
 					case REVERSE -> result.setBottomLayer(i, j, new ReverseDoor(i, j));
 					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
+					case DANGER -> result.setBottomLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
 						result.setBottomLayer(i, j, new PlayerCharacter(i, j));
@@ -140,6 +142,7 @@ public class MapConverter {
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR -> result.setUpperLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
+					case DANGER -> result.setUpperLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
 						result.setUpperLayer(i, j, new PlayerCharacter(i, j));
@@ -197,6 +200,7 @@ public class MapConverter {
 					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
 					case DOOR_CLOSED -> result.setBottomLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
+					case DANGER -> result.setBottomLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
 						result.setBottomLayer(i, j, new PlayerCharacter(i, j));
@@ -213,6 +217,7 @@ public class MapConverter {
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR_CLOSED -> result.setUpperLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
+					case DANGER -> result.setUpperLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
 						result.setUpperLayer(i, j, new PlayerCharacter(i, j));

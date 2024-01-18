@@ -3,6 +3,7 @@ package enums;
 public enum Graphics {
 	DEFAULT,
 	FLOOR,
+	DANGER,
 	WALL,
 	BOX,
 	PLAYER,

@@ -9,6 +9,8 @@ import event.display.ConnectableTileSelectedEvent;
 import event.display.ModeChangedEvent;
 import event.display.PalettePressedEvent;
 import event.editor.EditorEvent;
+import event.editor.EnemySelectedEvent;
+import event.editor.MapResizeEvent;
 import event.editor.SavePathEvent;
 import gamemanager.GameManager;
 import map.Map;
@@ -99,11 +101,8 @@ public class ResizeWindow {
 				EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
 
 				GameManager.getInstance().setMap(newMap);
-				if (GameManager.getInstance().getEditor().getCurrentPath() != null) {
-					GameManager.getInstance().getEditor().setCurrentPath(GameManager.getInstance().getEditor().resizePath());
-					GameManager.getInstance().onEvent(new SavePathEvent());
-				}
-				GameManager.getInstance().getEditor().setCurrentEnemy(null);
+				GameManager.getInstance().onEvent(new MapResizeEvent());
+				GameManager.getInstance().onEvent(new EnemySelectedEvent(null));
 
 				IOManager.getInstance().drawGame();
 				IOManager.getInstance().drawEditor();

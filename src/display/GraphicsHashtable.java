@@ -20,6 +20,7 @@ public class GraphicsHashtable {
             images = new Hashtable<>();
 
             images.put(FLOOR, ImageIO.read(new File("src/graphics/floor.png")));
+            images.put(DANGER, ImageIO.read(new File("src/graphics/danger.png")));
             images.put(WALL, ImageIO.read(new File("src/graphics/wall.png")));
             images.put(BOX, ImageIO.read(new File("src/graphics/box.png")));
             switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {

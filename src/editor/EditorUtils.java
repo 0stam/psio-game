@@ -28,8 +28,10 @@ public class EditorUtils {
             case MIMIC -> new MimicEnemy(x, y);
             case SMART -> new SmartEnemy(x, y);
             case FLOOR ->  new Floor(x, y);
+            case DANGER -> new DangerFloor(x, y);
             case PLAYER ->  new PlayerCharacter(x, y);
             case DOOR ->  new Door(x, y);
+            case REVERSE ->  new ReverseDoor(x, y);
             case BUTTON ->  new Button(x, y);
             default ->  null;
         };
@@ -46,8 +48,10 @@ public class EditorUtils {
             case "ChasingEnemy" -> ENEMY;
             case "MimicEnemy" -> MIMIC;
             case "SmartEnemy" -> SMART;
+            case "ReverseDoor" -> REVERSE;
             case "Door" -> DOOR;
             case "Floor" -> FLOOR;
+            case "DangerFloor" -> DANGER;
             case "Goal" -> GOAL;
             case "PlayerCharacter" -> PLAYER;
             case "Wall" -> WALL;
@@ -88,7 +92,7 @@ public class EditorUtils {
             GameManager.getInstance().getEditor().setTreeModel(new editor.TreeModel());
             for (int i = 0 ; i < GameManager.getInstance().getMap().getWidth() ; ++i)
             {
-                for (int j = 0 ; j < GameManager.getInstance().getMap().getWidth() ; ++j)
+                for (int j = 0 ; j < GameManager.getInstance().getMap().getHeight() ; ++j)
                 {
                     if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy)
                     {

@@ -35,4 +35,11 @@ public class ChasingEnemy extends ActionTile<Follower> implements Connectable {
     public void removeConnection(Tile tile) {
         getTurnStrategy().setTargetTile(null);
     }
+
+    @Override
+    public void setConnections(HashSet<Tile> list) {
+        if (list.size() == 1) {
+            this.getTurnStrategy().setTargetTile(list.iterator().next());
+        }
+    }
 }

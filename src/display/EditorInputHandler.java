@@ -12,6 +12,10 @@ import gamemanager.GameManager;
 import tile.SmartEnemy;
 import tile.Tile;
 
+import java.nio.file.Path;
+
+import static enums.Arrow.*;
+
 public class EditorInputHandler implements EventObserver {
     // Layer
     private Layer layer = Layer.BOTH;
@@ -28,6 +32,7 @@ public class EditorInputHandler implements EventObserver {
 
     // Current enemy and tree model for pathedit
     private SmartEnemy currentEnemy;
+    private EditorGraphics[][] currentPath;
     private TreeModel treeModel;
 
     @Override
@@ -64,6 +69,15 @@ public class EditorInputHandler implements EventObserver {
             case "EnemySelectedEvent":
                 onEnemySelected((EnemySelectedEvent) event);
                 break;
+            case "SavePathEvent":
+                onEnemySaved((SavePathEvent) event);
+                break;
+            case "ArrowModifiedEvent":
+                onArrowModified((ArrowModifiedEvent) event);
+                break;
+            case "MapResizedEvent":
+                onMapResized(new MapResizeEvent());
+                break;
         }
     }
 
@@ -96,6 +110,8 @@ public class EditorInputHandler implements EventObserver {
 
         switch (mode) {
             case ADD:
+                currentEnemy = null;
+                currentPath = null;
                 heldTile = EditableTile.EMPTY;
                 break;
             case SELECT, PATHEDIT:
@@ -120,9 +136,38 @@ public class EditorInputHandler implements EventObserver {
     private void onEnemySelected(EnemySelectedEvent event) {
         mode = EditorMode.SELECT;
         layer = Layer.PATH;
-        SmartEnemy previousEnemy = currentEnemy;
+        if (currentEnemy != null)
+            //mimo ze wyglada jakbysmy tworzyli obiekt "na darmo" to chyba jest to spojne z przyjetymi zasadami
+            onEnemySaved(new SavePathEvent());
+
         currentEnemy = event.getSmartEnemy();
-        GameManager.getInstance().onEvent(event);
+        if (currentEnemy != null)
+            currentPath = PathEditorHelper.listToPath(currentEnemy);
+
+        GameManager.getInstance().onEvent(new EditorChangeEvent());
+    }
+
+    private void onArrowModified(ArrowModifiedEvent event) {
+        if (currentPath!=null) {
+            Arrow arrow = event.getArrow();
+
+            if (event.isRemove()) {
+                arrow = EMPTY;
+            }
+
+            currentPath[event.getX()][event.getY()] = arrow;
+            GameManager.getInstance().onEvent(new EditorChangeEvent());
+        }
+    }
+    private void onEnemySaved(SavePathEvent event)
+    {
+        PathEditorHelper.updateEnemyPath(currentEnemy, currentPath);
+    }
+    private void onMapResized(MapResizeEvent event)
+    {
+        PathEditorHelper.resizePath(currentPath);
+        if (currentEnemy != null)
+            onEnemySaved(new SavePathEvent());
     }
 
     public Layer getLayer() {
@@ -151,5 +196,8 @@ public class EditorInputHandler implements EventObserver {
 
     public TreeModel getTreeModel() {
         return treeModel;
+    }
+    public EditorGraphics[][] getCurrentPath() {
+        return currentPath;
     }
 }

@@ -20,10 +20,6 @@ import static enums.Layer.UPPER;
 
 
 public class Editor implements EventObserver {
-    // Variables required for the graphics to work
-    private EditorGraphics[][] currentPath;
-    private SmartEnemy currentEnemy = null;
-    //private JTree referenceTree = null;
 
     // Variables required for the logic to work
     private boolean change;
@@ -51,10 +47,6 @@ public class Editor implements EventObserver {
                 onTilesDisconnected((TilesDisconnectedEvent) event);
                 break;
 
-            case "ArrowModifiedEvent":
-                onArrowModified((ArrowModifiedEvent) event);
-                break;
-
             case "LevelLoadedEvent":
                 EditorUtils.loadLevel(((LevelLoadedEvent) event).getPath());
                 IOManager.getInstance().drawEditor();
@@ -64,49 +56,25 @@ public class Editor implements EventObserver {
                 GameManager.getInstance().onEvent(new SavePathEvent());
                 EditorUtils.saveLevel(((LevelSavedEvent) event).getPath());
                 break;
-
-            case "EnemySelectedEvent":
-            {
-                updateEnemyPath();
-                EnemySelectedEvent enemySelectedEvent = (EnemySelectedEvent) event;
-                currentEnemy = enemySelectedEvent.getSmartEnemy();
-                currentPath = listToPath();
-                /*
-                DefaultMutableTreeNode path = new DefaultMutableTreeNode("Smart entities");
-                path.add(new DefaultMutableTreeNode("Smart enemy ("+enemySelectedEvent.getSmartEnemy().getX()+", "+enemySelectedEvent.getSmartEnemy().getY()+")"));
-                //DefaultMutableTreeNode path = new DefaultMutableTreeNode("Smart enemy ("+enemySelectedEvent.getSmartEnemy().getX()+", "+enemySelectedEvent.getSmartEnemy().getY()+")");
-                referenceTree.getSelectionModel().setSelectionPath(new TreePath(path));
-                */
-
-                IOManager.getInstance().drawEditor();
+            case "EditorChangeEvent":
+                change = true;
                 break;
-            }
-            case "SavePathEvent":
-            {
-                updateEnemyPath();
-                break;
-            }
             case "ChangeLayerEvent":
-            {
                 ChangeLayerEvent chlev = (ChangeLayerEvent) event;
-                ((EditorInputHandler) IOManager.getInstance().getInputHandler()).onEvent(event);
+                IOManager.getInstance().getInputHandler().onEvent((ChangeLayerEvent)event);
                 IOManager.getInstance().drawEditor();
                 break;
-            }
+            case "ArrowModifiedEvent":
+                IOManager.getInstance().getInputHandler().onEvent((ArrowModifiedEvent) event);
+                break;
+            case "EnemySelectedEvent":
+                IOManager.getInstance().getInputHandler().onEvent((EnemySelectedEvent)event);
+                break;
+            case "SavePathEvent":
+                IOManager.getInstance().getInputHandler().onEvent((SavePathEvent)event);
+                break;
 
-            case "EditorStateEvent":
-            {
-                EditorStateEvent est = (EditorStateEvent) event;
-                //layer = est.getLayer();
-                currentEnemy = est.getEnemy();
-                if (currentEnemy != null)
-                    currentPath = listToPath();
-                else
-                    currentPath = null;
-                //mode = est.getMode();
-                IOManager.getInstance().drawEditor();
-                break;
-            }
+
 
             default: return;
         }
@@ -220,35 +188,7 @@ public class Editor implements EventObserver {
         event.getFrom().removeConnection(event.getTo());
         change = true;
     }
-
-    private void onArrowModified(ArrowModifiedEvent event) {
-        if (currentPath!=null) {
-            Arrow arrow = event.getArrow();
-
-            if (event.isRemove()) {
-                arrow = EMPTY;
-            }
-
-            currentPath[event.getX()][event.getY()] = arrow;
-            change = true;
-        }
-    }
-
-    //metody do pathow
-    public EditorGraphics[][] generateEmptyPath()
-    {
-        EditorGraphics[][] path = new EditorGraphics[GameManager.getInstance().getMap().getWidth()][GameManager.getInstance().getMap().getHeight()];
-        for (int i = 0 ; i < path.length ; ++i)
-        {
-            for (int j = 0 ; j < path[0].length ; ++j)
-            {
-                path[i][j] = EMPTY;
-            }
-        }
-
-        return path;
-    }
-
+/*
     public EditorGraphics[][] resizePath()
     {
         EditorGraphics[][] path = new EditorGraphics[GameManager.getInstance().getMap().getWidth()][GameManager.getInstance().getMap().getHeight()];
@@ -267,84 +207,7 @@ public class Editor implements EventObserver {
         return path;
     }
 
-    public EditorGraphics[][] listToPath()
-    {
-        if (currentEnemy != null) {
-            EditorGraphics[][] path = generateEmptyPath();
-            ArrayList<PathTile> pathTiles = currentEnemy.getPathTileList();
-            if (pathTiles != null)
-            {
-                for (PathTile i : pathTiles) {
-                    EditorGraphics arrow = null;
-                    switch (i.getDirection()) {
-                        case UP: {
-                            arrow = ARROW_UP;
-                            break;
-                        }
-                        case DOWN: {
-                            arrow = ARROW_DOWN;
-                            break;
-                        }
-                        case LEFT: {
-                            arrow = ARROW_LEFT;
-                            break;
-                        }
-                        case RIGHT: {
-                            arrow = ARROW_RIGHT;
-                            break;
-                        }
-                    }
-                    if (i.getX() < GameManager.getInstance().getMap().getWidth() && i.getY() < GameManager.getInstance().getMap().getHeight()) {
-                        path[i.getX()][i.getY()] = arrow;
-                    }
-                }
-            }
-            else
-                path = generateEmptyPath();
-            return path;
-        }
-        return null;
-    }
-    public ArrayList<PathTile> pathToList()
-    {
-        ArrayList<PathTile> toReturn = new ArrayList<>();
-        for (int i = 0 ; i < currentPath.length ; ++i)
-        {
-            for (int j = 0 ; j < currentPath[0].length ; ++j)
-            {
-                if (currentPath[i][j] != EMPTY && currentPath[i][j] != null)
-                {
-                    Direction dir;
-                    /*
-                        java: patterns in switch statements are a preview feature and are disabled by default.
-                        (use --enable-preview to enable patterns in switch statements)
-
-                        jak macie cos takiego to zmiencie java machine na najnowsza wersje dodatkowo moze pomoc
-                        zmienienie w ustawieniach projektu wersj
-                     */
-                    switch (currentPath[i][j])
-                    {
-                        case ARROW_UP -> dir = UP;
-                        case ARROW_DOWN -> dir = DOWN;
-                        case ARROW_LEFT -> dir = LEFT;
-                        case ARROW_RIGHT -> dir = RIGHT;
-                        default -> throw new IllegalStateException("Unexpected value: " + currentPath[i][j]);
-                    }
-                    toReturn.add((new PathTile(i, j, dir)));
-                }
-            }
-        }
-        return toReturn;
-    }
-
-    public void updateEnemyPath()
-    {
-        if (currentEnemy != null && currentPath!=null)
-        {
-            currentEnemy.setPathTileList(pathToList());
-        }
-    }
-
+ */
 
     public List<Tile> getTilesInConnectableCategory(ConnectableTile category) {
         ArrayList<Tile> list = new ArrayList<>();
@@ -371,29 +234,4 @@ public class Editor implements EventObserver {
         this.treeModel = treeModel;
     }
 
-    public SmartEnemy getCurrentEnemy() {
-        return currentEnemy;
-    }
-
-    public void setCurrentEnemy(SmartEnemy currentEnemy) {
-        this.currentEnemy = currentEnemy;
-    }
-
-    public EditorGraphics[][] getCurrentPath() {
-        return currentPath;
-    }
-
-    public void setCurrentPath(EditorGraphics[][] currentPath) {
-        this.currentPath = currentPath;
-    }
-    /*
-    public JTree getReferenceTree() {
-        return referenceTree;
-    }
-
-    public void setReferenceTree(JTree referenceTree) {
-        this.referenceTree = referenceTree;
-    }
-
-     */
 }

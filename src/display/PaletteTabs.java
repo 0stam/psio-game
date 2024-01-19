@@ -4,10 +4,8 @@ import IO.IOManager;
 import enums.EditableTile;
 import enums.EditorMode;
 import enums.Layer;
-import event.display.ChangeLayerEvent;
-import event.display.ConnectableTileSelectedEvent;
-import event.display.ModeChangedEvent;
-import event.display.PalettePressedEvent;
+import event.display.*;
+import event.editor.EnemySelectedEvent;
 import event.editor.SavePathEvent;
 import gamemanager.GameManager;
 
@@ -105,9 +103,9 @@ public class PaletteTabs {
 	{
 		EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
 
-		inputHandler.onEvent(new ModeChangedEvent(m));
 		inputHandler.onEvent(new ChangeLayerEvent(Layer.BOTH));
-		GameManager.getInstance().getEditor().setCurrentEnemy(null);
+		inputHandler.onEvent(new ModeChangedEvent(m));
+		GameManager.getInstance().onEvent(new EditorChangeEvent());
 	}
 
 

@@ -36,6 +36,8 @@ public class GraphicsHashtable {
             images.put(SMART, ImageIO.read(new File("src/graphics/enemy_smart.png")));
             images.put(BUTTON_PRESSED, ImageIO.read(new File("src/graphics/button_pressed.png")));
             images.put(BUTTON_RELEASED, ImageIO.read(new File("src/graphics/button_released.png")));
+            images.put(BUTTON_PERMANENT_PRESSED, ImageIO.read(new File("src/graphics/button_permanent_pressed.png")));
+            images.put(BUTTON_PERMANENT_RELEASED, ImageIO.read(new File("src/graphics/button_permanent_released.png")));
             images.put(DOOR_OPEN, ImageIO.read(new File("src/graphics/door_open.png")));
             images.put(DOOR_CLOSED, ImageIO.read(new File("src/graphics/door_closed.png")));
             images.put(GOAL, ImageIO.read(new File("src/graphics/goal.png")));
@@ -47,6 +49,7 @@ public class GraphicsHashtable {
             images.put(ARROW_RIGHT, ImageIO.read(new File("src/graphics/arrow_right.png")));
             images.put(SMART_SELECTED, ImageIO.read(new File("src/graphics/enemy_zmart_selected.png")));
             images.put(BUTTON_SELECTED, ImageIO.read(new File("src/graphics/button_released_selected.png")));
+            images.put(BUTTON_PERMANENT_SELECTED, ImageIO.read(new File("src/graphics/button_permanent_released_selected.png")));
             images.put(ENEMY_SELECTED, ImageIO.read(new File("src/graphics/enemy_selected.png")));
             images.put(OUT_OF_BOUNDS, ImageIO.read(new File("src/graphics/oob.png")));
             images.put(MINUS, ImageIO.read(new File("src/graphics/minus.png")));

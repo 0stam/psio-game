@@ -121,6 +121,8 @@ public class ConsoleIO implements IOStrategy {
 			case SMART -> 'S';
             case BUTTON_PRESSED -> 'v';
             case BUTTON_RELEASED -> '^';
+			case BUTTON_PERMANENT_PRESSED -> 'v';
+			case BUTTON_PERMANENT_RELEASED -> '^';
             case DOOR_OPEN -> 'u';
             case DOOR_CLOSED -> 'n';
             case GOAL -> 'P';

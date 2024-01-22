@@ -6,6 +6,7 @@ public enum EditableTile implements EditorGraphics{
     FLOOR(true, true, Layer.BOTTOM, false,"Floor", Graphics.FLOOR),
     WALL(true, true, Layer.BOTTOM, true,"Wall", Graphics.WALL),
     BUTTON(true, true, Layer.BOTTOM, false, "Button", Graphics.BUTTON_RELEASED),
+    BUTTON_PERMANENT(true, true, Layer.BOTTOM, false, "Permanent Button", Graphics.BUTTON_PERMANENT_RELEASED),
     DOOR(true, true, Layer.BOTTOM, true, "Door", Graphics.DOOR_CLOSED),
     REVERSE(true, true, Layer.BOTTOM, true, "Reverse door", Graphics.DOOR_OPEN),
     ENEMY(false, true, Layer.UPPER, false, "Chasing enemy", Graphics.ENEMY),

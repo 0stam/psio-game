@@ -4,6 +4,7 @@ import IO.IOManager;
 import enums.EditableTile;
 import enums.EditorGraphics;
 import gamemanager.GameManager;
+import tile.ButtonPermanent;
 import tile.ChasingEnemy;
 import tile.SmartEnemy;
 
@@ -57,11 +58,11 @@ public class EditorMapDisplay extends JPanel {
 
                         if (inputHandler.getConnectingTile() != null) {
                             if (GameManager.getInstance().getMap().getBottomLayer(i, j) == inputHandler.getConnectingTile()) {
-                                newBottom = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
+                                newBottom = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : ((inputHandler.getConnectingTile() instanceof ButtonPermanent) ? enums.Graphics.BUTTON_PERMANENT_SELECTED : enums.Graphics.BUTTON_SELECTED));
                             }
 
                             if (GameManager.getInstance().getMap().getUpperLayer(i, j) == inputHandler.getConnectingTile()) {
-                                newUpper = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : enums.Graphics.BUTTON_SELECTED);
+                                newUpper = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : ((inputHandler.getConnectingTile() instanceof ButtonPermanent) ? enums.Graphics.BUTTON_PERMANENT_SELECTED : enums.Graphics.BUTTON_SELECTED));
                             }
                         }
 

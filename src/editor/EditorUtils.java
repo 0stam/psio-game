@@ -33,6 +33,7 @@ public class EditorUtils {
             case DOOR ->  new Door(x, y);
             case REVERSE ->  new ReverseDoor(x, y);
             case BUTTON ->  new Button(x, y);
+            case BUTTON_PERMANENT ->  new ButtonPermanent(x, y);
             default ->  null;
         };
     }
@@ -45,6 +46,7 @@ public class EditorUtils {
         return switch (tile.getClass().getSimpleName()) {
             case "Box" -> BOX;
             case "Button" -> BUTTON;
+            case "ButtonPermanent" -> BUTTON_PERMANENT;
             case "ChasingEnemy" -> ENEMY;
             case "MimicEnemy" -> MIMIC;
             case "SmartEnemy" -> SMART;
@@ -67,6 +69,7 @@ public class EditorUtils {
         return switch (tile.getClass().getSimpleName())
         {
             case "Button" -> ConnectableTile.BUTTON;
+            case "ButtonPermanent" -> ConnectableTile.BUTTON_PERMANENT;
             case "ChasingEnemy" -> ConnectableTile.ENEMY;
             default -> ConnectableTile.DEFAULT;
         };

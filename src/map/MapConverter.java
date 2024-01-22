@@ -23,6 +23,7 @@ public class MapConverter {
 
 		graphicsConvert.put("Box", EditableTile.BOX);
 		graphicsConvert.put("Button", EditableTile.BUTTON);
+		graphicsConvert.put("ButtonPermanent", EditableTile.BUTTON_PERMANENT);
 		graphicsConvert.put("ChasingEnemy", EditableTile.ENEMY);
 		graphicsConvert.put("MimicEnemy", EditableTile.MIMIC);
 		graphicsConvert.put("SmartEnemy", EditableTile.SMART);
@@ -119,6 +120,7 @@ public class MapConverter {
 				switch (map.getBottom(i, j)) {
 					case BOX -> result.setBottomLayer(i, j, new Box(i, j));
 					case BUTTON -> result.setBottomLayer(i, j, new Button(i, j));
+					case BUTTON_PERMANENT -> result.setBottomLayer(i, j, new ButtonPermanent(i, j));
 					case ENEMY -> result.setBottomLayer(i, j, new ChasingEnemy(i, j, null));
 					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
@@ -137,6 +139,7 @@ public class MapConverter {
 				switch (map.getTop(i, j)) {
 					case BOX -> result.setUpperLayer(i, j, new Box(i, j));
 					case BUTTON -> result.setUpperLayer(i, j, new Button(i, j));
+					case BUTTON_PERMANENT -> result.setUpperLayer(i, j, new ButtonPermanent(i, j));
 					case ENEMY -> result.setUpperLayer(i, j, new ChasingEnemy(i, j, null));
 					case MIMIC -> result.setUpperLayer(i, j, new MimicEnemy(i, j));
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
@@ -293,7 +296,7 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case BUTTON, ENEMY -> {return true;}
+			case BUTTON, ENEMY, BUTTON_PERMANENT -> {return true;}
 		}
 		return false;
 	}

@@ -1,4 +1,4 @@
-package event;
+package event.game;
 
 import enums.Direction;
 

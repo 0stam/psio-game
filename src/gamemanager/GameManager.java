@@ -1,13 +1,20 @@
 package gamemanager;
+import IO.GraphicIO;
 import IO.IOManager;
+import display.PopupClass;
 import editor.Editor;
 import enums.Direction;
 import event.display.ChangeLayerEvent;
 import event.editor.EditorEvent;
 import event.editor.EditorSelectedEvent;
+import event.game.*;
+import event.InputEvent;
+import event.game.ResetEvent;
 import levelloader.*;
 import map.Map;
 import event.*;
+
+import javax.swing.*;
 
 public class GameManager implements EventObserver {
     private static GameManager gameManager;
@@ -16,6 +23,8 @@ public class GameManager implements EventObserver {
     private boolean levelCompleted;
     private int currentLevel;
     private boolean endLevel = false;
+
+    private Popup currentPopup;
 
     private GameManager() {
 
@@ -26,34 +35,6 @@ public class GameManager implements EventObserver {
             gameManager = new GameManager();
         }
         return gameManager;
-    }
-
-    public void saveExampleLevel(){
-         //Tworzenie mapy do pozniejszego zapisu
-        Map map = new Map(10, 10);
-        levelCompleted = false;
-
-        map.setupMap();
-
-        this.map = map;
-
-        try {
-            LevelLoader.saveLevel("test2", this.map);
-        } catch (LevelNotSaved e) {
-            e.printStackTrace();
-        }
-        System.out.println(LevelLoader.getLevelCount());
-
-        //Wczytywanie zapisanej mapy
-        /*Map map = null;
-        try {
-            map = LevelLoader.loadLevel(1);
-        } catch (LevelNotLoaded e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        levelCompleted=false;
-        this.map=map;*/
     }
 
     public void startLevel(int index) {
@@ -100,6 +81,8 @@ public class GameManager implements EventObserver {
     }
 
     public void onEvent(Event event) {
+
+        //???????????????????
         if (!(event instanceof InputEvent)) {
             return;
         }
@@ -117,10 +100,18 @@ public class GameManager implements EventObserver {
         if (event instanceof EscapeEvent) {
             editor = null;
             IOManager.getInstance().drawMenu();
+            if (currentPopup != null) {
+                currentPopup.hide();
+                currentPopup = null;
+            }
         }
 
         if (event instanceof LevelSelectedEvent levelSelectedEvent) {
             startLevel(levelSelectedEvent.getIndex());
+            if (currentPopup != null) {
+                currentPopup.hide();
+                currentPopup = null;
+            }
             return;
         }
 
@@ -138,8 +129,28 @@ public class GameManager implements EventObserver {
             return;
         }
 
+        if (event instanceof PopupEvent) {
+            System.out.println('a');
+            JFrame frame = ((GraphicIO)IOManager.getInstance().getStrategy()).getWindow();
+            currentPopup = new PopupFactory().getPopup(frame, ((PopupEvent)event).getPopupClass(), (int) (frame.getLocationOnScreen().x + 0.05 * frame.getWidth()), frame.getLocationOnScreen().y + frame.getHeight() / 2);
+            currentPopup.show();
+            return;
+        }
+
+        if (event instanceof PopupResetEvent) {
+            System.out.println('b');
+            if (currentPopup != null) {
+                currentPopup.hide();
+                currentPopup = null;
+            }
+        }
+
         if (event instanceof ResetEvent) {
             resetLevel();
+            if (currentPopup != null) {
+                currentPopup.hide();
+                currentPopup = null;
+            }
             return;
         }
     }

@@ -1,7 +1,6 @@
 package display;
 
-import IO.IOManager;
-import event.EscapeEvent;
+import event.game.EscapeEvent;
 import gamemanager.GameManager;
 
 import javax.swing.*;

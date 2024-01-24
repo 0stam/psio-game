@@ -43,6 +43,11 @@ public class GraphicsHashtable {
             images.put(GOAL, ImageIO.read(new File("src/graphics/goal.png")));
             images.put(DEFAULT, ImageIO.read(new File("src/graphics/default.png")));
             images.put(EMPTY, ImageIO.read(new File("src/graphics/empty.png")));
+            images.put(ONEWAY_UP, ImageIO.read(new File("src/graphics/oneway_up.png")));
+            images.put(ONEWAY_DOWN, ImageIO.read(new File("src/graphics/oneway_down.png")));
+            images.put(ONEWAY_LEFT, ImageIO.read(new File("src/graphics/oneway_left.png")));
+            images.put(ONEWAY_RIGHT, ImageIO.read(new File("src/graphics/oneway_right.png")));
+            images.put(SIGN, ImageIO.read(new File("src/graphics/sign.png")));
             images.put(ARROW_UP, ImageIO.read(new File("src/graphics/arrow_up.png")));
             images.put(ARROW_DOWN, ImageIO.read(new File("src/graphics/arrow_down.png")));
             images.put(ARROW_LEFT, ImageIO.read(new File("src/graphics/arrow_left.png")));

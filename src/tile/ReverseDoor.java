@@ -3,7 +3,7 @@ package tile;
 import enterablestrategy.Empty;
 import enterablestrategy.Solid;
 import enums.Graphics;
-import event.ButtonEvent;
+import event.game.ButtonEvent;
 import event.Event;
 import event.EventObserver;
 

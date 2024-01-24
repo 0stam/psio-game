@@ -1,4 +1,6 @@
-package event;
+package event.game;
+
+import event.InputEvent;
 
 public class LevelSelectedEvent extends InputEvent {
     private final int index;

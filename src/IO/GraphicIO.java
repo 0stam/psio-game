@@ -44,7 +44,7 @@ public class GraphicIO implements IOStrategy {
 			window.getContentPane().removeAll();
 
 			editorDisplay = null;
-			inputHandler = null;
+			inputHandler = new GameEventHandler();
 			menuDisplay = null;
 
 			gameDisplay = new GameMapDisplay();
@@ -87,7 +87,6 @@ public class GraphicIO implements IOStrategy {
 		}
 	}
 
-	//gotowy placeholder
 	public void drawMenu() {
 		if (window == null) {
 			createWindow();

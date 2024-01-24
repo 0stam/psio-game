@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+import static enums.Direction.*;
 import static enums.Graphics.*;
 
 public class MapConverter {
@@ -34,6 +35,7 @@ public class MapConverter {
 		graphicsConvert.put("Goal", EditableTile.GOAL);
 		graphicsConvert.put("PlayerCharacter", EditableTile.PLAYER);
 		graphicsConvert.put("Wall", EditableTile.WALL);
+		graphicsConvert.put("Sign", EditableTile.SIGN);
 
 		NewRawMap result = new NewRawMap(map.getWidth(), map.getHeight());
 		RawConnection connection;
@@ -42,7 +44,17 @@ public class MapConverter {
 		for (int i = 0;i < map.getWidth();i++) {
 			for (int j = 0;j < map.getHeight();j++) {
 				if (map.getBottomLayer(i, j) != null) {
-					result.setBottom(i, j, graphicsConvert.get(map.getBottomLayer(i, j).getClass().getSimpleName()));
+					if (map.getBottomLayer(i, j) instanceof OnewayFloor) {
+						switch (((OnewayFloor)map.getBottomLayer(i, j)).getDirection()) {
+							case UP -> result.setBottom(i, j, EditableTile.ONEWAY_UP);
+							case DOWN -> result.setBottom(i, j, EditableTile.ONEWAY_DOWN);
+							case LEFT -> result.setBottom(i, j, EditableTile.ONEWAY_LEFT);
+							case RIGHT -> result.setBottom(i, j, EditableTile.ONEWAY_RIGHT);
+							default -> result.setBottom(i, j, EditableTile.ONEWAY_UP);
+						}
+					} else {
+						result.setBottom(i, j, graphicsConvert.get(map.getBottomLayer(i, j).getClass().getSimpleName()));
+					}
 
 					if (isConnectableTile(result.getBottom(i, j))) {
 						connection = new RawConnection();
@@ -74,7 +86,18 @@ public class MapConverter {
 				}
 
 				if (map.getUpperLayer(i, j) != null) {
-					result.setTop(i, j, graphicsConvert.get(map.getUpperLayer(i, j).getClass().getSimpleName()));
+
+					if (map.getUpperLayer(i, j) instanceof OnewayFloor) {
+						switch (((OnewayFloor)map.getUpperLayer(i, j)).getDirection()) {
+							case UP -> result.setTop(i, j, EditableTile.ONEWAY_UP);
+							case DOWN -> result.setTop(i, j, EditableTile.ONEWAY_DOWN);
+							case LEFT -> result.setTop(i, j, EditableTile.ONEWAY_LEFT);
+							case RIGHT -> result.setTop(i, j, EditableTile.ONEWAY_RIGHT);
+							default -> result.setTop(i, j, EditableTile.ONEWAY_UP);
+						}
+					} else {
+						result.setTop(i, j, graphicsConvert.get(map.getUpperLayer(i, j).getClass().getSimpleName()));
+					}
 
 					if (isConnectableTile(result.getTop(i, j))) {
 						connection = new RawConnection();
@@ -127,7 +150,12 @@ public class MapConverter {
 					case DOOR -> result.setBottomLayer(i, j, new Door(i, j));
 					case REVERSE -> result.setBottomLayer(i, j, new ReverseDoor(i, j));
 					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
+					case ONEWAY_UP -> result.setBottomLayer(i, j, new OnewayFloor(i, j, UP));
+					case ONEWAY_DOWN -> result.setBottomLayer(i, j, new OnewayFloor(i, j, DOWN));
+					case ONEWAY_LEFT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, LEFT));
+					case ONEWAY_RIGHT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, RIGHT));
 					case DANGER -> result.setBottomLayer(i, j, new DangerFloor(i, j));
+					case SIGN -> result.setBottomLayer(i, j, new Sign(i, j));
 					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
 						result.setBottomLayer(i, j, new PlayerCharacter(i, j));
@@ -145,7 +173,12 @@ public class MapConverter {
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR -> result.setUpperLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
+					case ONEWAY_UP -> result.setUpperLayer(i, j, new OnewayFloor(i, j, UP));
+					case ONEWAY_DOWN -> result.setUpperLayer(i, j, new OnewayFloor(i, j, DOWN));
+					case ONEWAY_LEFT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, LEFT));
+					case ONEWAY_RIGHT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, RIGHT));
 					case DANGER -> result.setUpperLayer(i, j, new DangerFloor(i, j));
+					case SIGN -> result.setUpperLayer(i, j, new Sign(i, j));
 					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
 						result.setUpperLayer(i, j, new PlayerCharacter(i, j));
@@ -203,6 +236,10 @@ public class MapConverter {
 					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
 					case DOOR_CLOSED -> result.setBottomLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
+					case ONEWAY_UP -> result.setBottomLayer(i, j, new OnewayFloor(i, j, UP));
+					case ONEWAY_DOWN -> result.setBottomLayer(i, j, new OnewayFloor(i, j, DOWN));
+					case ONEWAY_LEFT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, LEFT));
+					case ONEWAY_RIGHT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, RIGHT));
 					case DANGER -> result.setBottomLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
@@ -220,6 +257,10 @@ public class MapConverter {
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR_CLOSED -> result.setUpperLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
+					case ONEWAY_UP -> result.setUpperLayer(i, j, new OnewayFloor(i, j, UP));
+					case ONEWAY_DOWN -> result.setUpperLayer(i, j, new OnewayFloor(i, j, DOWN));
+					case ONEWAY_LEFT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, LEFT));
+					case ONEWAY_RIGHT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, RIGHT));
 					case DANGER -> result.setUpperLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));
 					case PLAYER -> {

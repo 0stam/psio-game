@@ -129,6 +129,7 @@ public class MapState implements Serializable, Cloneable {
         // Is field enterable
         if (GameManager.getInstance().getMap().checkEnterable(x+ direction.x, y + direction.y, direction, movedTile))
         {
+            emptiedTile.onExited(direction, movedTile);
             destinationTileBottom.onEntered(direction, movedTile);
             if (destinationTileUpper != null)
             {
@@ -139,7 +140,6 @@ public class MapState implements Serializable, Cloneable {
             deleteUpperLayer(x + direction.x, y + direction.y);
 
             // Trigger onExited method
-            emptiedTile.onExited(direction, movedTile);
 
             // Move tile
             setUpperLayer(x + direction.x, y + direction.y, movedTile);

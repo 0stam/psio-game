@@ -4,12 +4,10 @@ import connectableinterface.Connectable;
 import enterablestrategy.Empty;
 import enums.Graphics;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 
-import event.ButtonEvent;
+import event.game.ButtonEvent;
 import event.EventObserver;
 import event.EventSource;
 import enums.Direction;

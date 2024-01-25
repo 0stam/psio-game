@@ -2,17 +2,17 @@ package display;
 
 import IO.IOManager;
 import connectableinterface.Connectable;
-import editor.TreeModel;
+import editor.EnemiesTreeModel;
+import editor.SignsTreeModel;
 import enums.*;
 import event.Event;
 import event.EventObserver;
 import event.display.*;
 import event.editor.*;
 import gamemanager.GameManager;
+import tile.Sign;
 import tile.SmartEnemy;
 import tile.Tile;
-
-import java.nio.file.Path;
 
 import static enums.Arrow.*;
 
@@ -33,7 +33,10 @@ public class EditorInputHandler implements EventObserver {
     // Current enemy and tree model for pathedit
     private SmartEnemy currentEnemy;
     private EditorGraphics[][] currentPath;
-    private TreeModel treeModel;
+    private EnemiesTreeModel enemiesTreeModel;
+
+    private Sign currentSign;
+    private SignsTreeModel signsTreeModel;
 
     @Override
     public void onEvent(Event event) {
@@ -68,6 +71,9 @@ public class EditorInputHandler implements EventObserver {
 
             case "EnemySelectedEvent":
                 onEnemySelected((EnemySelectedEvent) event);
+                break;
+            case "SignSelectedEvent":
+                onSignSelected((SignSelectedEvent) event);
                 break;
             case "SavePathEvent":
                 onEnemySaved((SavePathEvent) event);
@@ -112,6 +118,7 @@ public class EditorInputHandler implements EventObserver {
             case ADD:
                 currentEnemy = null;
                 currentPath = null;
+                currentSign = null;
                 heldTile = EditableTile.EMPTY;
                 break;
             case SELECT, PATHEDIT:
@@ -143,6 +150,15 @@ public class EditorInputHandler implements EventObserver {
         currentEnemy = event.getSmartEnemy();
         if (currentEnemy != null)
             currentPath = PathEditorHelper.listToPath(currentEnemy);
+
+        GameManager.getInstance().onEvent(new EditorChangeEvent());
+    }
+
+    private void onSignSelected(SignSelectedEvent event) {
+        mode = EditorMode.TEXTEDIT;
+        layer = Layer.BOTH;
+
+        currentSign = event.getSign();
 
         GameManager.getInstance().onEvent(new EditorChangeEvent());
     }
@@ -194,10 +210,14 @@ public class EditorInputHandler implements EventObserver {
         return currentEnemy;
     }
 
-    public TreeModel getTreeModel() {
-        return treeModel;
+    public EnemiesTreeModel getEnemiesTreeModel() {
+        return enemiesTreeModel;
     }
     public EditorGraphics[][] getCurrentPath() {
         return currentPath;
+    }
+
+    public Sign getCurrentSign() {
+        return currentSign;
     }
 }

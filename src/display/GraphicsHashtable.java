@@ -56,6 +56,7 @@ public class GraphicsHashtable {
             images.put(BUTTON_SELECTED, ImageIO.read(new File("src/graphics/button_released_selected.png")));
             images.put(BUTTON_PERMANENT_SELECTED, ImageIO.read(new File("src/graphics/button_permanent_released_selected.png")));
             images.put(ENEMY_SELECTED, ImageIO.read(new File("src/graphics/enemy_selected.png")));
+            images.put(SIGN_SELECTED, ImageIO.read(new File("src/graphics/sign_selected.png")));
             images.put(OUT_OF_BOUNDS, ImageIO.read(new File("src/graphics/oob.png")));
             images.put(MINUS, ImageIO.read(new File("src/graphics/minus.png")));
         } catch (IOException e) {

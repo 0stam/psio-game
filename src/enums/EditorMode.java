@@ -5,5 +5,7 @@ public enum EditorMode {
 	ADD,
 	CONNECT,
 	PATHEDIT,
-	SELECT
+	SELECT,
+	MESSAGES,
+	TEXTEDIT
 }

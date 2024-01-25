@@ -101,14 +101,14 @@ public class EditorUtils {
     public static void loadLevel(String path) {
         try {
             GameManager.getInstance().setMap(LevelLoader.loadLevel(path));
-            GameManager.getInstance().getEditor().setTreeModel(new editor.TreeModel());
+            GameManager.getInstance().getEditor().setEnemiesTreeModel(new EnemiesTreeModel());
             for (int i = 0 ; i < GameManager.getInstance().getMap().getWidth() ; ++i)
             {
                 for (int j = 0 ; j < GameManager.getInstance().getMap().getHeight() ; ++j)
                 {
                     if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy)
                     {
-                        GameManager.getInstance().getEditor().getTreeModel().addNode("Smart enemy ("+i+", "+j+")");
+                        GameManager.getInstance().getEditor().getEnemiesTreeModel().addNode("Smart enemy ("+i+", "+j+")");
                     }
                 }
             }

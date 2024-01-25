@@ -66,6 +66,16 @@ public class EditorMapDisplay extends JPanel {
                             }
                         }
 
+                        if (inputHandler.getCurrentSign() != null) {
+                            if (GameManager.getInstance().getMap().getBottomLayer(i, j) == inputHandler.getCurrentSign()) {
+                                newBottom = enums.Graphics.SIGN_SELECTED;
+                            }
+
+                            if (GameManager.getInstance().getMap().getUpperLayer(i, j) == inputHandler.getCurrentSign()) {
+                                newUpper = enums.Graphics.SIGN_SELECTED;
+                            }
+                        }
+
                         mapTiles[i][j].updateGraphics(newBottom, null, newUpper);
                     }
                 }

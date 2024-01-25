@@ -28,7 +28,7 @@ public class PathEditPalette extends JPanel{
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
         splitPane.setResizeWeight(0.4f);
 
-        jTree = new JTree(GameManager.getInstance().getEditor().getTreeModel().getDefaultTreeModel());
+        jTree = new JTree(GameManager.getInstance().getEditor().getEnemiesTreeModel().getDefaultTreeModel());
         //roamingEnemyTree.setEditable(true);
         jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.setShowsRootHandles(true);

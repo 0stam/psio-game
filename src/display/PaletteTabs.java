@@ -19,6 +19,7 @@ public class PaletteTabs {
 	private TilePalette tilePalette;
 	private ConnectionsPalette connectionsPalette;
 	private PathEditPalette pathEditPalette;
+	private MessagesPalette messagesPalette;
 	private ToolPalette toolPalette;
 	//trzeba to przemyslec, na razie zrobie tak
 	public PaletteTabs (ToolPalette toolPalette) {
@@ -28,10 +29,12 @@ public class PaletteTabs {
 		tilePalette = new TilePalette(EditableTile.values());
 		connectionsPalette = new ConnectionsPalette();
 		pathEditPalette = new PathEditPalette();
+		messagesPalette = new MessagesPalette();
 
 		tabs.addTab("", new ImageIcon("src/graphics/tool_tiles.png"), tilePalette, "Tiles");
 		tabs.addTab("", new ImageIcon("src/graphics/tool_connect.png"), connectionsPalette, "Connections");
 		tabs.addTab("", new ImageIcon("src/graphics/tool_path.png"), pathEditPalette, "Pathedit");
+		tabs.addTab("", new ImageIcon("src/graphics/tool_message.png"), messagesPalette, "Messages");
 
 		tabs.addChangeListener(new ModeListener());
 	}
@@ -84,6 +87,17 @@ public class PaletteTabs {
 					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
 					pathEditPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
+					tilePalette.selectOne(tilePalette.buttons.get(0));
+					IOManager.getInstance().drawEditor();
+					break;
+				}
+				case "Messages":
+				{
+					resetState(EditorMode.MESSAGES);
+					//zrobic cos madrzejszego pozniej
+					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
+					messagesPalette.getTree().clearSelection();
+					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
 					tilePalette.selectOne(tilePalette.buttons.get(0));
 					IOManager.getInstance().drawEditor();
 					break;

@@ -8,7 +8,7 @@ public enum EditableTile implements EditorGraphics{
     ONEWAY_DOWN(true, true, Layer.BOTTOM, false,"Oneway floor (down)", Graphics.ONEWAY_DOWN),
     ONEWAY_LEFT(true, true, Layer.BOTTOM, false,"Oneway floor (left)", Graphics.ONEWAY_LEFT),
     ONEWAY_RIGHT(true, true, Layer.BOTTOM, false,"Oneway floor (right)", Graphics.ONEWAY_RIGHT),
-    SIGN(true, true, Layer.BOTTOM, false,"Sign", Graphics.SIGN),
+    SIGN(true, false, Layer.BOTTOM, false,"Sign", Graphics.SIGN),
     WALL(true, true, Layer.BOTTOM, true,"Wall", Graphics.WALL),
     BUTTON(true, true, Layer.BOTTOM, false, "Button", Graphics.BUTTON_RELEASED),
     BUTTON_PERMANENT(true, true, Layer.BOTTOM, false, "Permanent Button", Graphics.BUTTON_PERMANENT_RELEASED),

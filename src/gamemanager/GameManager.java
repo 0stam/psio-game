@@ -130,7 +130,6 @@ public class GameManager implements EventObserver {
         }
 
         if (event instanceof PopupEvent) {
-            System.out.println('a');
             JFrame frame = ((GraphicIO)IOManager.getInstance().getStrategy()).getWindow();
             currentPopup = new PopupFactory().getPopup(frame, ((PopupEvent)event).getPopupClass(), (int) (frame.getLocationOnScreen().x + 0.05 * frame.getWidth()), frame.getLocationOnScreen().y + frame.getHeight() / 2);
             currentPopup.show();
@@ -138,7 +137,6 @@ public class GameManager implements EventObserver {
         }
 
         if (event instanceof PopupResetEvent) {
-            System.out.println('b');
             if (currentPopup != null) {
                 currentPopup.hide();
                 currentPopup = null;

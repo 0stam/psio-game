@@ -1,7 +1,6 @@
 package editor;
 
 import IO.IOManager;
-import display.EditorInputHandler;
 import enums.*;
 import event.*;
 import event.display.ChangeLayerEvent;
@@ -12,9 +11,7 @@ import gamemanager.GameManager;
 import java.util.List;
 import java.util.ArrayList;
 
-import static enums.Arrow.*;
 import static enums.Arrow.EMPTY;
-import static enums.Direction.*;
 import static enums.EditableTile.*;
 import static enums.Layer.UPPER;
 
@@ -24,13 +21,15 @@ public class Editor implements EventObserver {
     // Variables required for the logic to work
     private boolean change;
     private int playerCount;
-    private TreeModel treeModel;
+    private EnemiesTreeModel enemiesTreeModel;
+    private SignsTreeModel signsTreeModel;
 
     public Editor() {
         change=false;
         EditorUtils.setDefaultMap(10, 10);
         playerCount = 1;
-        treeModel = new TreeModel();
+        enemiesTreeModel = new EnemiesTreeModel();
+        signsTreeModel = new SignsTreeModel();
     }
 
     public void onEvent(Event event) {
@@ -69,6 +68,9 @@ public class Editor implements EventObserver {
                 break;
             case "EnemySelectedEvent":
                 IOManager.getInstance().getInputHandler().onEvent((EnemySelectedEvent)event);
+                break;
+            case "SignSelectedEvent":
+                IOManager.getInstance().getInputHandler().onEvent((SignSelectedEvent)event);
                 break;
             case "SavePathEvent":
                 IOManager.getInstance().getInputHandler().onEvent((SavePathEvent)event);
@@ -119,7 +121,11 @@ public class Editor implements EventObserver {
                         Tile mapTile = GameManager.getInstance().getMap().getUpperLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
-                                treeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                break;
+                            }
+                            case SIGN: {
+                                signsTreeModel.removeNode("Sign (" + x + ", " + y + ")");
                                 break;
                             }
                             //moze w przyszlosci bedzie wiecej
@@ -131,7 +137,11 @@ public class Editor implements EventObserver {
 
                         switch (tile) {
                             case SMART: {
-                                treeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                break;
+                            }
+                            case SIGN: {
+                                signsTreeModel.addNode("Sign (" + x + ", " + y + ")");
                                 break;
                             }
                             case PLAYER: {
@@ -153,8 +163,31 @@ public class Editor implements EventObserver {
                         tile = FLOOR;
                     }
                     if (tile.isPlaceableBottom && tile != EditorUtils.objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x, y))) {
+                        Tile mapTile = GameManager.getInstance().getMap().getBottomLayer(x, y);
+                        switch (EditorUtils.objectToEditable(mapTile)) {
+                            case SMART: {
+                                enemiesTreeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                break;
+                            }
+                            case SIGN: {
+                                signsTreeModel.removeNode("Sign (" + x + ", " + y + ")");
+                                break;
+                            }
+                            //moze w przyszlosci bedzie wiecej
+                        }
                         GameManager.getInstance().getMap().setBottomLayer(x, y, EditorUtils.editableToObject(tile, x, y));
                         change = true;
+                        switch (tile) {
+                            case SMART: {
+                                enemiesTreeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                break;
+                            }
+                            case SIGN: {
+                                signsTreeModel.addNode("Sign (" + x + ", " + y + ")");
+                                break;
+                            }
+                            //moze w przyszlosci bedzie wiecej
+                        }
                     }
                 }
                 break;
@@ -226,12 +259,19 @@ public class Editor implements EventObserver {
         return list;
     }
 
-    public TreeModel getTreeModel() {
-        return treeModel;
+    public EnemiesTreeModel getEnemiesTreeModel() {
+        return enemiesTreeModel;
     }
 
-    public void setTreeModel(TreeModel treeModel) {
-        this.treeModel = treeModel;
+    public void setEnemiesTreeModel(EnemiesTreeModel enemiesTreeModel) {
+        this.enemiesTreeModel = enemiesTreeModel;
     }
 
+    public SignsTreeModel getSignsTreeModel() {
+        return signsTreeModel;
+    }
+
+    public void setSignsTreeModel(SignsTreeModel signsTreeModel) {
+        this.signsTreeModel = signsTreeModel;
+    }
 }

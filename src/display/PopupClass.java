@@ -8,14 +8,14 @@ import java.awt.*;
 
 public class PopupClass extends JPanel {
 	String textBuffer = "";
-	JTextArea textArea = new JTextArea("Empty");
+	JLabel textArea = new JLabel("Empty");
 	public PopupClass(){
 		init();
 	}
 	public PopupClass(String buffer)
 	{
 		textBuffer = buffer;
-		textArea = new JTextArea(buffer);
+		textArea = new JLabel(buffer);
 		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 40));
 		textArea.setBackground(new Color(0, 0, 0, 0));
 		this.setBackground(new Color(255, 255, 255));

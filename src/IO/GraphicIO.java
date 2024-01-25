@@ -28,6 +28,8 @@ public class GraphicIO implements IOStrategy {
 
 		window = new JFrame("Nasza cudowna gra");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//window.setUndecorated(true);
 		window.setVisible(true);
 		window.setIconImage(new ImageIcon("src/graphics/icon.png").getImage());
 		//i tak nie ma sensu robic mniejszego

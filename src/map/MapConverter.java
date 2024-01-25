@@ -36,6 +36,7 @@ public class MapConverter {
 		graphicsConvert.put("PlayerCharacter", EditableTile.PLAYER);
 		graphicsConvert.put("Wall", EditableTile.WALL);
 		graphicsConvert.put("Sign", EditableTile.SIGN);
+		graphicsConvert.put("Teleport", EditableTile.TELEPORT);
 
 		NewRawMap result = new NewRawMap(map.getWidth(), map.getHeight());
 		RawConnection connection;
@@ -179,6 +180,7 @@ public class MapConverter {
 						playerPos = new Point(i, j);
 					}
 					case WALL -> result.setBottomLayer(i, j, new Wall(i, j));
+					case TELEPORT -> result.setBottomLayer(i, j, new Teleport(i, j));
 				}
 
 				switch (map.getTop(i, j)) {
@@ -202,6 +204,7 @@ public class MapConverter {
 						playerPos = new Point(i, j);
 					}
 					case WALL -> result.setUpperLayer(i, j, new Wall(i, j));
+					case TELEPORT -> result.setUpperLayer(i, j, new Teleport(i, j));
 				}
 			}
 		}
@@ -364,7 +367,7 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case BUTTON, ENEMY, BUTTON_PERMANENT -> {return true;}
+			case BUTTON, ENEMY, BUTTON_PERMANENT, TELEPORT -> {return true;}
 		}
 		return false;
 	}

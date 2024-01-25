@@ -31,9 +31,7 @@ public class Teleporting implements EnterableStrategy {
             return;
         }
 
-        Map map = GameManager.getInstance().getMap();
-        map.deleteUpperLayer(tile.getX(), tile.getY());
-        map.setUpperLayer(target.getX(), target.getY(), tile);
+        GameManager.getInstance().getMap().teleport(tile.getX(), tile.getY(), target.getX(), target.getY());
     }
 
     @Override

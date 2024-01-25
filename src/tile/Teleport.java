@@ -49,6 +49,10 @@ public class Teleport extends Tile implements Connectable {
 
     @Override
     public HashSet<Tile> getConnections() {
+        if (getTarget() == null) {
+            return null;
+        }
+
         HashSet<Tile> result = new HashSet<>();
         result.add(getTarget());
         return result;

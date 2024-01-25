@@ -13,6 +13,7 @@ import event.game.ResetEvent;
 import levelloader.*;
 import map.Map;
 import event.*;
+import tile.Teleport;
 
 import javax.swing.*;
 

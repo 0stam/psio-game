@@ -75,6 +75,10 @@ public class Map implements Serializable{
         nextMapState.move(x, y, direction);
     }
 
+    public void teleport(int startX, int startY, int targetX, int targetY) {
+        nextMapState.teleport(startX, startY, targetX, targetY);
+    }
+
     public void startTurn(Direction direction) {
         currentMapState = nextMapState.clone();
         if (nextMapState.update(direction)) {

@@ -22,7 +22,8 @@ public class Teleporting implements EnterableStrategy {
             return true;
         }
 
-        return GameManager.getInstance().getMap().checkEnterable(target.getX(), target.getY(), Direction.DEFAULT, tile);
+        Tile targetUpperTile = GameManager.getInstance().getMap().getUpperLayer(target.getX(), target.getY());
+        return targetUpperTile == null || targetUpperTile.isEnterable(Direction.DEFAULT, tile);
     }
 
     @Override

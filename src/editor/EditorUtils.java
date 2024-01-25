@@ -15,6 +15,10 @@ import static enums.EditableTile.WALL;
 
 public class EditorUtils {
     public static Tile editableToObject(EditableTile editableTile, int x, int y) {
+        if (editableTile == ENEMY && GameManager.getInstance().getMap() == null) {
+            return new ChasingEnemy(x, y, null);
+        }
+
         return switch (editableTile) {
             case BOX ->  new Box(x, y);
             case GOAL ->  new Goal(x, y);

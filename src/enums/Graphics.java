@@ -25,6 +25,7 @@ public enum Graphics {
 	ONEWAY_LEFT,
 	ONEWAY_RIGHT,
 	SIGN,
+	TELEPORT,
 	ARROW_UP,
 	ARROW_DOWN,
 	ARROW_LEFT,

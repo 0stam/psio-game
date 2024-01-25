@@ -104,8 +104,8 @@ public class MapState implements Serializable, Cloneable {
     }
 
     protected void updateActionTiles() {
-        actionTiles.removeAll(actionTilesToRemove);
         actionTiles.addAll(actionTilesToAdd);
+        actionTiles.removeAll(actionTilesToRemove);
         Collections.sort(actionTiles, Collections.reverseOrder());
 
         actionTilesToAdd = new ArrayList<>();
@@ -130,11 +130,11 @@ public class MapState implements Serializable, Cloneable {
         if (GameManager.getInstance().getMap().checkEnterable(x+ direction.x, y + direction.y, direction, movedTile))
         {
             emptiedTile.onExited(direction, movedTile);
-            destinationTileBottom.onEntered(direction, movedTile);
             if (destinationTileUpper != null)
             {
                 destinationTileUpper.onEntered(direction, movedTile);
             }
+            destinationTileBottom.onEntered(direction, movedTile);
 
             // In case we are moving on an object, delete it
             deleteUpperLayer(x + direction.x, y + direction.y);
@@ -151,15 +151,17 @@ public class MapState implements Serializable, Cloneable {
         }
     }
 
-    public void teleport(int startX, int startY, int targetX, int targetY) {
+    public void teleport(int startX, int startY, int targetX, int targetY, Direction direction) {
         Tile teleportedTile = upperLayer[startX][startY];
 
         deleteUpperLayer(targetX, targetY);
         upperLayer[targetX][targetY] = teleportedTile;
-        upperLayer[startX][startY] = null;
-
         teleportedTile.setX(targetX);
         teleportedTile.setY(targetY);
+
+        upperLayer[startX][startY] = null;
+        deleteUpperLayer(startX + direction.x, startY + direction.y);
+        System.out.println((startX + direction.x) + "  " + (startY + direction.y));
     }
 
     public boolean checkEnterable(int x, int y, Direction direction, Tile tile)

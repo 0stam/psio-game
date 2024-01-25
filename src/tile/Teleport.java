@@ -15,7 +15,7 @@ public class Teleport extends Tile implements Connectable {
         super(x, y);
 
         setEnterableStrategy(new Teleporting());
-        setGraphicsID(Graphics.DEFAULT);
+        setGraphicsID(Graphics.TELEPORT);
     }
 
     private void setTarget(Tile tile) {

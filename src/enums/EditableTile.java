@@ -20,7 +20,7 @@ public enum EditableTile implements EditorGraphics{
     BOX(false, true, Layer.UPPER, false,"Box", Graphics.BOX),
     PLAYER(false, true, Layer.UPPER, false,"Player", Graphics.PLAYER),
     GOAL(true, true, Layer.BOTTOM, false,"Goal", Graphics.GOAL),
-    TELEPORT(true, true, Layer.BOTTOM, false, "Teleport", Graphics.DEFAULT);
+    TELEPORT(true, true, Layer.BOTTOM, false, "Teleport", Graphics.TELEPORT);
 
     public final boolean isPlaceableBottom;
     public final boolean isPlaceableUpper;

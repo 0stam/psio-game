@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 public class MessagesPalette extends JPanel{
 	private JSplitPane splitPane;
 	private JTree jTree;
-	private JTextArea textArea;
+	private static JTextArea textArea;
 	private float scale = 1;
 
 	public MessagesPalette ()
@@ -42,6 +42,8 @@ public class MessagesPalette extends JPanel{
 		renderer.setLeafIcon(null);
 
 		textArea = new JTextArea();
+		textArea.setBackground(Color.WHITE);
+		textArea.setFont(new Font("Arial", Font.PLAIN, 25));
 
 		jTree.addTreeSelectionListener(new SelectionListener());
 
@@ -104,5 +106,13 @@ public class MessagesPalette extends JPanel{
 
 	public void setTree(JTree jTree) {
 		this.jTree = jTree;
+	}
+
+	public static String getText () {
+		return textArea.getText();
+	}
+
+	public static void setText (String text) {
+		textArea.setText(text);
 	}
 }

@@ -40,6 +40,7 @@ public class MapConverter {
 		NewRawMap result = new NewRawMap(map.getWidth(), map.getHeight());
 		RawConnection connection;
 		RawPath path;
+		RawMessage message;
 
 		for (int i = 0;i < map.getWidth();i++) {
 			for (int j = 0;j < map.getHeight();j++) {
@@ -80,6 +81,14 @@ public class MapConverter {
 						}
 
 						result.addPath(path);
+					}
+
+					if (map.getBottomLayer(i, j) instanceof Sign) {
+						message = new RawMessage();
+						message.setSignPos(new Point(i, j));
+						message.setMessage(((Sign) map.getBottomLayer(i, j)).getMessage());
+
+						result.addMessage(message);
 					}
 				} else {
 					result.setBottom(i, j, EditableTile.EMPTY);
@@ -123,6 +132,14 @@ public class MapConverter {
 						}
 
 						result.addPath(path);
+					}
+
+					if (map.getUpperLayer(i, j) instanceof Sign) {
+						message = new RawMessage();
+						message.setSignPos(new Point(i, j));
+						message.setMessage(((Sign) map.getUpperLayer(i, j)).getMessage());
+
+						result.addMessage(message);
 					}
 				} else {
 					result.setTop(i, j, EditableTile.EMPTY);
@@ -216,6 +233,16 @@ public class MapConverter {
 				((SmartEnemy)result.getBottomLayer(path.getEnemyPos().x, path.getEnemyPos().y)).setPathTileList(path.getPath());
 			} else if (result.getUpperLayer(path.getEnemyPos().x, path.getEnemyPos().y) instanceof SmartEnemy) {
 				((SmartEnemy)result.getUpperLayer(path.getEnemyPos().x, path.getEnemyPos().y)).setPathTileList(path.getPath());
+			}
+		}
+
+		if (map.getMessages() != null) {
+			for (RawMessage message : map.getMessages()) {
+				if (result.getBottomLayer(message.getSignPos().x, message.getSignPos().y) instanceof Sign) {
+					((Sign) result.getBottomLayer(message.getSignPos().x, message.getSignPos().y)).setMessage(message.getMessage());
+				} else if (result.getUpperLayer(message.getSignPos().x, message.getSignPos().y) instanceof Sign) {
+					((Sign) result.getUpperLayer(message.getSignPos().x, message.getSignPos().y)).setMessage(message.getMessage());
+				}
 			}
 		}
 

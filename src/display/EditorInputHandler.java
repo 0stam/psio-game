@@ -78,6 +78,9 @@ public class EditorInputHandler implements EventObserver {
             case "SavePathEvent":
                 onEnemySaved((SavePathEvent) event);
                 break;
+            case "SaveMessageEvent":
+                onSignSaved((SaveMessageEvent) event);
+                break;
             case "ArrowModifiedEvent":
                 onArrowModified((ArrowModifiedEvent) event);
                 break;
@@ -157,8 +160,11 @@ public class EditorInputHandler implements EventObserver {
     private void onSignSelected(SignSelectedEvent event) {
         mode = EditorMode.TEXTEDIT;
         layer = Layer.BOTH;
+        if (currentSign != null)
+            onSignSaved(new SaveMessageEvent());
 
         currentSign = event.getSign();
+        MessagesPalette.setText(currentSign.getMessage());
 
         GameManager.getInstance().onEvent(new EditorChangeEvent());
     }
@@ -179,6 +185,12 @@ public class EditorInputHandler implements EventObserver {
     {
         PathEditorHelper.updateEnemyPath(currentEnemy, currentPath);
     }
+
+    private void onSignSaved(SaveMessageEvent event)
+    {
+        currentSign.setMessage(MessagesPalette.getText());
+    }
+
     private void onMapResized(MapResizeEvent event)
     {
         PathEditorHelper.resizePath(currentPath);

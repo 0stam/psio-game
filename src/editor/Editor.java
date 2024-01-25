@@ -52,6 +52,7 @@ public class Editor implements EventObserver {
                 break;
 
             case "LevelSavedEvent":
+                GameManager.getInstance().onEvent(new SaveMessageEvent());
                 GameManager.getInstance().onEvent(new SavePathEvent());
                 EditorUtils.saveLevel(((LevelSavedEvent) event).getPath());
                 break;
@@ -75,8 +76,9 @@ public class Editor implements EventObserver {
             case "SavePathEvent":
                 IOManager.getInstance().getInputHandler().onEvent((SavePathEvent)event);
                 break;
-
-
+            case "SaveMessageEvent":
+                IOManager.getInstance().getInputHandler().onEvent((SaveMessageEvent)event);
+                break;
 
             default: return;
         }

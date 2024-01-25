@@ -102,6 +102,7 @@ public class EditorUtils {
         try {
             GameManager.getInstance().setMap(LevelLoader.loadLevel(path));
             GameManager.getInstance().getEditor().setEnemiesTreeModel(new EnemiesTreeModel());
+            GameManager.getInstance().getEditor().setSignsTreeModel(new SignsTreeModel());
             for (int i = 0 ; i < GameManager.getInstance().getMap().getWidth() ; ++i)
             {
                 for (int j = 0 ; j < GameManager.getInstance().getMap().getHeight() ; ++j)
@@ -109,6 +110,10 @@ public class EditorUtils {
                     if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy)
                     {
                         GameManager.getInstance().getEditor().getEnemiesTreeModel().addNode("Smart enemy ("+i+", "+j+")");
+                    }
+                    if (GameManager.getInstance().getMap().getBottomLayer(i,j) instanceof Sign)
+                    {
+                        GameManager.getInstance().getEditor().getSignsTreeModel().addNode("Sign ("+i+", "+j+")");
                     }
                 }
             }

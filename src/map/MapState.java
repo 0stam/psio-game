@@ -139,9 +139,11 @@ public class MapState implements Serializable, Cloneable {
             // In case we are moving on an object, delete it
             deleteUpperLayer(x + direction.x, y + direction.y);
 
-            // Trigger onExited method
+            // Move tile, but only if it wasn't already moved/teleported by EnterableStrategy
+            if (movedTile.getX() != x || movedTile.getY() != y) {
+                return;
+            }
 
-            // Move tile
             setUpperLayer(x + direction.x, y + direction.y, movedTile);
             movedTile.setX(x + direction.x);
             movedTile.setY(y + direction.y);

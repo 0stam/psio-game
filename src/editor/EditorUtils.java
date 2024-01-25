@@ -34,6 +34,7 @@ public class EditorUtils {
             case BUTTON ->  new Button(x, y);
             case BUTTON_PERMANENT ->  new ButtonPermanent(x, y);
             case SIGN -> new Sign(x, y);
+            case TELEPORT -> new Teleport(x, y);
             default ->  null;
         };
     }
@@ -65,6 +66,7 @@ public class EditorUtils {
                 case "PlayerCharacter" -> PLAYER;
                 case "Wall" -> WALL;
                 case "Sign" -> SIGN;
+                case "Teleport" -> TELEPORT;
                 default -> enums.EditableTile.EMPTY;
             };
         }
@@ -80,6 +82,7 @@ public class EditorUtils {
             case "Button" -> ConnectableTile.BUTTON;
             case "ButtonPermanent" -> ConnectableTile.BUTTON_PERMANENT;
             case "ChasingEnemy" -> ConnectableTile.ENEMY;
+            case "Teleport" -> ConnectableTile.TELEPORT;
             default -> ConnectableTile.DEFAULT;
         };
     }

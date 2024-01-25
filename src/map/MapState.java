@@ -104,8 +104,8 @@ public class MapState implements Serializable, Cloneable {
     }
 
     protected void updateActionTiles() {
-        actionTiles.addAll(actionTilesToAdd);
         actionTiles.removeAll(actionTilesToRemove);
+        actionTiles.addAll(actionTilesToAdd);
         Collections.sort(actionTiles, Collections.reverseOrder());
 
         actionTilesToAdd = new ArrayList<>();
@@ -139,14 +139,27 @@ public class MapState implements Serializable, Cloneable {
             // In case we are moving on an object, delete it
             deleteUpperLayer(x + direction.x, y + direction.y);
 
-            // Trigger onExited method
+            // Move tile, but only if it wasn't already moved/teleported by EnterableStrategy
+            if (movedTile.getX() != x || movedTile.getY() != y) {
+                return;
+            }
 
-            // Move tile
             setUpperLayer(x + direction.x, y + direction.y, movedTile);
             movedTile.setX(x + direction.x);
             movedTile.setY(y + direction.y);
             upperLayer[x][y] = null; // Do not use deleteUpperLayer, we don't want to lose reference to the object in actionTiles
         }
+    }
+
+    public void teleport(int startX, int startY, int targetX, int targetY) {
+        Tile teleportedTile = upperLayer[startX][startY];
+
+        deleteUpperLayer(targetX, targetY);
+        upperLayer[targetX][targetY] = teleportedTile;
+        upperLayer[startX][startY] = null;
+
+        teleportedTile.setX(targetX);
+        teleportedTile.setY(targetY);
     }
 
     public boolean checkEnterable(int x, int y, Direction direction, Tile tile)

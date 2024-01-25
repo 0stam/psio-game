@@ -19,7 +19,8 @@ public enum EditableTile implements EditorGraphics{
     SMART(false, true, Layer.UPPER, false,"Smart enemy", Graphics.SMART),
     BOX(false, true, Layer.UPPER, false,"Box", Graphics.BOX),
     PLAYER(false, true, Layer.UPPER, false,"Player", Graphics.PLAYER),
-    GOAL(true, true, Layer.BOTTOM, false,"Goal", Graphics.GOAL);
+    GOAL(true, true, Layer.BOTTOM, false,"Goal", Graphics.GOAL),
+    TELEPORT(true, true, Layer.BOTTOM, false, "Teleport", Graphics.DEFAULT);
 
     public final boolean isPlaceableBottom;
     public final boolean isPlaceableUpper;

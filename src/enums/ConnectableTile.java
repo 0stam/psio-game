@@ -4,7 +4,8 @@ public enum ConnectableTile {
     DEFAULT(new EditableTile[]{}, false),
     BUTTON(new EditableTile[]{EditableTile.DOOR, EditableTile.REVERSE}, false),
     BUTTON_PERMANENT(new EditableTile[]{EditableTile.DOOR, EditableTile.REVERSE}, false),
-    ENEMY(new EditableTile[]{EditableTile.PLAYER, EditableTile.MIMIC, EditableTile.SMART}, true);
+    ENEMY(new EditableTile[]{EditableTile.PLAYER, EditableTile.MIMIC, EditableTile.SMART}, true),
+    TELEPORT(new EditableTile[]{EditableTile.TELEPORT}, true);
 
     public final EditableTile[] allowedTiles; // Must be EditableTile and not ConnectibleTile to avoid forward references
     public final boolean exactlyOne; // if set to true, tile must have exactly one connection

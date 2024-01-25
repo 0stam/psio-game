@@ -188,7 +188,9 @@ public class EditorInputHandler implements EventObserver {
 
     private void onSignSaved(SaveMessageEvent event)
     {
-        currentSign.setMessage(MessagesPalette.getText());
+        if (currentSign != null) {
+            currentSign.setMessage(MessagesPalette.getText());
+        }
     }
 
     private void onMapResized(MapResizeEvent event)

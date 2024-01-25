@@ -105,13 +105,13 @@ public class Editor implements EventObserver {
                         if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == UPPER) {
                             editorPlaceTile(tile, UPPER, x, y);
                             if (tile.fullTileWhenBoth || EditorUtils.objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x, y)).fullTileWhenBoth) {
-                                editorPlaceTile(EMPTY, Layer.BOTTOM, x, y);
+                                editorPlaceTile(EditableTile.EMPTY, Layer.BOTTOM, x, y);
                             }
                         }
                         if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == Layer.BOTTOM) {
                             editorPlaceTile(tile, Layer.BOTTOM, x, y);
                             if (tile.fullTileWhenBoth || EditorUtils.objectToEditable(GameManager.getInstance().getMap().getUpperLayer(x, y)).fullTileWhenBoth) {
-                                editorPlaceTile(EMPTY, UPPER, x, y);
+                                editorPlaceTile(EditableTile.EMPTY, UPPER, x, y);
                             }
                         }
                     }

@@ -19,19 +19,7 @@ public class Teleporting implements EnterableStrategy {
 
     @Override
     public boolean isEnterable(Direction direction, Tile tile) {
-        if (target == null) {
-            return true;
-        }
-
-        Tile targetUpperTile = GameManager.getInstance().getMap().getUpperLayer(target.getX(), target.getY());
-		if ((targetUpperTile != null) && (targetUpperTile.getEnterableStrategy() instanceof Pushable)) {
-			if (GameManager.getInstance().getMap().getUpperLayer(target.getX() + direction.x, target.getY() + direction.y) != null) {
-				return GameManager.getInstance().getMap().getBottomLayer(target.getX() + direction.x, target.getY() + direction.y).isEnterable(direction, tile) && GameManager.getInstance().getMap().getUpperLayer(target.getX() + direction.x, target.getY() + direction.y).isEnterable(direction, tile);
-			} else {
-				return GameManager.getInstance().getMap().getBottomLayer(target.getX() + direction.x, target.getY() + direction.y).isEnterable(direction, tile);
-			}
-		}
-        return targetUpperTile == null || targetUpperTile.isEnterable(Direction.DEFAULT, tile);
+        return true;
     }
 
     @Override
@@ -40,12 +28,11 @@ public class Teleporting implements EnterableStrategy {
             return;
         }
 
-		if ((GameManager.getInstance().getMap().getUpperLayer(target.getX(), target.getY()) != null) && (GameManager.getInstance().getMap().getUpperLayer(target.getX(), target.getY()).getEnterableStrategy() instanceof Pushable)) {
-            Tile temp = GameManager.getInstance().getMap().getUpperLayer(target.getX() - direction.x, target.getY() - direction.y);
-            GameManager.getInstance().getMap().setUpperLayer(target.getX() - direction.x, target.getY() - direction.y, new Box(target.getX() - direction.x, target.getY() - direction.y));
-            GameManager.getInstance().getMap().getUpperLayer(target.getX(), target.getY()).onEntered(direction, GameManager.getInstance().getMap().getUpperLayer(target.getX() - direction.x, target.getY() - direction.y));
-            GameManager.getInstance().getMap().setUpperLayer(target.getX() - direction.x, target.getY() - direction.y, temp);
+        if (GameManager.getInstance().getMap().getUpperLayer(target.getX(), target.getY()) != null) {
+            return;
         }
+
+
         GameManager.getInstance().getMap().teleport(tile.getX(), tile.getY(), target.getX(), target.getY(), direction);
     }
 

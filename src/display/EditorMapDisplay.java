@@ -7,6 +7,7 @@ import gamemanager.GameManager;
 import tile.ButtonPermanent;
 import tile.ChasingEnemy;
 import tile.SmartEnemy;
+import tile.Teleport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,11 +59,11 @@ public class EditorMapDisplay extends JPanel {
 
                         if (inputHandler.getConnectingTile() != null) {
                             if (GameManager.getInstance().getMap().getBottomLayer(i, j) == inputHandler.getConnectingTile()) {
-                                newBottom = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : ((inputHandler.getConnectingTile() instanceof ButtonPermanent) ? enums.Graphics.BUTTON_PERMANENT_SELECTED : enums.Graphics.BUTTON_SELECTED));
+                                newBottom = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : ((inputHandler.getConnectingTile() instanceof ButtonPermanent) ? enums.Graphics.BUTTON_PERMANENT_SELECTED : ((inputHandler.getConnectingTile() instanceof Teleport) ? enums.Graphics.TELEPORT_SELECTED : enums.Graphics.BUTTON_SELECTED)));
                             }
 
                             if (GameManager.getInstance().getMap().getUpperLayer(i, j) == inputHandler.getConnectingTile()) {
-                                newUpper = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : ((inputHandler.getConnectingTile() instanceof ButtonPermanent) ? enums.Graphics.BUTTON_PERMANENT_SELECTED : enums.Graphics.BUTTON_SELECTED));
+                                newUpper = ((inputHandler.getConnectingTile() instanceof ChasingEnemy) ? enums.Graphics.ENEMY_SELECTED : ((inputHandler.getConnectingTile() instanceof ButtonPermanent) ? enums.Graphics.BUTTON_PERMANENT_SELECTED : ((inputHandler.getConnectingTile() instanceof Teleport) ? enums.Graphics.TELEPORT_SELECTED : enums.Graphics.BUTTON_SELECTED)));
                             }
                         }
 

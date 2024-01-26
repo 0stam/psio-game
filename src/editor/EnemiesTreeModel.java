@@ -1,16 +1,11 @@
 package editor;
 
-import com.sun.source.tree.Tree;
-import gamemanager.GameManager;
-
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import java.util.Enumeration;
 
-public class TreeModel {
+public class EnemiesTreeModel {
     private DefaultTreeModel defaultTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Smart entities"));
     private DefaultMutableTreeNode findNodeByName(String nodeName) {
         //typ zniknal z Enumeration, ale kod jest bezpieczny wiec mozna

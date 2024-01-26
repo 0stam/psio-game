@@ -26,74 +26,6 @@ public class Map implements Serializable{
         nextMapState = currentMapState;
     }
 
-    public void setupMap() {
-        // Create floor
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                bottomLayer[i][j] = new Floor(i, j);
-            }
-        }
-
-        // Make a horizontal wall
-        for (int i = 1; i < 10; i++) {
-            bottomLayer[i][5] = new Wall(i, 5);
-        }
-        //Make vertical walls
-        for(int i=6; i<10; i++){
-            bottomLayer[1][i] = new Wall(1, i);
-            bottomLayer[4][i] = new Wall(4, i);
-            //bottomLayer[7][i] = new Wall(7, i);
-        }
-        bottomLayer[5][7] = new Wall(5, 7);
-        bottomLayer[6][7] = new Wall(6, 7);
-
-
-
-
-        // Create door in the wall
-        Door door1 = new Door(5, 5);
-        bottomLayer[5][5] = door1;
-        Door door2 = new Door(6, 5);
-        bottomLayer[6][5] = door2;
-        Door door3 = new Door(5, 7);
-        bottomLayer[5][7]=door3;
-        Door door4 = new Door(6, 7);
-        bottomLayer[6][7]=door4;
-
-        // Create button
-        Button button = new Button(9, 2);
-        button.addObserver(door1);
-        button.addObserver(door2);
-        bottomLayer[9][2] = button;
-
-        //Create second button
-        Button button2 = new Button(9, 0);
-        button2.addObserver(door3);
-        button2.addObserver(door4);
-        bottomLayer[9][0]=button2;
-
-        // Create boxes
-        upperLayer[1][2] = new Box(1, 2);
-        upperLayer[1][1] = new Box(1, 1);
-        //bottomLayer[1][9] = new Wall(1, 1);
-        //bottomLayer[0][8] = new Wall(1, 1);
-        bottomLayer[5][3] = new Wall(5, 3);
-
-        // Create an exit
-        bottomLayer[6][8] = new Goal(6, 8);
-
-        // Create player
-        PlayerCharacter playerCharacter = new PlayerCharacter(2, 2);
-        upperLayer[2][2] = playerCharacter;
-        actionTiles.add(playerCharacter);
-
-        // Create an enemy
-        // TODO: fix player follower
-        ChasingEnemy chasingEnemy = new ChasingEnemy(0, 9, playerCharacter);
-        upperLayer[0][9] = chasingEnemy;
-        actionTiles.add(chasingEnemy);
-    }
-
     public void pushMapState(MapState mapState) {
         mapState.setActionTiles(actionTiles);
         mapState.setBottomLayer(bottomLayer);
@@ -141,6 +73,10 @@ public class Map implements Serializable{
 
     public void move(int x, int y, Direction direction) {
         nextMapState.move(x, y, direction);
+    }
+
+    public void teleport(int startX, int startY, int targetX, int targetY, Direction direction) {
+        nextMapState.teleport(startX, startY, targetX, targetY, direction);
     }
 
     public void startTurn(Direction direction) {

@@ -2,13 +2,10 @@ package display;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import gamemanager.GameManager;
 import levelloader.LevelLoader;
-import event.LevelSelectedEvent;
-import levelloader.LevelNotLoaded;
-import map.Map;
+import event.game.LevelSelectedEvent;
 
 public class LevelSelectionDisplay extends JPanel {
     private int currentPage = 0;

@@ -1,6 +1,8 @@
-package event;
+package event.game;
 
-public class ButtonEvent extends Event {
+import event.Event;
+
+public class ButtonEvent extends GameEvent {
     private final boolean pressed;
 
     public ButtonEvent(boolean pressed) {

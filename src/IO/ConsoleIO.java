@@ -3,9 +3,9 @@ package IO;
 import enums.Graphics;
 import enums.Direction;
 import event.EventObserver;
-import event.LevelSelectedEvent;
-import event.MoveEvent;
-import event.ResetEvent;
+import event.game.LevelSelectedEvent;
+import event.game.MoveEvent;
+import event.game.ResetEvent;
 import gamemanager.GameManager;
 import levelloader.LevelLoader;
 import map.Map;
@@ -113,6 +113,7 @@ public class ConsoleIO implements IOStrategy {
 	public char idToChar(Graphics graphics)	{
         return switch (graphics) {
             case FLOOR -> '_';
+			case DANGER -> '~';
             case WALL -> '#';
             case BOX -> 'O';
             case PLAYER -> 'X';
@@ -121,6 +122,8 @@ public class ConsoleIO implements IOStrategy {
 			case SMART -> 'S';
             case BUTTON_PRESSED -> 'v';
             case BUTTON_RELEASED -> '^';
+			case BUTTON_PERMANENT_PRESSED -> 'v';
+			case BUTTON_PERMANENT_RELEASED -> '^';
             case DOOR_OPEN -> 'u';
             case DOOR_CLOSED -> 'n';
             case GOAL -> 'P';

@@ -7,11 +7,8 @@ import enums.Layer;
 import event.display.ChangeLayerEvent;
 import event.display.ConnectableTileSelectedEvent;
 import event.display.ModeChangedEvent;
-import event.display.PalettePressedEvent;
-import event.editor.EditorEvent;
 import event.editor.EnemySelectedEvent;
 import event.editor.MapResizeEvent;
-import event.editor.SavePathEvent;
 import gamemanager.GameManager;
 import map.Map;
 import tile.Floor;
@@ -93,7 +90,7 @@ public class ResizeWindow {
 					for (int j = 0;j < GameManager.getInstance().getMap().getHeight();j++) {
 						if ((i >= newWidth || j >= newHeight) && ((GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof SmartEnemy) || (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof SmartEnemy))) {
 
-							GameManager.getInstance().getEditor().getTreeModel().removeNode("Smart enemy (" + i + ", " + j + ")");
+							GameManager.getInstance().getEditor().getEnemiesTreeModel().removeNode("Smart enemy (" + i + ", " + j + ")");
 						}
 					}
 				}

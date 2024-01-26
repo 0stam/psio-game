@@ -11,6 +11,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class NewRawMap implements Serializable {
+	private static final long serialVersionUID = -6277955962762571597L;
 	private int width;
 	private int height;
 
@@ -19,6 +20,8 @@ public class NewRawMap implements Serializable {
 
 	private ArrayList<RawConnection> connections;
 	private ArrayList<RawPath> paths;
+
+	private ArrayList<RawMessage> messages;
 
 	public NewRawMap(int width, int height) {
 		this.width = width;
@@ -29,6 +32,7 @@ public class NewRawMap implements Serializable {
 
 		connections = new ArrayList<>();
 		paths = new ArrayList<>();
+		messages = new ArrayList<>();
 	}
 
 	public EditableTile getBottom (int x, int y) {
@@ -81,5 +85,13 @@ public class NewRawMap implements Serializable {
 
 	public void addPath (RawPath path) {
 		paths.add(path);
+	}
+
+	public ArrayList<RawMessage> getMessages () {
+		return messages;
+	}
+
+	public void addMessage (RawMessage message) {
+		messages.add(message);
 	}
 }

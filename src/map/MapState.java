@@ -129,24 +129,39 @@ public class MapState implements Serializable, Cloneable {
         // Is field enterable
         if (GameManager.getInstance().getMap().checkEnterable(x+ direction.x, y + direction.y, direction, movedTile))
         {
-            destinationTileBottom.onEntered(direction, movedTile);
+            emptiedTile.onExited(direction, movedTile);
             if (destinationTileUpper != null)
             {
                 destinationTileUpper.onEntered(direction, movedTile);
             }
+            destinationTileBottom.onEntered(direction, movedTile);
 
             // In case we are moving on an object, delete it
             deleteUpperLayer(x + direction.x, y + direction.y);
 
-            // Trigger onExited method
-            emptiedTile.onExited(direction, movedTile);
+            // Move tile, but only if it wasn't already moved/teleported by EnterableStrategy
+            if (movedTile.getX() != x || movedTile.getY() != y) {
+                return;
+            }
 
-            // Move tile
             setUpperLayer(x + direction.x, y + direction.y, movedTile);
             movedTile.setX(x + direction.x);
             movedTile.setY(y + direction.y);
             upperLayer[x][y] = null; // Do not use deleteUpperLayer, we don't want to lose reference to the object in actionTiles
         }
+    }
+
+    public void teleport(int startX, int startY, int targetX, int targetY, Direction direction) {
+        Tile teleportedTile = upperLayer[startX][startY];
+
+        deleteUpperLayer(targetX, targetY);
+        upperLayer[targetX][targetY] = teleportedTile;
+        teleportedTile.setX(targetX);
+        teleportedTile.setY(targetY);
+
+        upperLayer[startX][startY] = null;
+        //deleteUpperLayer(startX + direction.x, startY + direction.y);
+        System.out.println((startX + direction.x) + "  " + (startY + direction.y));
     }
 
     public boolean checkEnterable(int x, int y, Direction direction, Tile tile)

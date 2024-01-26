@@ -1,6 +1,6 @@
 package event.editor;
 
-import event.LevelEvent;
+import event.game.LevelEvent;
 
 public class LevelSavedEvent extends LevelEvent {
     public LevelSavedEvent(String path) {

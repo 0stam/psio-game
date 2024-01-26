@@ -1,6 +1,7 @@
 package map;
 
 import connectableinterface.Connectable;
+import editor.EditorUtils;
 import enums.EditableTile;
 import enums.Graphics;
 import event.EventObserver;
@@ -15,33 +16,20 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+import static enums.Direction.*;
 import static enums.Graphics.*;
 
 public class MapConverter {
 	public static NewRawMap saveConvert (Map map) {
-		Hashtable<String, EditableTile>graphicsConvert = new Hashtable<>();
-
-		graphicsConvert.put("Box", EditableTile.BOX);
-		graphicsConvert.put("Button", EditableTile.BUTTON);
-		graphicsConvert.put("ChasingEnemy", EditableTile.ENEMY);
-		graphicsConvert.put("MimicEnemy", EditableTile.MIMIC);
-		graphicsConvert.put("SmartEnemy", EditableTile.SMART);
-		graphicsConvert.put("Door", EditableTile.DOOR);
-		graphicsConvert.put("ReverseDoor", EditableTile.REVERSE);
-		graphicsConvert.put("Floor", EditableTile.FLOOR);
-		graphicsConvert.put("DangerFloor", EditableTile.DANGER);
-		graphicsConvert.put("Goal", EditableTile.GOAL);
-		graphicsConvert.put("PlayerCharacter", EditableTile.PLAYER);
-		graphicsConvert.put("Wall", EditableTile.WALL);
-
 		NewRawMap result = new NewRawMap(map.getWidth(), map.getHeight());
 		RawConnection connection;
 		RawPath path;
+		RawMessage message;
 
 		for (int i = 0;i < map.getWidth();i++) {
 			for (int j = 0;j < map.getHeight();j++) {
 				if (map.getBottomLayer(i, j) != null) {
-					result.setBottom(i, j, graphicsConvert.get(map.getBottomLayer(i, j).getClass().getSimpleName()));
+					result.setBottom(i, j, EditorUtils.objectToEditable(map.getBottomLayer(i, j)));
 
 					if (isConnectableTile(result.getBottom(i, j))) {
 						connection = new RawConnection();
@@ -68,12 +56,20 @@ public class MapConverter {
 
 						result.addPath(path);
 					}
+
+					if (map.getBottomLayer(i, j) instanceof Sign) {
+						message = new RawMessage();
+						message.setSignPos(new Point(i, j));
+						message.setMessage(((Sign) map.getBottomLayer(i, j)).getMessage());
+
+						result.addMessage(message);
+					}
 				} else {
 					result.setBottom(i, j, EditableTile.EMPTY);
 				}
 
 				if (map.getUpperLayer(i, j) != null) {
-					result.setTop(i, j, graphicsConvert.get(map.getUpperLayer(i, j).getClass().getSimpleName()));
+					result.setTop(i, j, EditorUtils.objectToEditable(map.getUpperLayer(i, j)));
 
 					if (isConnectableTile(result.getTop(i, j))) {
 						connection = new RawConnection();
@@ -100,6 +96,14 @@ public class MapConverter {
 
 						result.addPath(path);
 					}
+
+					if (map.getUpperLayer(i, j) instanceof Sign) {
+						message = new RawMessage();
+						message.setSignPos(new Point(i, j));
+						message.setMessage(((Sign) map.getUpperLayer(i, j)).getMessage());
+
+						result.addMessage(message);
+					}
 				} else {
 					result.setTop(i, j, EditableTile.EMPTY);
 				}
@@ -116,40 +120,8 @@ public class MapConverter {
 
 		for (int i = 0;i < map.getWidth();i++) {
 			for (int j = 0;j < map.getHeight();j++) {
-				switch (map.getBottom(i, j)) {
-					case BOX -> result.setBottomLayer(i, j, new Box(i, j));
-					case BUTTON -> result.setBottomLayer(i, j, new Button(i, j));
-					case ENEMY -> result.setBottomLayer(i, j, new ChasingEnemy(i, j, null));
-					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
-					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
-					case DOOR -> result.setBottomLayer(i, j, new Door(i, j));
-					case REVERSE -> result.setBottomLayer(i, j, new ReverseDoor(i, j));
-					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
-					case DANGER -> result.setBottomLayer(i, j, new DangerFloor(i, j));
-					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
-					case PLAYER -> {
-						result.setBottomLayer(i, j, new PlayerCharacter(i, j));
-						playerPos = new Point(i, j);
-					}
-					case WALL -> result.setBottomLayer(i, j, new Wall(i, j));
-				}
-
-				switch (map.getTop(i, j)) {
-					case BOX -> result.setUpperLayer(i, j, new Box(i, j));
-					case BUTTON -> result.setUpperLayer(i, j, new Button(i, j));
-					case ENEMY -> result.setUpperLayer(i, j, new ChasingEnemy(i, j, null));
-					case MIMIC -> result.setUpperLayer(i, j, new MimicEnemy(i, j));
-					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
-					case DOOR -> result.setUpperLayer(i, j, new Door(i, j));
-					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
-					case DANGER -> result.setUpperLayer(i, j, new DangerFloor(i, j));
-					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));
-					case PLAYER -> {
-						result.setUpperLayer(i, j, new PlayerCharacter(i, j));
-						playerPos = new Point(i, j);
-					}
-					case WALL -> result.setUpperLayer(i, j, new Wall(i, j));
-				}
+				result.setBottomLayer(i, j, EditorUtils.editableToObject(map.getBottom(i, j), i, j));
+				result.setUpperLayer(i, j, EditorUtils.editableToObject(map.getTop(i, j), i, j));
 			}
 		}
 
@@ -183,6 +155,16 @@ public class MapConverter {
 			}
 		}
 
+		if (map.getMessages() != null) {
+			for (RawMessage message : map.getMessages()) {
+				if (result.getBottomLayer(message.getSignPos().x, message.getSignPos().y) instanceof Sign) {
+					((Sign) result.getBottomLayer(message.getSignPos().x, message.getSignPos().y)).setMessage(message.getMessage());
+				} else if (result.getUpperLayer(message.getSignPos().x, message.getSignPos().y) instanceof Sign) {
+					((Sign) result.getUpperLayer(message.getSignPos().x, message.getSignPos().y)).setMessage(message.getMessage());
+				}
+			}
+		}
+
 		return result;
 	}
 
@@ -200,6 +182,10 @@ public class MapConverter {
 					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
 					case DOOR_CLOSED -> result.setBottomLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
+					case ONEWAY_UP -> result.setBottomLayer(i, j, new OnewayFloor(i, j, UP));
+					case ONEWAY_DOWN -> result.setBottomLayer(i, j, new OnewayFloor(i, j, DOWN));
+					case ONEWAY_LEFT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, LEFT));
+					case ONEWAY_RIGHT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, RIGHT));
 					case DANGER -> result.setBottomLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
@@ -217,6 +203,10 @@ public class MapConverter {
 					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
 					case DOOR_CLOSED -> result.setUpperLayer(i, j, new Door(i, j));
 					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
+					case ONEWAY_UP -> result.setUpperLayer(i, j, new OnewayFloor(i, j, UP));
+					case ONEWAY_DOWN -> result.setUpperLayer(i, j, new OnewayFloor(i, j, DOWN));
+					case ONEWAY_LEFT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, LEFT));
+					case ONEWAY_RIGHT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, RIGHT));
 					case DANGER -> result.setUpperLayer(i, j, new DangerFloor(i, j));
 					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));
 					case PLAYER -> {
@@ -293,7 +283,7 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case BUTTON, ENEMY -> {return true;}
+			case BUTTON, ENEMY, BUTTON_PERMANENT, TELEPORT -> {return true;}
 		}
 		return false;
 	}
@@ -301,7 +291,7 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case DOOR,PLAYER,MIMIC,REVERSE:
+			case DOOR,PLAYER,MIMIC,REVERSE,TELEPORT:
 			{
 				return true;
 			}

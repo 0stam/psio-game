@@ -1,9 +1,9 @@
 package display;
 
 import enums.Direction;
-import event.EscapeEvent;
-import event.MoveEvent;
-import event.ResetEvent;
+import event.game.EscapeEvent;
+import event.game.MoveEvent;
+import event.game.ResetEvent;
 import gamemanager.GameManager;
 import map.Map;
 import tile.PlayerCharacter;

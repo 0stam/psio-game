@@ -4,6 +4,9 @@ import enums.Direction;
 import gamemanager.GameManager;
 import tile.*;
 
+
+// Requires downloading JUnit library. It can be done automatically by IntelliJ.
+// After download go to "Menu > Project Structure > Sources" and mark "test" directory as test source folder.
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 

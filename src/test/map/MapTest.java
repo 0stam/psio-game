@@ -38,7 +38,6 @@ class MapTest {
         PlayerCharacter player = new PlayerCharacter(playerX, playerY);
         map.setUpperLayer(playerX, playerY, player);
 
-
         // Move an object on an empty map
         for (Direction direction : Direction.values()) {
             if (direction == Direction.DEFAULT) {

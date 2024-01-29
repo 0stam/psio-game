@@ -82,8 +82,6 @@ public class GameManager implements EventObserver {
     }
 
     public void onEvent(Event event) {
-
-        //???????????????????
         if (!(event instanceof InputEvent)) {
             return;
         }

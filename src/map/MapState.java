@@ -24,6 +24,9 @@ public class MapState implements Serializable, Cloneable {
     public MapState(int x, int y) {
         this.x = x;
         this.y = y;
+
+        bottomLayer = new Tile[x][y];
+        upperLayer = new Tile[x][y];
     }
     public void setActionTiles(List<ActionTile> actionTiles) {
         this.actionTiles = actionTiles;
@@ -127,7 +130,7 @@ public class MapState implements Serializable, Cloneable {
         Tile destinationTileUpper = getUpperLayer(x + direction.x, y + direction.y);
       
         // Is field enterable
-        if (GameManager.getInstance().getMap().checkEnterable(x+ direction.x, y + direction.y, direction, movedTile))
+        if (checkEnterable(x+ direction.x, y + direction.y, direction, movedTile))
         {
             emptiedTile.onExited(direction, movedTile);
             if (destinationTileUpper != null)

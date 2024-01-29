@@ -40,8 +40,6 @@ public class Pushable implements EnterableStrategy, Serializable{
         Tile pushedTile = map.getUpperLayer(x, y);
         Tile coveredTile = map.getBottomLayer(coveredX, coveredY);
 
-
-
         map.setUpperLayer(coveredX, coveredY, pushedTile);
         pushedTile.setX(coveredX);
         pushedTile.setY(coveredY);

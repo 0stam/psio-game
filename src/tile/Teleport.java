@@ -50,7 +50,7 @@ public class Teleport extends Tile implements Connectable {
     @Override
     public HashSet<Tile> getConnections() {
         if (getTarget() == null) {
-            return null;
+            return new HashSet<>();
         }
 
         HashSet<Tile> result = new HashSet<>();

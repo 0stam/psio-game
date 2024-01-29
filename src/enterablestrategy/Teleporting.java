@@ -6,7 +6,9 @@ import map.Map;
 import tile.Box;
 import tile.Tile;
 
-public class Teleporting implements EnterableStrategy {
+import java.io.Serializable;
+
+public class Teleporting implements EnterableStrategy, Serializable {
     Tile target;
 
     public Tile getTarget() {

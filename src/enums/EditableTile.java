@@ -1,5 +1,7 @@
 package enums;
 
+import tile.Checkpoint;
+
 public enum EditableTile implements EditorGraphics{
     EMPTY(true, true, Layer.BOTH, false,"Empty", Graphics.EMPTY),
     DANGER(true, true, Layer.BOTTOM, false, "Dangerous floor", Graphics.DANGER),
@@ -20,7 +22,8 @@ public enum EditableTile implements EditorGraphics{
     BOX(false, true, Layer.UPPER, false,"Box", Graphics.BOX),
     PLAYER(false, true, Layer.UPPER, false,"Player", Graphics.PLAYER),
     GOAL(true, true, Layer.BOTTOM, false,"Goal", Graphics.GOAL),
-    TELEPORT(true, false, Layer.BOTTOM, false, "Teleport", Graphics.TELEPORT);
+    TELEPORT(true, false, Layer.BOTTOM, false, "Teleport", Graphics.TELEPORT),
+    CHECKPOINT(true, true, Layer.BOTTOM, false, "Checkpoint", Graphics.CHECKPOINT_UNUSED);
 
     public final boolean isPlaceableBottom;
     public final boolean isPlaceableUpper;

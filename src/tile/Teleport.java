@@ -8,9 +8,10 @@ import enums.Graphics;
 import gamemanager.GameManager;
 import map.Map;
 
+import java.io.Serializable;
 import java.util.HashSet;
 
-public class Teleport extends Tile implements Connectable {
+public class Teleport extends Tile implements Connectable, Serializable {
     public Teleport(int x, int y) {
         super(x, y);
 

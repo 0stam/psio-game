@@ -13,7 +13,10 @@ import event.game.ResetEvent;
 import levelloader.*;
 import map.Map;
 import event.*;
+import tile.PlayerCharacter;
+import tile.Sign;
 import tile.Teleport;
+import tile.Tile;
 
 import javax.swing.*;
 
@@ -22,6 +25,7 @@ public class GameManager implements EventObserver {
     private Map map;
     private Editor editor;
     private boolean levelCompleted;
+    private boolean checkpointQueued;
     private int currentLevel;
     private boolean endLevel = false;
 
@@ -72,13 +76,48 @@ public class GameManager implements EventObserver {
     // should have input parameters
     public void startTurn(Direction input) {
         this.map.startTurn(input);
+
+        if (checkpointQueued) {
+            map.registerCheckpoint();
+            checkpointQueued = false;
+        }
+
         if (endLevel) {
             endLevel();
         }
     }
 
     public void resetLevel() {
-        startLevel(currentLevel);
+        map.reset();
+        IOManager.getInstance().drawGame();
+        hidePopup();
+    }
+
+    public void undoMove() {
+        map.resetMove();
+        IOManager.getInstance().drawGame();
+        hidePopup();
+
+        PlayerCharacter player = map.getPlayer();
+
+        // FIXME: workaround for sings not displaying after move undo
+        Tile[] potentialSings = new Tile[2];
+        potentialSings[0] = map.getBottomLayer(player.getX(), player.getY());
+        potentialSings[1] = map.getUpperLayer(player.getX(), player.getY());
+
+        for (Tile tile : potentialSings) {
+            if (tile instanceof Sign) {
+                tile.onEntered(Direction.DEFAULT, player);
+                return;
+            }
+        }
+    }
+
+    public void hidePopup() {
+        if (currentPopup != null) {
+            currentPopup.hide();
+            currentPopup = null;
+        }
     }
 
     public void onEvent(Event event) {
@@ -136,18 +175,22 @@ public class GameManager implements EventObserver {
         }
 
         if (event instanceof PopupResetEvent) {
-            if (currentPopup != null) {
-                currentPopup.hide();
-                currentPopup = null;
-            }
+            hidePopup();
+            return;
         }
 
         if (event instanceof ResetEvent) {
             resetLevel();
-            if (currentPopup != null) {
-                currentPopup.hide();
-                currentPopup = null;
-            }
+            return;
+        }
+
+        if (event instanceof UndoEvent) {
+            undoMove();
+            return;
+        }
+
+        if (event instanceof CheckpointActivatedEvent) {
+            checkpointQueued = true;
             return;
         }
     }

@@ -1,41 +1,27 @@
 package map;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 
 import enums.Direction;
 import tile.*;
 
-import java.io.Serializable;
+import java.util.Stack;
 
-public class Map implements Serializable{
+public class Map implements Serializable {
     private final int x, y;
-    private Tile[][] bottomLayer;
-    private Tile[][] upperLayer;
+    private MapState currentMapState;
 
-    private List<ActionTile> actionTiles = new ArrayList<>();
-    private MapState currentMapState, nextMapState;
+    private ByteArrayOutputStream previousMapState;
+    private Stack<ByteArrayOutputStream> checkpoints;
+    private boolean moveCancelAvailable = false;
 
     public Map(int x, int y) {
         this.x = x;
         this.y = y;
-        bottomLayer = new Tile[x][y];
-        upperLayer = new Tile[x][y];
+        checkpoints = new Stack<>();
         currentMapState = new MapState(x, y);
-        pushMapState(currentMapState);
-        nextMapState = currentMapState;
     }
 
-    public void pushMapState(MapState mapState) {
-        mapState.setActionTiles(actionTiles);
-        mapState.setBottomLayer(bottomLayer);
-        mapState.setUpperLayer(upperLayer);
-    }
-    public void pullMapState(MapState mapState) {
-        bottomLayer = mapState.getBottomLayer();
-        upperLayer = mapState.getUpperLayer();
-        actionTiles = mapState.getActionTiles();
-    }
     public int getWidth() {
         return x;
     }
@@ -43,56 +29,92 @@ public class Map implements Serializable{
         return y;
     }
     public Tile getBottomLayer(int x, int y) {
-        return nextMapState.getBottomLayer(x, y);
+        return currentMapState.getBottomLayer(x, y);
     }
     public Tile getUpperLayer(int x, int y) {
-        return nextMapState.getUpperLayer(x, y);
+        return currentMapState.getUpperLayer(x, y);
     }
     public void setUpperLayer(int x, int y, Tile tile) {
-        nextMapState.setUpperLayer(x, y, tile);
+        currentMapState.setUpperLayer(x, y, tile);
     }
     public void setBottomLayer(int x, int y, Tile tile) {
-        nextMapState.setBottomLayer(x, y, tile);
+        currentMapState.setBottomLayer(x, y, tile);
     }
     public void deleteBottomLayer(int x, int y) {
-        nextMapState.deleteBottomLayer(x, y);
+        currentMapState.deleteBottomLayer(x, y);
     }
     public void deleteUpperLayer(int x, int y) {
-        nextMapState.deleteUpperLayer(x, y);
+        currentMapState.deleteUpperLayer(x, y);
     }
     public void deleteActionTile(ActionTile actionTile) {
-        nextMapState.deleteActionTile(actionTile);
+        currentMapState.deleteActionTile(actionTile);
     }
     public void addActionTile(ActionTile actionTile) {
-        nextMapState.addActionTile(actionTile);
+        currentMapState.addActionTile(actionTile);
     }
-    public void addCurrentActionTile(ActionTile actionTile) {actionTiles.add(actionTile);}
     public PlayerCharacter getPlayer() {
-        return nextMapState.getPlayer();
+        return currentMapState.getPlayer();
+    }
+
+    public static ByteArrayOutputStream serializeMapState(MapState mapState) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(mapState);
+            return bos;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static MapState deserializeMapState(ByteArrayOutputStream bos) {
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(bis);
+            return (MapState) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void move(int x, int y, Direction direction) {
-        nextMapState.move(x, y, direction);
+        currentMapState.move(x, y, direction);
     }
 
     public void teleport(int startX, int startY, int targetX, int targetY, Direction direction) {
-        nextMapState.teleport(startX, startY, targetX, targetY, direction);
+        currentMapState.teleport(startX, startY, targetX, targetY, direction);
     }
 
     public void startTurn(Direction direction) {
-        currentMapState = nextMapState.clone();
-        if (nextMapState.update(direction)) {
-            currentMapState = nextMapState.clone();
+        // If the starting map state isn't saved yet, do it
+        if (checkpoints.empty()) {
+            checkpoints.add(serializeMapState(currentMapState));
         }
-        else {
-            // this should call some IO function to print to the screen
-            // should never happen in current implementation
-            System.out.println("Invalid move. Turn skipped.");
+
+        previousMapState = serializeMapState(currentMapState);
+        currentMapState.update(direction);
+        moveCancelAvailable = true;
+    }
+
+    public void registerCheckpoint() {
+        checkpoints.add(serializeMapState(currentMapState));
+    }
+
+    public void resetMove() {
+        if (moveCancelAvailable) {
+            currentMapState = deserializeMapState(previousMapState);
+            moveCancelAvailable = false;
+        }
+    }
+
+    public void reset() {
+        if (!checkpoints.empty()) {
+            currentMapState = deserializeMapState(checkpoints.pop());
         }
     }
 
     public boolean checkEnterable(int x, int y, Direction direction, Tile tile)
     {
-        return nextMapState.checkEnterable(x, y, direction, tile);
+        return currentMapState.checkEnterable(x, y, direction, tile);
     }
 }

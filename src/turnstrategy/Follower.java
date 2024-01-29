@@ -7,7 +7,9 @@ import map.Map;
 import tile.ActionTile;
 import tile.Tile;
 
-public class Follower implements TurnStrategy {
+import java.io.Serializable;
+
+public class Follower implements TurnStrategy, Serializable {
     Tile targetTile;
 
     public Follower(Tile targetTile) {

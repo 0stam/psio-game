@@ -163,8 +163,6 @@ public class MapState implements Serializable, Cloneable {
         teleportedTile.setY(targetY);
 
         upperLayer[startX][startY] = null;
-        //deleteUpperLayer(startX + direction.x, startY + direction.y);
-        System.out.println((startX + direction.x) + "  " + (startY + direction.y));
     }
 
     public boolean checkEnterable(int x, int y, Direction direction, Tile tile)

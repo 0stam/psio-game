@@ -4,6 +4,7 @@ import enums.Direction;
 import event.game.EscapeEvent;
 import event.game.MoveEvent;
 import event.game.ResetEvent;
+import event.game.UndoEvent;
 import gamemanager.GameManager;
 import map.Map;
 import tile.PlayerCharacter;
@@ -74,6 +75,9 @@ public class GameMapDisplay extends JPanel {
 
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "escape");
 		actionMap.put("escape", new EventAction(new EscapeEvent()));
+
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "undo");
+		actionMap.put("undo", new EventAction(new UndoEvent()));
 	}
 
 	public void setupMap (Map map) {

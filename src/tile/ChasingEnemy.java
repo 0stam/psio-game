@@ -28,7 +28,6 @@ public class ChasingEnemy extends ActionTile<Follower> implements Connectable {
     @Override
     public void addConnection(Tile tile) {
         getTurnStrategy().setTargetTile(tile);
-        System.out.println(tile);
     }
 
     @Override

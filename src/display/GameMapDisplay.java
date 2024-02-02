@@ -23,13 +23,13 @@ public class GameMapDisplay extends JPanel {
 	private JPanel container = new JPanel();
 	private enums.Graphics[][] prevMapBottom;
 	private enums.Graphics[][] prevMapFront;
-	private int width = 15;
-	private int height = 15;
+	private int width = 50;
+	private int height = 38;
 
 	// Following camera parameters
 	private boolean useFollowingCamera = true;
-	private final int followingWidth = 15;
-	private final int followingHeight = 15;
+	private final int followingWidth = 50;
+	private final int followingHeight = 38;
 	private int playerX = -1;
 	private int playerY = -1;
 

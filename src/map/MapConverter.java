@@ -291,7 +291,7 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case DOOR,PLAYER,MIMIC,REVERSE,TELEPORT:
+			case DOOR,PLAYER,MIMIC,REVERSE,TELEPORT, TOGGLE:
 			{
 				return true;
 			}

@@ -2,8 +2,8 @@ package enums;
 
 public enum ConnectableTile {
     DEFAULT(new EditableTile[]{}, false),
-    BUTTON(new EditableTile[]{EditableTile.DOOR, EditableTile.REVERSE}, false),
-    BUTTON_PERMANENT(new EditableTile[]{EditableTile.DOOR, EditableTile.REVERSE}, false),
+    BUTTON(new EditableTile[]{EditableTile.DOOR, EditableTile.REVERSE, EditableTile.TOGGLE}, false),
+    BUTTON_PERMANENT(new EditableTile[]{EditableTile.DOOR, EditableTile.REVERSE, EditableTile.TOGGLE}, false),
     ENEMY(new EditableTile[]{EditableTile.PLAYER, EditableTile.MIMIC, EditableTile.SMART}, true),
     TELEPORT(new EditableTile[]{EditableTile.TELEPORT}, true);
 

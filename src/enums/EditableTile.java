@@ -16,6 +16,7 @@ public enum EditableTile implements EditorGraphics{
     BUTTON_PERMANENT(true, true, Layer.BOTTOM, false, "Permanent Button", Graphics.BUTTON_PERMANENT_RELEASED),
     DOOR(true, true, Layer.BOTTOM, true, "Door", Graphics.DOOR_CLOSED),
     REVERSE(true, true, Layer.BOTTOM, true, "Reverse door", Graphics.DOOR_OPEN),
+    TOGGLE(true, true, Layer.BOTTOM, true, "Toggle door", Graphics.DOOR_CLOSED),
     ENEMY(false, true, Layer.UPPER, false, "Chasing enemy", Graphics.ENEMY),
     MIMIC(false, true, Layer.UPPER, false,"Mimic", Graphics.MIMIC),
     SMART(false, true, Layer.UPPER, false,"Smart enemy", Graphics.SMART),

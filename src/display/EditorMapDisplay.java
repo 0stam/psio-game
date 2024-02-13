@@ -17,7 +17,7 @@ import static enums.Arrow.EMPTY;
 public class EditorMapDisplay extends JPanel {
     private JPanel container = new JPanel();
     //skala chyba powinna tu zostac bo oblicza ja EditorMapDisplay
-    public static float scale = 1;
+    public static float scale = 1.4f;
     //lepiej zeby to byla tablica dla refreshTile i refreshMap, tablice 1D bede zamienial na
     //array listy bo sa szybsze i bardziej elastyczne
     private InteractiveTile[][] mapTiles;

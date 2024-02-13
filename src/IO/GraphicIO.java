@@ -17,9 +17,9 @@ public class GraphicIO implements IOStrategy {
 
 	private void createWindow () {
 		try {
-			// Set System L&F
+			// Set cross-platform L&F
 			UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
+					UIManager.getCrossPlatformLookAndFeelClassName());
 		}
 		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
 			   IllegalAccessException e) {
@@ -33,7 +33,7 @@ public class GraphicIO implements IOStrategy {
 		window.setVisible(true);
 		window.setIconImage(new ImageIcon("src/graphics/icon.png").getImage());
 		//i tak nie ma sensu robic mniejszego
-		window.setMinimumSize(new Dimension(300, 400));
+		window.setMinimumSize(new Dimension(1280, 720));
 	}
 
 	public void drawGame () {

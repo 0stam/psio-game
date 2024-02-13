@@ -13,6 +13,10 @@ import java.util.Arrays;
 
 public class LevelLoader {
     public static final String userLevelsPath = "/psio-game/userlevels/";
+    public static final String[] levelOrder = {
+            "introduction", "first_puzzle", "creative_button", "labyrinth", "chained_puzzle", "big_level", "robots_robots",
+            "conveyor", "chained_diagonal", "full_adder", "kopara", "hardest_level", "web_of_lies", "the_great_puzzle", "badziewie"
+    };
 
     public static void saveLevel(String name, Map map) throws LevelNotSaved {
         String userHome = System.getProperty("user.home");
@@ -61,25 +65,23 @@ public class LevelLoader {
 
     public static String getPath(int index, boolean full) {
         String userHome = System.getProperty("user.home");
-        File baseLevels = new File("src/levels");
+        String baseLevels = "/levels/";
         File userLevels = new File(userHome + userLevelsPath);
 
-        File[] bfiles = baseLevels.listFiles();
-        Arrays.sort(bfiles);
-        if(index < bfiles.length) {
+        if(index < levelOrder.length) {
             if (full) {
-                return bfiles[index].getAbsolutePath();
+                return baseLevels + levelOrder[index];
             } else {
-                return bfiles[index].getName();
+                return levelOrder[index];
             }
         }
         else {
             File[] ufiles = userLevels.listFiles();
             Arrays.sort(ufiles);
             if (full) {
-                return ufiles[index - bfiles.length].getAbsolutePath();
+                return ufiles[index - levelOrder.length].getAbsolutePath();
             } else {
-                return ufiles[index - bfiles.length].getName();
+                return ufiles[index - levelOrder.length].getName();
             }
         }
     }
@@ -92,9 +94,13 @@ public class LevelLoader {
         String path = getPath(index);
         Object read = null;
 
-
         try {
-            ObjectInputStream is = new ObjectInputStream(new FileInputStream(path));
+            ObjectInputStream is;
+            if (index < levelOrder.length) {
+                is = new ObjectInputStream(LevelLoader.class.getResourceAsStream(path));
+            } else {
+                is = new ObjectInputStream(new FileInputStream(path));
+            }
             try {
                 read = is.readObject();
             } catch (ClassNotFoundException e) {
@@ -116,16 +122,11 @@ public class LevelLoader {
         }
     }
 
-    public static int getLevelCount(){
+    public static int getLevelCount() {
         String userHome = System.getProperty("user.home");
-        File baseLevels = new File("src/levels");
         File userLevels = new File(userHome + "/psio-game/userlevels");
-        int a=0, b=0;
+        int a=levelOrder.length, b=0;
 
-        if(baseLevels.isDirectory()){
-            File[] bfiles = baseLevels.listFiles();
-            a = bfiles.length;
-        }
         if(userLevels.isDirectory()){
             File[] ufiles = userLevels.listFiles();
             b=ufiles.length;

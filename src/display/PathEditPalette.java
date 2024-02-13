@@ -92,7 +92,7 @@ public class PathEditPalette extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO: put code here
-                System.out.println("S pressed");
+                // System.out.println("S pressed");
             }
         });
     }

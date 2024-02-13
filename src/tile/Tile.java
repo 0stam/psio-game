@@ -6,7 +6,7 @@ import enums.Direction;
 import enums.Graphics;
 import java.io.Serializable;
 
-public abstract class Tile implements Serializable{
+public abstract class Tile implements Serializable {
 	private int x;
 	private int y;
 	private Graphics graphicsID;

@@ -6,11 +6,12 @@ import tile.ActionTile;
 import tile.PathTile;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class StateMachine implements TurnStrategy {
+public class StateMachine implements TurnStrategy, Serializable {
     private Hashtable<Point, Direction> path;
     public StateMachine () {}
     public StateMachine(ArrayList<PathTile> path) {setPath(path);}

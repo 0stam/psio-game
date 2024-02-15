@@ -30,7 +30,7 @@ public class MessagesPalette extends JPanel{
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 		splitPane.setResizeWeight(0.4f);
 
-		jTree = new JTree(GameManager.getInstance().getEditor().getSignsTreeModel().getDefaultTreeModel());
+		jTree = new JTree(GameManager.getInstance().getEditor().getSignsTreeModel());
 		jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		jTree.setShowsRootHandles(true);
 		jTree.setBackground(Color.WHITE);

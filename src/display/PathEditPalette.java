@@ -28,7 +28,7 @@ public class PathEditPalette extends JPanel{
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
         splitPane.setResizeWeight(0.4f);
 
-        jTree = new JTree(GameManager.getInstance().getEditor().getEnemiesTreeModel().getDefaultTreeModel());
+        jTree = new JTree(GameManager.getInstance().getEditor().getEnemiesTreeModel());
         //roamingEnemyTree.setEditable(true);
         jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.setShowsRootHandles(true);
@@ -69,16 +69,10 @@ public class PathEditPalette extends JPanel{
             DefaultMutableTreeNode selected = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
             if (selected == null)
                 return;
-            if (selected.isLeaf() && !((String) selected.getUserObject()).isEmpty())
+            if (selected.getUserObject() instanceof SmartEnemy smartEnemy)
             {
-                String chosen = (String) selected.getUserObject();
-                chosen = chosen.substring(13, chosen.length()-1);
-                int dot = chosen.indexOf(',');
-                String s = chosen.substring(0, dot);
-                int x = Integer.parseInt(chosen.substring(0, dot));
-                int y = Integer.parseInt(chosen.substring(dot+2));
                 EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
-                inputHandler.onEvent(new EnemySelectedEvent((SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(x, y)));
+                inputHandler.onEvent(new EnemySelectedEvent((SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(smartEnemy.getX(), smartEnemy.getY())));
             }
         }
     }

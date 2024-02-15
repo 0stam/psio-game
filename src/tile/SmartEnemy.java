@@ -27,4 +27,9 @@ public class SmartEnemy extends ActionTile<TurnStrategy> {
 		this.pathTileList = pathTileList;
 		setTurnStrategy(new StateMachine(pathTileList));
 	}
+	@Override
+	public String toString()
+	{
+		return "Smart enemy (" + super.getX() + ", " + super.getY() + ")";
+	}
 }

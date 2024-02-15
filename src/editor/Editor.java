@@ -8,6 +8,8 @@ import event.editor.*;
 import tile.*;
 import gamemanager.GameManager;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -123,7 +125,8 @@ public class Editor implements EventObserver {
                         Tile mapTile = GameManager.getInstance().getMap().getUpperLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
-                                enemiesTreeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                DefaultMutableTreeNode found = enemiesTreeModel.findNode((DefaultMutableTreeNode) enemiesTreeModel.getRoot(),mapTile);
+                                enemiesTreeModel.removeNodeFromParent(found);
                                 break;
                             }
                             case SIGN: {
@@ -139,11 +142,11 @@ public class Editor implements EventObserver {
 
                         switch (tile) {
                             case SMART: {
-                                enemiesTreeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)enemiesTreeModel.getRoot(), 0);
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.addNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)signsTreeModel.getRoot(), 0);
                                 break;
                             }
                             case PLAYER: {
@@ -168,7 +171,7 @@ public class Editor implements EventObserver {
                         Tile mapTile = GameManager.getInstance().getMap().getBottomLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
-                                enemiesTreeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.removeNodeFromParent((DefaultMutableTreeNode) enemiesTreeModel.getRoot());
                                 break;
                             }
                             case SIGN: {
@@ -181,11 +184,11 @@ public class Editor implements EventObserver {
                         change = true;
                         switch (tile) {
                             case SMART: {
-                                enemiesTreeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)enemiesTreeModel.getRoot(), 0);
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.addNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)signsTreeModel.getRoot(), 0);
                                 break;
                             }
                             //moze w przyszlosci bedzie wiecej

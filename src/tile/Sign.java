@@ -50,4 +50,10 @@ public class Sign extends Tile {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Sign (" + super.getX() + ", " + super.getY() + ")";
+	}
 }

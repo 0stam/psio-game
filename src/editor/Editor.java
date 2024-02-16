@@ -125,12 +125,11 @@ public class Editor implements EventObserver {
                         Tile mapTile = GameManager.getInstance().getMap().getUpperLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
-                                DefaultMutableTreeNode found = enemiesTreeModel.findNode((DefaultMutableTreeNode) enemiesTreeModel.getRoot(),mapTile);
-                                enemiesTreeModel.removeNodeFromParent(found);
+                                enemiesTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) enemiesTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.removeNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) signsTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             //moze w przyszlosci bedzie wiecej
@@ -171,11 +170,11 @@ public class Editor implements EventObserver {
                         Tile mapTile = GameManager.getInstance().getMap().getBottomLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
-                                enemiesTreeModel.removeNodeFromParent((DefaultMutableTreeNode) enemiesTreeModel.getRoot());
+                                enemiesTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) enemiesTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.removeNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) signsTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             //moze w przyszlosci bedzie wiecej

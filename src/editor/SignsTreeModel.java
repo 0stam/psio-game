@@ -11,22 +11,4 @@ public class SignsTreeModel extends DefaultTreeModel{
 	public SignsTreeModel() {
 		super(new DefaultMutableTreeNode("Signs"));
 	}
-
-	private DefaultMutableTreeNode findNodeByName(String nodeName) {
-		//typ zniknal z Enumeration, ale kod jest bezpieczny wiec mozna
-		@SuppressWarnings("rawtypes")
-		Enumeration enumeration = ((DefaultMutableTreeNode)this.getRoot()).breadthFirstEnumeration();
-		while (enumeration.hasMoreElements()) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) enumeration.nextElement();
-			if (nodeName.equals(node.getUserObject().toString())) {
-				return node;
-			}
-		}
-		return null;
-	}
-	public void removeNode(String name)
-	{
-		this.removeNodeFromParent(findNodeByName(name));
-	}
-
 }

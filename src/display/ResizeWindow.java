@@ -2,6 +2,7 @@ package display;
 
 import IO.IOManager;
 import connectableinterface.Connectable;
+import editor.EditorUtils;
 import enums.EditorMode;
 import enums.Layer;
 import event.display.ChangeLayerEvent;
@@ -16,6 +17,7 @@ import tile.SmartEnemy;
 import tile.Tile;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -89,8 +91,7 @@ public class ResizeWindow {
 				for (int i = 0;i < GameManager.getInstance().getMap().getWidth(); i++) {
 					for (int j = 0;j < GameManager.getInstance().getMap().getHeight();j++) {
 						if ((i >= newWidth || j >= newHeight) && ((GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof SmartEnemy) || (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof SmartEnemy))) {
-
-							GameManager.getInstance().getEditor().getEnemiesTreeModel().removeNode("Smart enemy (" + i + ", " + j + ")");
+							GameManager.getInstance().getEditor().getEnemiesTreeModel().removeNodeFromParent(new DefaultMutableTreeNode(GameManager.getInstance().getMap().getUpperLayer(i,j)));
 						}
 					}
 				}

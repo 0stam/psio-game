@@ -9,6 +9,8 @@ import levelloader.LevelNotSaved;
 import map.Map;
 import tile.*;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import static enums.Direction.*;
 import static enums.EditableTile.*;
 import static enums.EditableTile.WALL;
@@ -116,13 +118,13 @@ public class EditorUtils {
             {
                 for (int j = 0 ; j < GameManager.getInstance().getMap().getHeight() ; ++j)
                 {
-                    if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy)
+                    if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy smartEnemy)
                     {
-                        GameManager.getInstance().getEditor().getEnemiesTreeModel().addNode("Smart enemy ("+i+", "+j+")");
+                        GameManager.getInstance().getEditor().getEnemiesTreeModel().insertNodeInto(new DefaultMutableTreeNode(smartEnemy), (DefaultMutableTreeNode)GameManager.getInstance().getEditor().getEnemiesTreeModel().getRoot(), 0);
                     }
-                    if (GameManager.getInstance().getMap().getBottomLayer(i,j) instanceof Sign)
+                    if (GameManager.getInstance().getMap().getBottomLayer(i,j) instanceof Sign sign)
                     {
-                        GameManager.getInstance().getEditor().getSignsTreeModel().addNode("Sign ("+i+", "+j+")");
+                        GameManager.getInstance().getEditor().getSignsTreeModel().insertNodeInto(new DefaultMutableTreeNode(sign), (DefaultMutableTreeNode)GameManager.getInstance().getEditor().getSignsTreeModel().getRoot(), 0);
                     }
                 }
             }

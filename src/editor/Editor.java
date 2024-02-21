@@ -8,6 +8,8 @@ import event.editor.*;
 import tile.*;
 import gamemanager.GameManager;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -123,11 +125,11 @@ public class Editor implements EventObserver {
                         Tile mapTile = GameManager.getInstance().getMap().getUpperLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
-                                enemiesTreeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) enemiesTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.removeNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) signsTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             //moze w przyszlosci bedzie wiecej
@@ -139,11 +141,11 @@ public class Editor implements EventObserver {
 
                         switch (tile) {
                             case SMART: {
-                                enemiesTreeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)enemiesTreeModel.getRoot(), 0);
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.addNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)signsTreeModel.getRoot(), 0);
                                 break;
                             }
                             case PLAYER: {
@@ -168,11 +170,11 @@ public class Editor implements EventObserver {
                         Tile mapTile = GameManager.getInstance().getMap().getBottomLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
                             case SMART: {
-                                enemiesTreeModel.removeNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) enemiesTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.removeNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.removeNodeFromParent(TreeDFS.findNode((DefaultMutableTreeNode) signsTreeModel.getRoot(),mapTile));
                                 break;
                             }
                             //moze w przyszlosci bedzie wiecej
@@ -181,11 +183,11 @@ public class Editor implements EventObserver {
                         change = true;
                         switch (tile) {
                             case SMART: {
-                                enemiesTreeModel.addNode("Smart enemy (" + x + ", " + y + ")");
+                                enemiesTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)enemiesTreeModel.getRoot(), 0);
                                 break;
                             }
                             case SIGN: {
-                                signsTreeModel.addNode("Sign (" + x + ", " + y + ")");
+                                signsTreeModel.insertNodeInto(new DefaultMutableTreeNode(EditorUtils.editableToObject(tile, x, y)), (DefaultMutableTreeNode)signsTreeModel.getRoot(), 0);
                                 break;
                             }
                             //moze w przyszlosci bedzie wiecej

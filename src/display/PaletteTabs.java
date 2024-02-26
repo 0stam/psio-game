@@ -67,7 +67,7 @@ public class PaletteTabs {
 					GameManager.getInstance().onEvent(new SavePathEvent());
 					resetState(EditorMode.ADD);
 					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
-					pathEditPalette.getArrows().selectOne(pathEditPalette.getArrows().buttons.get(0));
+					//pathEditPalette.getArrows().selectOne(pathEditPalette.getArrows().buttons.get(0));
 					IOManager.getInstance().drawEditor();
 					break;
 				}
@@ -87,7 +87,7 @@ public class PaletteTabs {
 					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
 					pathEditPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
-					tilePalette.selectOne(tilePalette.buttons.get(0));
+					//tilePalette.selectOne(tilePalette.buttons.get(0));
 					IOManager.getInstance().drawEditor();
 					break;
 				}
@@ -98,7 +98,7 @@ public class PaletteTabs {
 					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
 					messagesPalette.getTree().clearSelection();
 					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
-					tilePalette.selectOne(tilePalette.buttons.get(0));
+					//tilePalette.selectOne(tilePalette.buttons.get(0));
 					IOManager.getInstance().drawEditor();
 					break;
 				}

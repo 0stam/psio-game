@@ -25,13 +25,14 @@ public class EditorInputHandler implements EventObserver {
     private boolean modeActive = false;
 
     // Current tile selected for ADD
-    private EditorGraphics heldTile = EditableTile.EMPTY;
+    private EditableTile heldTile = EditableTile.EMPTY;
 
     // Current tile selected for CONNECT
     private Tile connectingTile;
 
-    // Current enemy and tree model for pathedit
+    // Current enemy, arrow and tree model for pathedit
     private SmartEnemy currentEnemy;
+    private Arrow heldArrow = ARROW_UP;
     private EditorGraphics[][] currentPath;
     private EnemiesTreeModel enemiesTreeModel;
 
@@ -91,20 +92,24 @@ public class EditorInputHandler implements EventObserver {
     }
 
     private void onTilePalettePressed(PalettePressedEvent event) {
-        heldTile = event.getType();
+        if (event.getType() instanceof EditableTile editableTile) {
+            heldTile = editableTile;
+        } else if (event.getType() instanceof Arrow arrow) {
+            heldArrow = arrow;
+        }
     }
 
     private void onInteractiveTilePressed(InteractiveTilePressedEvent event) {
         if (modeActive) {
             switch (mode) {
                 case ADD:
-                    GameManager.getInstance().onEvent(new TileModifiedEvent((EditableTile) heldTile, event.getX(), event.getY(), layer, event.isRightMouseButton()));
+                    GameManager.getInstance().onEvent(new TileModifiedEvent(heldTile, event.getX(), event.getY(), layer, event.isRightMouseButton()));
                     break;
                 case CONNECT:
                     GameManager.getInstance().onEvent(new TileConnectionModifiedEvent((Connectable) connectingTile, event.getX(), event.getY(), layer, event.isRightMouseButton()));
                     break;
                 case SELECT:
-                    GameManager.getInstance().onEvent(new ArrowModifiedEvent((Arrow) heldTile, event.getX(), event.getY(), event.isRightMouseButton()));
+                    GameManager.getInstance().onEvent(new ArrowModifiedEvent(heldArrow, event.getX(), event.getY(), event.isRightMouseButton()));
                     break;
             }
         }
@@ -122,10 +127,8 @@ public class EditorInputHandler implements EventObserver {
                 currentEnemy = null;
                 currentPath = null;
                 currentSign = null;
-                heldTile = EditableTile.EMPTY;
                 break;
             case SELECT, PATHEDIT:
-                heldTile = Arrow.ARROW_UP;
                 break;
         }
     }

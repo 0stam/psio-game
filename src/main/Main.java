@@ -4,6 +4,7 @@ import IO.ConsoleIO;
 import IO.IOManager;
 import gamemanager.GameManager;
 import IO.GraphicIO;
+import levelloader.LevelLoader;
 
 import java.io.File;
 
@@ -13,6 +14,7 @@ public class Main {
 
         IOManager io = IOManager.getInstance(new GraphicIO());
 
+        LevelLoader.createUserLevelDirectory();
         // Wyświetlenie menu głównego
         io.drawMenu();
         //gameManager.startGame();

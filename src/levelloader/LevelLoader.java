@@ -18,6 +18,13 @@ public class LevelLoader {
             "conveyor", "chained_diagonal", "full_adder", "kopara", "hardest_level", "web_of_lies", "the_great_puzzle", "badziewie"
     };
 
+    public static void createUserLevelDirectory() {
+        Path userPath = Paths.get(System.getProperty("user.home"), userLevelsPath);
+        if (!Files.exists(userPath)) {
+            new File(userPath.toString()).mkdirs();
+        }
+    }
+
     public static void saveLevel(String name, Map map) throws LevelNotSaved {
         String userHome = System.getProperty("user.home");
         String path = name;

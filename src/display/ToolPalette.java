@@ -29,30 +29,30 @@ public class ToolPalette extends AbstractPalette {
 
 		buttons = new ArrayList<>();
 		try {
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_both.png")), "Both"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_both.png"), "Both"));
 			buttons.get(0).addMouseListener(new layerListener(Layer.BOTH));
 			selected = buttons.get(0);
 			buttons.get(0).setSelected(true);
 
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_front.png")), "Front"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_front.png"), "Front"));
 			buttons.get(1).addMouseListener(new layerListener(Layer.UPPER));
 
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_bottom.png")), "Bottom"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_bottom.png"), "Bottom"));
 			buttons.get(2).addMouseListener(new layerListener(Layer.BOTTOM));
 
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_resize.png")), "Resize"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_resize.png"), "Resize"));
 			buttons.get(3).addMouseListener(new resizeListener());
 
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_zoomin.png")), "Zoom in"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_zoomin.png"), "Zoom in"));
 			buttons.get(4).addMouseListener(new zoomListener(parent, 1));
 
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_zoomout.png")), "Zoom out"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_zoomout.png"), "Zoom out"));
 			buttons.get(5).addMouseListener(new zoomListener(parent, -1));
 
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_save.png")), "Save"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_save.png"), "Save"));
 			buttons.get(6).addMouseListener(new saveListener(this));
 
-			buttons.add(new ImageButton(ImageIO.read(new File("src/graphics/tool_load.png")), "Load"));
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_load.png"), "Load"));
 			buttons.get(7).addMouseListener(new loadListener(this));
 		} catch (IOException ignored) {
 

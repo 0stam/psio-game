@@ -77,8 +77,9 @@ public class GraphicsHashtable {
     public Hashtable<Graphics, BufferedImage> getImages() {
         return images;
     }
-    
-    private BufferedImage loadImage(String path) throws IOException {
-        return ImageIO.read(getClass().getResourceAsStream(path));
+
+    // Helper function to load an image using resources system, exposed to be used by other classes
+    public static BufferedImage loadImage(String path) throws IOException {
+        return ImageIO.read(GraphicsHashtable.class.getResourceAsStream(path));
     }
 }

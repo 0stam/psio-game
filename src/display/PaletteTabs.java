@@ -12,6 +12,7 @@ import gamemanager.GameManager;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.io.IOException;
 
 public class PaletteTabs {
 	private JTabbedPane tabs;
@@ -31,10 +32,12 @@ public class PaletteTabs {
 		pathEditPalette = new PathEditPalette();
 		messagesPalette = new MessagesPalette();
 
-		tabs.addTab("", new ImageIcon("src/graphics/tool_tiles.png"), tilePalette, "Tiles");
-		tabs.addTab("", new ImageIcon("src/graphics/tool_connect.png"), connectionsPalette, "Connections");
-		tabs.addTab("", new ImageIcon("src/graphics/tool_path.png"), pathEditPalette, "Pathedit");
-		tabs.addTab("", new ImageIcon("src/graphics/tool_message.png"), messagesPalette, "Messages");
+		try {
+			tabs.addTab("", new ImageIcon(GraphicsHashtable.loadImage("/graphics/tool_tiles.png")), tilePalette, "Tiles");
+			tabs.addTab("", new ImageIcon(GraphicsHashtable.loadImage("/graphics/tool_connect.png")), connectionsPalette, "Connections");
+			tabs.addTab("", new ImageIcon(GraphicsHashtable.loadImage("/graphics/tool_path.png")), pathEditPalette, "Pathedit");
+			tabs.addTab("", new ImageIcon(GraphicsHashtable.loadImage("/graphics/tool_message.png")), messagesPalette, "Messages");
+		} catch (IOException e) {}
 
 		tabs.addChangeListener(new ModeListener());
 	}

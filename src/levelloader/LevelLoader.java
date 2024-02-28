@@ -131,7 +131,7 @@ public class LevelLoader {
 
     public static int getLevelCount() {
         String userHome = System.getProperty("user.home");
-        File userLevels = new File(userHome + "/psio-game/userlevels");
+        File userLevels = new File(userHome + userLevelsPath);
         int a=levelOrder.length, b=0;
 
         if(userLevels.isDirectory()){

@@ -15,7 +15,7 @@ public class LevelLoader {
     public static final String userLevelsPath = "/psio-game/userlevels/";
     public static final String[] levelOrder = {
             "introduction", "first_puzzle", "creative_button", "labyrinth", "chained_puzzle", "big_level", "robots_robots",
-            "conveyor", "chained_diagonal", "full_adder", "kopara", "hardest_level", "web_of_lies", "the_great_puzzle", "badziewie"
+            "conveyor", "chained_diagonal", "full_adder", "kopara", "hardest_level", "web_of_lies", "the_great_puzzle", "badziewie", "bad_apple"
     };
 
     public static void createUserLevelDirectory() {

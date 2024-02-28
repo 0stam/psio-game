@@ -78,9 +78,11 @@ public class ButtonPermanent extends Tile implements EventSource, Connectable {
 	public void onEntered(Direction direction, Tile tile) {
 		super.onEntered(direction, tile);
 
-		isPressed = true;
-		this.setGraphicsID(Graphics.BUTTON_PERMANENT_PRESSED);
-		notifyObservers();
+		if (!isPressed) {
+			isPressed = true;
+			this.setGraphicsID(Graphics.BUTTON_PERMANENT_PRESSED);
+			notifyObservers();
+		}
 	}
 
 	@Override

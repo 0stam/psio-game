@@ -41,6 +41,7 @@ public class EditorUtils {
             case BUTTON_PERMANENT ->  new ButtonPermanent(x, y);
             case SIGN -> new Sign(x, y);
             case TELEPORT -> new Teleport(x, y);
+            case TOGGLE -> new ToggleDoor(x, y);
             case CHECKPOINT -> new Checkpoint(x, y);
             default ->  null;
         };
@@ -74,6 +75,7 @@ public class EditorUtils {
                 case "Wall" -> WALL;
                 case "Sign" -> SIGN;
                 case "Teleport" -> TELEPORT;
+                case "ToggleDoor" -> TOGGLE;
                 case "Checkpoint" -> CHECKPOINT;
                 default -> enums.EditableTile.EMPTY;
             };

@@ -28,8 +28,6 @@ public class Editor implements EventObserver {
     private SignsTreeModel signsTreeModel;
 
     public Editor() {
-        LevelLoader.createUserLevelDirectory();
-
         change=false;
         EditorUtils.setDefaultMap(10, 10);
         playerCount = 1;

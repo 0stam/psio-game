@@ -26,7 +26,7 @@ public class GraphicIO implements IOStrategy {
 
 		}
 
-		window = new JFrame("Nasza cudowna gra");
+		window = new JFrame("Nanogrid");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//window.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		//window.setUndecorated(true);

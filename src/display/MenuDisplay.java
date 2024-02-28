@@ -29,8 +29,8 @@ public class MenuDisplay extends JPanel {
         add(container, BorderLayout.CENTER);
 
 
-        titleLabel = new JLabel("TILE ADVENTURE");
-        titleLabel.setFont(new Font("Serif", Font.BOLD, 48));
+        titleLabel = new JLabel("NANOGRID");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 50));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 

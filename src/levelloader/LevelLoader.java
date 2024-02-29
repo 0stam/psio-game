@@ -14,8 +14,8 @@ import java.util.Arrays;
 public class LevelLoader {
     public static final String userLevelsPath = "/nanogrid-levels/";
     public static final String[] levelOrder = {
-            "introduction", "first_puzzle", "creative_button", "labyrinth", "chained_puzzle", "big_level", "robots_robots",
-            "conveyor", "chained_diagonal", "full_adder", "kopara", "hardest_level", "web_of_lies", "the_great_puzzle", "badziewie"
+            "introduction", "first_puzzle", "creative_button", "labyrinth", "chained_puzzle", "big_level", "robots_robots", "new_danger",
+            "conveyor", "chained_diagonal", "kopara", "hardest_level", "web_of_lies", "the_great_puzzle", "badziewie", "full_adder"
     };
 
     public static void createUserLevelDirectory() {

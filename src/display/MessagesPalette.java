@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 public class MessagesPalette extends JPanel{
 	private JSplitPane splitPane;
 	private JTree jTree;
+	private static JScrollPane textScrollPane;
 	private static JTextArea textArea;
 	private float scale = 1;
 
@@ -43,7 +44,10 @@ public class MessagesPalette extends JPanel{
 
 		textArea = new JTextArea();
 		textArea.setBackground(Color.WHITE);
-		textArea.setFont(new Font("Arial", Font.PLAIN, 25));
+		textArea.setFont(new Font("MS Gothic", Font.PLAIN, 25));
+		textScrollPane = new JScrollPane(textArea);
+		textScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		textScrollPane.getHorizontalScrollBar().setUnitIncrement(16);
 
 		jTree.addTreeSelectionListener(new SelectionListener());
 
@@ -52,7 +56,7 @@ public class MessagesPalette extends JPanel{
 		scrollPane.setMinimumSize(new Dimension(300, 0));
 		//GameManager.getInstance().getEditor().setReferenceTree(jTree);
 		splitPane.setLeftComponent(scrollPane);
-		splitPane.setRightComponent(textArea);
+		splitPane.setRightComponent(textScrollPane);
 		this.add(splitPane);
 
 		createKeyBindings();

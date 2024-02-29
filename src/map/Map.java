@@ -118,6 +118,7 @@ public class Map implements Serializable {
     public void reset() {
         if (!checkpoints.empty()) {
             currentMapState = deserializeMapState(checkpoints.pop());
+            moveCancelAvailable = false;
         }
     }
 

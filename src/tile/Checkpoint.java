@@ -20,7 +20,7 @@ public class Checkpoint extends Tile {
     public void onEntered(Direction direction, Tile tile) {
         super.onEntered(direction, tile);
 
-        if (!activated) {
+        if (tile instanceof PlayerCharacter && !activated) {
             activated = true;
             setGraphicsID(Graphics.CHECKPOINT_USED);
             GameManager.getInstance().onEvent(new CheckpointActivatedEvent());

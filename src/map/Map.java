@@ -13,6 +13,7 @@ public class Map implements Serializable {
 
     private ByteArrayOutputStream previousMapState;
     private Stack<ByteArrayOutputStream> checkpoints;
+    private boolean checkpointJustCreated = false; // True if checkpoint was created on this turn
     private boolean moveCancelAvailable = false;
 
     public Map(int x, int y) {
@@ -91,19 +92,26 @@ public class Map implements Serializable {
             checkpoints.add(serializeMapState(currentMapState));
         }
 
+        moveCancelAvailable = true;
+        checkpointJustCreated = false;
+
         previousMapState = serializeMapState(currentMapState);
         currentMapState.update(direction);
-        moveCancelAvailable = true;
     }
 
     public void registerCheckpoint() {
         checkpoints.add(serializeMapState(currentMapState));
+        checkpointJustCreated = true;
     }
 
     public void resetMove() {
         if (moveCancelAvailable) {
             currentMapState = deserializeMapState(previousMapState);
             moveCancelAvailable = false;
+
+            if (checkpointJustCreated) {
+                checkpoints.pop();
+            }
         }
     }
 

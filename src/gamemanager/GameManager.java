@@ -165,7 +165,8 @@ public class GameManager implements EventObserver {
             }
         }
 
-        if (event instanceof LevelSelectedEvent levelSelectedEvent) {
+        if (event instanceof LevelSelectedEvent) {
+            LevelSelectedEvent levelSelectedEvent = (LevelSelectedEvent)event;
             startLevel(levelSelectedEvent.getIndex());
             if (currentPopup != null) {
                 currentPopup.hide();
@@ -180,7 +181,8 @@ public class GameManager implements EventObserver {
             return;
         }
 
-        if (event instanceof MoveEvent moveEvent) {
+        if (event instanceof MoveEvent) {
+            MoveEvent moveEvent = (MoveEvent)event;
             startTurn(moveEvent.getDirection());
             if (!levelCompleted) {
                 IOManager.getInstance().drawGame();

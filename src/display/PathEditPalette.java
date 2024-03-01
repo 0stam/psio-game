@@ -69,8 +69,9 @@ public class PathEditPalette extends JPanel{
             DefaultMutableTreeNode selected = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
             if (selected == null)
                 return;
-            if (selected.getUserObject() instanceof SmartEnemy smartEnemy)
+            if (selected.getUserObject() instanceof SmartEnemy)
             {
+                SmartEnemy smartEnemy = (SmartEnemy)selected.getUserObject();
                 EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
                 inputHandler.onEvent(new EnemySelectedEvent((SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(smartEnemy.getX(), smartEnemy.getY())));
             }

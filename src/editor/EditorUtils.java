@@ -1,5 +1,6 @@
 package editor;
 
+import IO.ConsoleIO;
 import IO.IOManager;
 import enums.ConnectableTile;
 import enums.EditableTile;
@@ -21,80 +22,187 @@ public class EditorUtils {
             return new ChasingEnemy(x, y, null);
         }
 
-        return switch (editableTile) {
-            case BOX ->  new Box(x, y);
-            case GOAL ->  new Goal(x, y);
-            case WALL ->  new Wall(x, y);
-            case ENEMY ->  new ChasingEnemy(x, y, GameManager.getInstance().getMap().getPlayer());
-            case MIMIC -> new MimicEnemy(x, y);
-            case SMART -> new SmartEnemy(x, y);
-            case FLOOR ->  new Floor(x, y);
-            case ONEWAY_UP ->  new OnewayFloor(x, y, UP);
-            case ONEWAY_DOWN ->  new OnewayFloor(x, y, DOWN);
-            case ONEWAY_LEFT ->  new OnewayFloor(x, y, LEFT);
-            case ONEWAY_RIGHT ->  new OnewayFloor(x, y, RIGHT);
-            case DANGER -> new DangerFloor(x, y);
-            case PLAYER ->  new PlayerCharacter(x, y);
-            case DOOR ->  new Door(x, y);
-            case REVERSE ->  new ReverseDoor(x, y);
-            case BUTTON ->  new Button(x, y);
-            case BUTTON_PERMANENT ->  new ButtonPermanent(x, y);
-            case SIGN -> new Sign(x, y);
-            case TELEPORT -> new Teleport(x, y);
-            case TOGGLE -> new ToggleDoor(x, y);
-            case CHECKPOINT -> new Checkpoint(x, y);
-            default ->  null;
-        };
+        Tile tile;
+
+        switch (editableTile) {
+            case BOX:
+                tile = new Box(x, y);
+                break;
+            case GOAL:
+                tile = new Goal(x, y);
+                break;
+            case WALL:
+                tile = new Wall(x, y);
+                break;
+            case ENEMY:
+                tile = new ChasingEnemy(x, y, GameManager.getInstance().getMap().getPlayer());
+                break;
+            case MIMIC:
+                tile = new MimicEnemy(x, y);
+                break;
+            case SMART:
+                tile = new SmartEnemy(x, y);
+                break;
+            case FLOOR:
+                tile = new Floor(x, y);
+                break;
+            case ONEWAY_UP:
+                tile = new OnewayFloor(x, y, UP);
+                break;
+            case ONEWAY_DOWN:
+                tile = new OnewayFloor(x, y, DOWN);
+                break;
+            case ONEWAY_LEFT:
+                tile = new OnewayFloor(x, y, LEFT);
+                break;
+            case ONEWAY_RIGHT:
+                tile = new OnewayFloor(x, y, RIGHT);
+                break;
+            case DANGER:
+                tile = new DangerFloor(x, y);
+                break;
+            case PLAYER:
+                tile = new PlayerCharacter(x, y);
+                break;
+            case DOOR:
+                tile = new Door(x, y);
+                break;
+            case REVERSE:
+                tile = new ReverseDoor(x, y);
+                break;
+            case BUTTON:
+                tile = new Button(x, y);
+                break;
+            case BUTTON_PERMANENT:
+                tile = new ButtonPermanent(x, y);
+                break;
+            case SIGN:
+                tile = new Sign(x, y);
+                break;
+            case TELEPORT:
+                tile = new Teleport(x, y);
+                break;
+            case TOGGLE:
+                tile = new ToggleDoor(x, y);
+                break;
+            case CHECKPOINT:
+                tile = new Checkpoint(x, y);
+                break;
+            default:
+                tile = null;
+        }
+
+        return tile;
     }
 
     public static EditableTile objectToEditable(Tile tile) {
+        EditableTile et;
         if (tile == null){
-            return enums.EditableTile.EMPTY;
+            et = enums.EditableTile.EMPTY;
         } else if (tile instanceof OnewayFloor){
-            return switch (((OnewayFloor)tile).getDirection()) {
-                case UP -> ONEWAY_UP;
-                case DOWN -> ONEWAY_DOWN;
-                case LEFT -> ONEWAY_LEFT;
-                case RIGHT -> ONEWAY_RIGHT;
-                default -> ONEWAY_UP;
-            };
+            switch (((OnewayFloor)tile).getDirection()) {
+                case UP:
+                    et = ONEWAY_UP;
+                    break;
+                case DOWN:
+                    et = ONEWAY_DOWN;
+                    break;
+                case LEFT:
+                    et = ONEWAY_LEFT;
+                    break;
+                case RIGHT:
+                    et = ONEWAY_RIGHT;
+                    break;
+                default:
+                    et = ONEWAY_UP;
+                    break;
+            }
         } else {
-            return switch (tile.getClass().getSimpleName()) {
-                case "Box" -> BOX;
-                case "Button" -> BUTTON;
-                case "ButtonPermanent" -> BUTTON_PERMANENT;
-                case "ChasingEnemy" -> ENEMY;
-                case "MimicEnemy" -> MIMIC;
-                case "SmartEnemy" -> SMART;
-                case "ReverseDoor" -> REVERSE;
-                case "Door" -> DOOR;
-                case "Floor" -> FLOOR;
-                case "DangerFloor" -> DANGER;
-                case "Goal" -> GOAL;
-                case "PlayerCharacter" -> PLAYER;
-                case "Wall" -> WALL;
-                case "Sign" -> SIGN;
-                case "Teleport" -> TELEPORT;
-                case "ToggleDoor" -> TOGGLE;
-                case "Checkpoint" -> CHECKPOINT;
-                default -> enums.EditableTile.EMPTY;
-            };
+            switch (tile.getClass().getSimpleName()) {
+                case "Box":
+                    et = BOX;
+                    break;
+                case "Button":
+                    et = BUTTON;
+                    break;
+                case "ButtonPermanent":
+                    et = BUTTON_PERMANENT;
+                    break;
+                case "ChasingEnemy":
+                    et = ENEMY;
+                    break;
+                case "MimicEnemy":
+                    et = MIMIC;
+                    break;
+                case "SmartEnemy":
+                    et = SMART;
+                    break;
+                case "Door":
+                    et = DOOR;
+                    break;
+                case "Floor":
+                    et = FLOOR;
+                    break;
+                case "DangerFloor":
+                    et = DANGER;
+                    break;
+                case "Goal":
+                    et = GOAL;
+                    break;
+                case "PlayerCharacter":
+                    et = PLAYER;
+                    break;
+                case "Wall":
+                    et = WALL;
+                    break;
+                case "Sign":
+                    et = SIGN;
+                    break;
+                case "Teleport":
+                    et = TELEPORT;
+                    break;
+                case "ToggleDoor":
+                    et = TOGGLE;
+                    break;
+                case "Checkpoint":
+                    et = CHECKPOINT;
+                    break;
+                default:
+                    et = enums.EditableTile.EMPTY;
+                    break;
+            }
         }
+
+        return et;
     }
 
     public static ConnectableTile objectToConnectable(Tile tile)
     {
+        ConnectableTile ct;
+
         if (tile == null){
             return ConnectableTile.DEFAULT;
         }
-        return switch (tile.getClass().getSimpleName())
+        switch (tile.getClass().getSimpleName())
         {
-            case "Button" -> ConnectableTile.BUTTON;
-            case "ButtonPermanent" -> ConnectableTile.BUTTON_PERMANENT;
-            case "ChasingEnemy" -> ConnectableTile.ENEMY;
-            case "Teleport" -> ConnectableTile.TELEPORT;
-            default -> ConnectableTile.DEFAULT;
-        };
+            case "Button":
+                ct = ConnectableTile.BUTTON;
+                break;
+            case "ButtonPermanent":
+                ct = ConnectableTile.BUTTON_PERMANENT;
+                break;
+            case "ChasingEnemy":
+                ct = ConnectableTile.ENEMY;
+                break;
+            case "Teleport":
+                ct = ConnectableTile.TELEPORT;
+                break;
+            default:
+                ct = ConnectableTile.DEFAULT;
+                break;
+        }
+
+        return ct;
     }
 
     public static void setDefaultMap(int x, int y) {
@@ -120,12 +228,14 @@ public class EditorUtils {
             {
                 for (int j = 0 ; j < GameManager.getInstance().getMap().getHeight() ; ++j)
                 {
-                    if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy smartEnemy)
+                    if (GameManager.getInstance().getMap().getUpperLayer(i,j) instanceof SmartEnemy)
                     {
+                        SmartEnemy smartEnemy = (SmartEnemy)GameManager.getInstance().getMap().getUpperLayer(i,j);
                         GameManager.getInstance().getEditor().getEnemiesTreeModel().insertNodeInto(new DefaultMutableTreeNode(smartEnemy), (DefaultMutableTreeNode)GameManager.getInstance().getEditor().getEnemiesTreeModel().getRoot(), 0);
                     }
-                    if (GameManager.getInstance().getMap().getBottomLayer(i,j) instanceof Sign sign)
+                    if (GameManager.getInstance().getMap().getBottomLayer(i,j) instanceof Sign)
                     {
+                        Sign sign = (Sign)GameManager.getInstance().getMap().getBottomLayer(i,j);
                         GameManager.getInstance().getEditor().getSignsTreeModel().insertNodeInto(new DefaultMutableTreeNode(sign), (DefaultMutableTreeNode)GameManager.getInstance().getEditor().getSignsTreeModel().getRoot(), 0);
                     }
                 }

@@ -38,14 +38,17 @@ public class PathEditorHelper {
                         jak macie cos takiego to zmiencie java machine na najnowsza wersje dodatkowo moze pomoc
                         zmienienie w ustawieniach projektu wersj
                      */
-                    switch (currentPath[i][j])
-                    {
-                        case ARROW_UP -> dir = UP;
-                        case ARROW_DOWN -> dir = DOWN;
-                        case ARROW_LEFT -> dir = LEFT;
-                        case ARROW_RIGHT -> dir = RIGHT;
-                        default -> throw new IllegalStateException("Unexpected value: " + currentPath[i][j]);
-                    }
+					if (currentPath[i][j].equals(ARROW_UP)) {
+						dir = UP;
+					} else if (currentPath[i][j].equals(ARROW_DOWN)) {
+						dir = DOWN;
+					} else if (currentPath[i][j].equals(ARROW_LEFT)) {
+						dir = LEFT;
+					} else if (currentPath[i][j].equals(ARROW_RIGHT)) {
+						dir = RIGHT;
+					} else {
+						throw new IllegalStateException("Unexpected value: " + currentPath[i][j]);
+					}
                     toReturn.add((new PathTile(i, j, dir)));
                 }
             }

@@ -18,7 +18,8 @@ public class ReverseDoor extends Tile implements EventObserver {
 
     @Override
     public void onEvent(Event event) {
-        if (event instanceof ButtonEvent buttonEvent) {
+        if (event instanceof ButtonEvent) {
+            ButtonEvent buttonEvent = (ButtonEvent)event;
             if (buttonEvent.isPressed()) {
                 numer++;
             } else {

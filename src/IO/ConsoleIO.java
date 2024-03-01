@@ -53,19 +53,24 @@ public class ConsoleIO implements IOStrategy {
 			move = inputListener.nextLine().charAt(0);
 
 			switch (move) {
-				case 'w', 'W':
+				case 'w':
+				case 'W':
 					direction = Direction.UP;
 					break;
-                case 'a', 'A':
+                case 'a':
+				case 'A':
 					direction = Direction.LEFT;
 					break;
-                case 's', 'S':
+                case 's':
+				case 'S':
 					direction = Direction.DOWN;
 					break;
-                case 'd', 'D':
+                case 'd':
+				case 'D':
 					direction = Direction.RIGHT;
 					break;
-				case 'r', 'R':
+				case 'r':
+				case 'R':
 					GameManager.getInstance().onEvent(new ResetEvent());
 					return;
                 default:
@@ -111,23 +116,59 @@ public class ConsoleIO implements IOStrategy {
 	}
 
 	public char idToChar(Graphics graphics)	{
-        return switch (graphics) {
-            case FLOOR -> '_';
-			case DANGER -> '~';
-            case WALL -> '#';
-            case BOX -> 'O';
-            case PLAYER -> 'X';
-            case ENEMY -> 'Y';
-			case MIMIC -> 'x';
-			case SMART -> 'S';
-            case BUTTON_PRESSED -> 'v';
-            case BUTTON_RELEASED -> '^';
-			case BUTTON_PERMANENT_PRESSED -> 'v';
-			case BUTTON_PERMANENT_RELEASED -> '^';
-            case DOOR_OPEN -> 'u';
-            case DOOR_CLOSED -> 'n';
-            case GOAL -> 'P';
-            default -> '!';
-        };
+		char c;
+
+        switch (graphics) {
+			case FLOOR:
+				c = '_';
+				break;
+			case DANGER:
+				c = '~';
+				break;
+			case WALL:
+				c = '#';
+				break;
+			case BOX:
+				c = 'O';
+				break;
+			case PLAYER:
+				c = 'X';
+				break;
+			case ENEMY:
+				c = 'Y';
+				break;
+			case MIMIC:
+				c = 'x';
+				break;
+			case SMART:
+				c = 'S';
+				break;
+			case BUTTON_PRESSED:
+				c = 'v';
+				break;
+			case BUTTON_RELEASED:
+				c = '^';
+				break;
+			case BUTTON_PERMANENT_PRESSED:
+				c = 'v';
+				break;
+			case BUTTON_PERMANENT_RELEASED:
+				c = '^';
+				break;
+			case DOOR_OPEN:
+				c = 'u';
+				break;
+			case DOOR_CLOSED:
+				c = 'n';
+				break;
+			case GOAL:
+				c = 'P';
+				break;
+			default:
+				c = '!';
+				break;
+        }
+
+		return c;
 	}
 }

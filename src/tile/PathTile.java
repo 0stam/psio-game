@@ -10,10 +10,18 @@ public class PathTile extends Tile{
         setEnterableStrategy(null);
         switch (direction)
         {
-            case UP -> setGraphicsID(Graphics.ARROW_UP);
-            case DOWN -> setGraphicsID(Graphics.ARROW_DOWN);
-            case LEFT -> setGraphicsID(Graphics.ARROW_LEFT);
-            case RIGHT -> setGraphicsID(Graphics.ARROW_RIGHT);
+            case UP:
+                setGraphicsID(Graphics.ARROW_UP);
+                break;
+            case DOWN:
+                setGraphicsID(Graphics.ARROW_DOWN);
+                break;
+            case LEFT:
+                setGraphicsID(Graphics.ARROW_LEFT);
+                break;
+            case RIGHT:
+                setGraphicsID(Graphics.ARROW_RIGHT);
+                break;
         }
         this.direction = direction;
     }

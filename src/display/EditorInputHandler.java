@@ -92,9 +92,11 @@ public class EditorInputHandler implements EventObserver {
     }
 
     private void onTilePalettePressed(PalettePressedEvent event) {
-        if (event.getType() instanceof EditableTile editableTile) {
+        if (event.getType() instanceof EditableTile) {
+            EditableTile editableTile = (EditableTile)event.getType();
             heldTile = editableTile;
-        } else if (event.getType() instanceof Arrow arrow) {
+        } else if (event.getType() instanceof Arrow) {
+            Arrow arrow = (Arrow)event.getType();
             heldArrow = arrow;
         }
     }
@@ -128,7 +130,8 @@ public class EditorInputHandler implements EventObserver {
                 currentPath = null;
                 currentSign = null;
                 break;
-            case SELECT, PATHEDIT:
+            case SELECT:
+            case PATHEDIT:
                 break;
         }
     }

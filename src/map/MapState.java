@@ -66,8 +66,10 @@ public class MapState implements Serializable, Cloneable {
         if (upperLayer[x][y] instanceof ActionTile) {
             deleteActionTile((ActionTile) upperLayer[x][y]);
         }
-        if (tile instanceof ActionTile actionTile) {
-            if (actionTile instanceof PlayerCharacter playerCharacter) {
+        if (tile instanceof ActionTile) {
+            ActionTile actionTile = (ActionTile)tile;
+            if (actionTile instanceof PlayerCharacter) {
+                PlayerCharacter playerCharacter = (PlayerCharacter)actionTile;
                 if (player != null && player != playerCharacter) {
                     deleteUpperLayer(player.getX(), player.getY());
                 }

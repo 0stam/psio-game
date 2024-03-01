@@ -103,8 +103,8 @@ public class Editor implements EventObserver {
     private void editorPlaceTile(EditorGraphics incomingTile, Layer layer, int x, int y) {
         switch (layer) {
             case BOTH:
-                if (incomingTile instanceof EditableTile tile) {
-                    {
+                if (incomingTile instanceof EditableTile) {
+                    EditableTile tile = (EditableTile)incomingTile;
                         if (tile.preferredLayer == Layer.BOTH || tile.preferredLayer == UPPER) {
                             editorPlaceTile(tile, UPPER, x, y);
                             if (tile.fullTileWhenBoth || EditorUtils.objectToEditable(GameManager.getInstance().getMap().getBottomLayer(x, y)).fullTileWhenBoth) {
@@ -117,11 +117,11 @@ public class Editor implements EventObserver {
                                 editorPlaceTile(EditableTile.EMPTY, UPPER, x, y);
                             }
                         }
-                    }
                 }
                 break;
             case UPPER:
-                if (incomingTile instanceof EditableTile tile) {
+                if (incomingTile instanceof EditableTile) {
+                    EditableTile tile = (EditableTile)incomingTile;
                     if (tile.isPlaceableUpper && tile != EditorUtils.objectToEditable(GameManager.getInstance().getMap().getUpperLayer(x, y)) && !(GameManager.getInstance().getMap().getUpperLayer(x, y) instanceof PlayerCharacter && playerCount == 1)) {
                         Tile mapTile = GameManager.getInstance().getMap().getUpperLayer(x, y);
                         switch (EditorUtils.objectToEditable(mapTile)) {
@@ -152,7 +152,8 @@ public class Editor implements EventObserver {
                             case PLAYER: {
                                 for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
                                     for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
-                                        if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof ChasingEnemy enemy) {
+                                        if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof ChasingEnemy) {
+                                            ChasingEnemy enemy = (ChasingEnemy)GameManager.getInstance().getMap().getUpperLayer(i, j);
                                             enemy.addConnection(GameManager.getInstance().getMap().getUpperLayer(x, y));
                                         }
                                     }
@@ -163,7 +164,8 @@ public class Editor implements EventObserver {
                 }
                 break;
             case BOTTOM:
-                if (incomingTile instanceof EditableTile tile) {
+                if (incomingTile instanceof EditableTile) {
+                    EditableTile tile = (EditableTile)incomingTile;
                     if (tile == enums.EditableTile.EMPTY) {
                         tile = FLOOR;
                     }

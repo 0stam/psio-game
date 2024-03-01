@@ -9,10 +9,10 @@ import event.display.ModeChangedEvent;
 import event.editor.LevelLoadedEvent;
 import event.editor.LevelSavedEvent;
 import event.editor.SavePathEvent;
+import event.game.TestEvent;
 import gamemanager.GameManager;
 import levelloader.LevelLoader;
 
-        import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
         import java.awt.*;
@@ -43,17 +43,20 @@ public class ToolPalette extends AbstractPalette {
 			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_resize.png"), "Resize"));
 			buttons.get(3).addMouseListener(new resizeListener());
 
+			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_test.png"), "Test"));
+			buttons.get(4).addMouseListener(new testListener());
+
 			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_zoomin.png"), "Zoom in"));
-			buttons.get(4).addMouseListener(new zoomListener(parent, 1));
+			buttons.get(5).addMouseListener(new zoomListener(parent, 1));
 
 			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_zoomout.png"), "Zoom out"));
-			buttons.get(5).addMouseListener(new zoomListener(parent, -1));
+			buttons.get(6).addMouseListener(new zoomListener(parent, -1));
 
 			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_save.png"), "Save"));
-			buttons.get(6).addMouseListener(new saveListener(this));
+			buttons.get(7).addMouseListener(new saveListener(this));
 
 			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_load.png"), "Load"));
-			buttons.get(7).addMouseListener(new loadListener(this));
+			buttons.get(8).addMouseListener(new loadListener(this));
 		} catch (IOException ignored) {
 
 		}
@@ -108,6 +111,13 @@ public class ToolPalette extends AbstractPalette {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			resizeWindow = new ResizeWindow();
+		}
+	}
+
+	public class testListener extends MouseInputAdapter {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			GameManager.getInstance().onEvent(new TestEvent());
 		}
 	}
 

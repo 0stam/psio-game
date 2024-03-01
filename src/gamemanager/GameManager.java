@@ -28,6 +28,7 @@ public class GameManager implements EventObserver {
     private boolean checkpointQueued;
     private int currentLevel;
     private boolean endLevel = false;
+    private boolean isTest = false;
 
     private Popup currentPopup;
 
@@ -59,10 +60,17 @@ public class GameManager implements EventObserver {
         levelCompleted = true;
         endLevel = false;
 
-        if (currentLevel < LevelLoader.getLevelCount() - 1) {
-            startLevel(currentLevel + 1);
+        if (!isTest) {
+            if (currentLevel < LevelLoader.getLevelCount() - 1) {
+                startLevel(currentLevel + 1);
+            } else {
+                IOManager.getInstance().drawMenu();
+            }
         } else {
-            IOManager.getInstance().drawMenu();
+            while (map.availableCheckpoints()) {
+                map.reset();
+            }
+            IOManager.getInstance().drawEditor();
         }
     }
     public void setMap(Map map) {
@@ -135,9 +143,22 @@ public class GameManager implements EventObserver {
             return;
         }
 
+        if (event instanceof TestEvent) {
+            isTest = true;
+            IOManager.getInstance().drawGame();
+        }
+
         if (event instanceof EscapeEvent) {
-            editor = null;
-            IOManager.getInstance().drawMenu();
+            if (!isTest) {
+                editor = null;
+                IOManager.getInstance().drawMenu();
+            } else {
+                while (map.availableCheckpoints()) {
+                    map.reset();
+                }
+                IOManager.getInstance().drawEditor();
+            }
+            isTest = false;
             if (currentPopup != null) {
                 currentPopup.hide();
                 currentPopup = null;
@@ -163,6 +184,9 @@ public class GameManager implements EventObserver {
             startTurn(moveEvent.getDirection());
             if (!levelCompleted) {
                 IOManager.getInstance().drawGame();
+            } else if (isTest) {
+                isTest = false;
+                levelCompleted = false;
             }
             return;
         }

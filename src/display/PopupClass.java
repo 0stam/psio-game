@@ -16,7 +16,7 @@ public class PopupClass extends JPanel {
 	{
 		textBuffer = buffer;
 		textArea = new JLabel("<html>"+buffer.replaceAll("\n", "<br />")+"</html>");
-		textArea.setFont(new Font("MS Gothic", Font.PLAIN, 40));
+		textArea.setFont(new Font("MS Gothic", Font.PLAIN, 30));
 		textArea.setBackground(new Color(0, 0, 0, 0));
 		this.setBackground(new Color(255, 255, 255));
 		init();

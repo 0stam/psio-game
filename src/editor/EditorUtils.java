@@ -161,6 +161,9 @@ public class EditorUtils {
                 case "Teleport":
                     et = TELEPORT;
                     break;
+                case "ReverseDoor":
+                    et = REVERSE;
+                    break;
                 case "ToggleDoor":
                     et = TOGGLE;
                     break;

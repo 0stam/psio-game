@@ -22,187 +22,130 @@ public class EditorUtils {
             return new ChasingEnemy(x, y, null);
         }
 
-        Tile tile;
-
         switch (editableTile) {
             case BOX:
-                tile = new Box(x, y);
-                break;
+                return new Box(x, y);
             case GOAL:
-                tile = new Goal(x, y);
-                break;
+                return new Goal(x, y);
             case WALL:
-                tile = new Wall(x, y);
-                break;
+                return new Wall(x, y);
             case ENEMY:
-                tile = new ChasingEnemy(x, y, GameManager.getInstance().getMap().getPlayer());
-                break;
+                return new ChasingEnemy(x, y, GameManager.getInstance().getMap().getPlayer());
             case MIMIC:
-                tile = new MimicEnemy(x, y);
-                break;
+                return new MimicEnemy(x, y);
             case SMART:
-                tile = new SmartEnemy(x, y);
-                break;
+                return new SmartEnemy(x, y);
             case FLOOR:
-                tile = new Floor(x, y);
-                break;
+                return new Floor(x, y);
             case ONEWAY_UP:
-                tile = new OnewayFloor(x, y, UP);
-                break;
+                return new OnewayFloor(x, y, UP);
             case ONEWAY_DOWN:
-                tile = new OnewayFloor(x, y, DOWN);
-                break;
+                return new OnewayFloor(x, y, DOWN);
             case ONEWAY_LEFT:
-                tile = new OnewayFloor(x, y, LEFT);
-                break;
+                return new OnewayFloor(x, y, LEFT);
             case ONEWAY_RIGHT:
-                tile = new OnewayFloor(x, y, RIGHT);
-                break;
+                return new OnewayFloor(x, y, RIGHT);
             case DANGER:
-                tile = new DangerFloor(x, y);
-                break;
+                return new DangerFloor(x, y);
             case PLAYER:
-                tile = new PlayerCharacter(x, y);
-                break;
+                return new PlayerCharacter(x, y);
             case DOOR:
-                tile = new Door(x, y);
-                break;
+                return new Door(x, y);
             case REVERSE:
-                tile = new ReverseDoor(x, y);
-                break;
+                return new ReverseDoor(x, y);
             case BUTTON:
-                tile = new Button(x, y);
-                break;
+                return new Button(x, y);
             case BUTTON_PERMANENT:
-                tile = new ButtonPermanent(x, y);
-                break;
+                return new ButtonPermanent(x, y);
             case SIGN:
-                tile = new Sign(x, y);
-                break;
+                return new Sign(x, y);
             case TELEPORT:
-                tile = new Teleport(x, y);
-                break;
+                return new Teleport(x, y);
             case TOGGLE:
-                tile = new ToggleDoor(x, y);
-                break;
+                return new ToggleDoor(x, y);
             case CHECKPOINT:
-                tile = new Checkpoint(x, y);
-                break;
+                return new Checkpoint(x, y);
             default:
-                tile = null;
+                return null;
         }
-
-        return tile;
     }
 
     public static EditableTile objectToEditable(Tile tile) {
-        EditableTile et;
         if (tile == null){
-            et = enums.EditableTile.EMPTY;
+            return enums.EditableTile.EMPTY;
         } else if (tile instanceof OnewayFloor){
             switch (((OnewayFloor)tile).getDirection()) {
                 case UP:
-                    et = ONEWAY_UP;
-                    break;
+                    return ONEWAY_UP;
                 case DOWN:
-                    et = ONEWAY_DOWN;
-                    break;
+                    return ONEWAY_DOWN;
                 case LEFT:
-                    et = ONEWAY_LEFT;
-                    break;
+                    return ONEWAY_LEFT;
                 case RIGHT:
-                    et = ONEWAY_RIGHT;
-                    break;
+                    return ONEWAY_RIGHT;
                 default:
-                    et = ONEWAY_UP;
-                    break;
+                    return ONEWAY_UP;
             }
         } else {
             switch (tile.getClass().getSimpleName()) {
                 case "Box":
-                    et = BOX;
-                    break;
+                    return BOX;
                 case "Button":
-                    et = BUTTON;
-                    break;
+                    return BUTTON;
                 case "ButtonPermanent":
-                    et = BUTTON_PERMANENT;
-                    break;
+                    return BUTTON_PERMANENT;
                 case "ChasingEnemy":
-                    et = ENEMY;
-                    break;
+                    return ENEMY;
                 case "MimicEnemy":
-                    et = MIMIC;
-                    break;
+                    return MIMIC;
                 case "SmartEnemy":
-                    et = SMART;
-                    break;
+                    return SMART;
                 case "Door":
-                    et = DOOR;
-                    break;
+                    return DOOR;
                 case "Floor":
-                    et = FLOOR;
-                    break;
+                    return FLOOR;
                 case "DangerFloor":
-                    et = DANGER;
-                    break;
+                    return DANGER;
                 case "Goal":
-                    et = GOAL;
-                    break;
+                    return GOAL;
                 case "PlayerCharacter":
-                    et = PLAYER;
-                    break;
+                    return PLAYER;
                 case "Wall":
-                    et = WALL;
-                    break;
+                    return WALL;
                 case "Sign":
-                    et = SIGN;
-                    break;
+                    return SIGN;
                 case "Teleport":
-                    et = TELEPORT;
-                    break;
+                    return TELEPORT;
+                case "ReverseDoor":
+                    return REVERSE;
                 case "ToggleDoor":
-                    et = TOGGLE;
-                    break;
+                    return TOGGLE;
                 case "Checkpoint":
-                    et = CHECKPOINT;
-                    break;
+                    return CHECKPOINT;
                 default:
-                    et = enums.EditableTile.EMPTY;
-                    break;
+                    return enums.EditableTile.EMPTY;
             }
         }
-
-        return et;
     }
 
     public static ConnectableTile objectToConnectable(Tile tile)
     {
-        ConnectableTile ct;
-
         if (tile == null){
             return ConnectableTile.DEFAULT;
         }
         switch (tile.getClass().getSimpleName())
         {
             case "Button":
-                ct = ConnectableTile.BUTTON;
-                break;
+                return ConnectableTile.BUTTON;
             case "ButtonPermanent":
-                ct = ConnectableTile.BUTTON_PERMANENT;
-                break;
+                return ConnectableTile.BUTTON_PERMANENT;
             case "ChasingEnemy":
-                ct = ConnectableTile.ENEMY;
-                break;
+                return ConnectableTile.ENEMY;
             case "Teleport":
-                ct = ConnectableTile.TELEPORT;
-                break;
+                return ConnectableTile.TELEPORT;
             default:
-                ct = ConnectableTile.DEFAULT;
-                break;
+                return ConnectableTile.DEFAULT;
         }
-
-        return ct;
     }
 
     public static void setDefaultMap(int x, int y) {

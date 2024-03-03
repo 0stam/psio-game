@@ -116,59 +116,39 @@ public class ConsoleIO implements IOStrategy {
 	}
 
 	public char idToChar(Graphics graphics)	{
-		char c;
-
         switch (graphics) {
 			case FLOOR:
-				c = '_';
-				break;
+				return '_';
 			case DANGER:
-				c = '~';
-				break;
+				return '~';
 			case WALL:
-				c = '#';
-				break;
+				return '#';
 			case BOX:
-				c = 'O';
-				break;
+				return 'O';
 			case PLAYER:
-				c = 'X';
-				break;
+				return 'X';
 			case ENEMY:
-				c = 'Y';
-				break;
+				return 'Y';
 			case MIMIC:
-				c = 'x';
-				break;
+				return 'x';
 			case SMART:
-				c = 'S';
-				break;
+				return 'S';
 			case BUTTON_PRESSED:
-				c = 'v';
-				break;
+				return 'v';
 			case BUTTON_RELEASED:
-				c = '^';
-				break;
+				return '^';
 			case BUTTON_PERMANENT_PRESSED:
-				c = 'v';
-				break;
+				return 'v';
 			case BUTTON_PERMANENT_RELEASED:
-				c = '^';
-				break;
+				return '^';
 			case DOOR_OPEN:
-				c = 'u';
-				break;
+				return 'u';
 			case DOOR_CLOSED:
-				c = 'n';
-				break;
+				return 'n';
 			case GOAL:
-				c = 'P';
-				break;
+				return 'P';
 			default:
-				c = '!';
-				break;
+				return '!';
         }
-
-		return c;
 	}
 }

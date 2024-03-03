@@ -31,13 +31,7 @@ public class PathEditorHelper {
                 if (currentPath[i][j] != EMPTY && currentPath[i][j] != null)
                 {
                     Direction dir;
-                    /*
-                        java: patterns in switch statements are a preview feature and are disabled by default.
-                        (use --enable-preview to enable patterns in switch statements)
 
-                        jak macie cos takiego to zmiencie java machine na najnowsza wersje dodatkowo moze pomoc
-                        zmienienie w ustawieniach projektu wersj
-                     */
 					if (currentPath[i][j].equals(ARROW_UP)) {
 						dir = UP;
 					} else if (currentPath[i][j].equals(ARROW_DOWN)) {
@@ -49,6 +43,7 @@ public class PathEditorHelper {
 					} else {
 						throw new IllegalStateException("Unexpected value: " + currentPath[i][j]);
 					}
+
                     toReturn.add((new PathTile(i, j, dir)));
                 }
             }

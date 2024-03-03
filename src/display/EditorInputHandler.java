@@ -184,6 +184,7 @@ public class EditorInputHandler implements EventObserver {
             }
 
             currentPath[event.getX()][event.getY()] = arrow;
+            onEnemySaved(new SavePathEvent());
             GameManager.getInstance().onEvent(new EditorChangeEvent());
         }
     }

@@ -176,44 +176,98 @@ public class MapConverter {
 		for (int i = 0;i < map.getWidth();i++) {
 			for (int j = 0;j < map.getHeight();j++) {
 				switch (map.getBottom(i, j)) {
-					case BOX -> result.setBottomLayer(i, j, new Box(i, j));
-					case BUTTON_RELEASED -> result.setBottomLayer(i, j, new Button(i, j));
-					case ENEMY -> result.setBottomLayer(i, j, new ChasingEnemy(i, j, null));
-					case MIMIC -> result.setBottomLayer(i, j, new MimicEnemy(i, j));
-					case DOOR_CLOSED -> result.setBottomLayer(i, j, new Door(i, j));
-					case FLOOR -> result.setBottomLayer(i, j, new Floor(i, j));
-					case ONEWAY_UP -> result.setBottomLayer(i, j, new OnewayFloor(i, j, UP));
-					case ONEWAY_DOWN -> result.setBottomLayer(i, j, new OnewayFloor(i, j, DOWN));
-					case ONEWAY_LEFT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, LEFT));
-					case ONEWAY_RIGHT -> result.setBottomLayer(i, j, new OnewayFloor(i, j, RIGHT));
-					case DANGER -> result.setBottomLayer(i, j, new DangerFloor(i, j));
-					case GOAL -> result.setBottomLayer(i, j, new Goal(i, j));
-					case PLAYER -> {
+					case BOX:
+						result.setBottomLayer(i, j, new Box(i, j));
+						break;
+					case BUTTON_RELEASED:
+						result.setBottomLayer(i, j, new Button(i, j));
+						break;
+					case ENEMY:
+						result.setBottomLayer(i, j, new ChasingEnemy(i, j, null));
+						break;
+					case MIMIC:
+						result.setBottomLayer(i, j, new MimicEnemy(i, j));
+						break;
+					case DOOR_CLOSED:
+						result.setBottomLayer(i, j, new Door(i, j));
+						break;
+					case FLOOR:
+						result.setBottomLayer(i, j, new Floor(i, j));
+						break;
+					case ONEWAY_UP:
+						result.setBottomLayer(i, j, new OnewayFloor(i, j, UP));
+						break;
+					case ONEWAY_DOWN:
+						result.setBottomLayer(i, j, new OnewayFloor(i, j, DOWN));
+						break;
+					case ONEWAY_LEFT:
+						result.setBottomLayer(i, j, new OnewayFloor(i, j, LEFT));
+						break;
+					case ONEWAY_RIGHT:
+						result.setBottomLayer(i, j, new OnewayFloor(i, j, RIGHT));
+						break;
+					case DANGER:
+						result.setBottomLayer(i, j, new DangerFloor(i, j));
+						break;
+					case GOAL:
+						result.setBottomLayer(i, j, new Goal(i, j));
+						break;
+					case PLAYER:
 						result.setBottomLayer(i, j, new PlayerCharacter(i, j));
 						playerPos = new Point(i, j);
-					}
-					case WALL -> result.setBottomLayer(i, j, new Wall(i, j));
+						break;
+					case WALL:
+						result.setBottomLayer(i, j, new Wall(i, j));
+						break;
 				}
 
 				switch (map.getTop(i, j)) {
-					case BOX -> result.setUpperLayer(i, j, new Box(i, j));
-					case BUTTON_RELEASED -> result.setUpperLayer(i, j, new Button(i, j));
-					case ENEMY -> result.setUpperLayer(i, j, new ChasingEnemy(i, j, null));
-					case MIMIC -> result.setUpperLayer(i, j, new MimicEnemy(i, j));
-					case SMART -> result.setUpperLayer(i, j, new SmartEnemy(i, j));
-					case DOOR_CLOSED -> result.setUpperLayer(i, j, new Door(i, j));
-					case FLOOR -> result.setUpperLayer(i, j, new Floor(i, j));
-					case ONEWAY_UP -> result.setUpperLayer(i, j, new OnewayFloor(i, j, UP));
-					case ONEWAY_DOWN -> result.setUpperLayer(i, j, new OnewayFloor(i, j, DOWN));
-					case ONEWAY_LEFT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, LEFT));
-					case ONEWAY_RIGHT -> result.setUpperLayer(i, j, new OnewayFloor(i, j, RIGHT));
-					case DANGER -> result.setUpperLayer(i, j, new DangerFloor(i, j));
-					case GOAL -> result.setUpperLayer(i, j, new Goal(i, j));
-					case PLAYER -> {
+					case BOX:
+						result.setUpperLayer(i, j, new Box(i, j));
+						break;
+					case BUTTON_RELEASED:
+						result.setUpperLayer(i, j, new Button(i, j));
+						break;
+					case ENEMY:
+						result.setUpperLayer(i, j, new ChasingEnemy(i, j, null));
+						break;
+					case MIMIC:
+						result.setUpperLayer(i, j, new MimicEnemy(i, j));
+						break;
+					case SMART:
+						result.setUpperLayer(i, j, new SmartEnemy(i, j));
+						break;
+					case DOOR_CLOSED:
+						result.setUpperLayer(i, j, new Door(i, j));
+						break;
+					case FLOOR:
+						result.setUpperLayer(i, j, new Floor(i, j));
+						break;
+					case ONEWAY_UP:
+						result.setUpperLayer(i, j, new OnewayFloor(i, j, UP));
+						break;
+					case ONEWAY_DOWN:
+						result.setUpperLayer(i, j, new OnewayFloor(i, j, DOWN));
+						break;
+					case ONEWAY_LEFT:
+						result.setUpperLayer(i, j, new OnewayFloor(i, j, LEFT));
+						break;
+					case ONEWAY_RIGHT:
+						result.setUpperLayer(i, j, new OnewayFloor(i, j, RIGHT));
+						break;
+					case DANGER:
+						result.setUpperLayer(i, j, new DangerFloor(i, j));
+						break;
+					case GOAL:
+						result.setUpperLayer(i, j, new Goal(i, j));
+						break;
+					case PLAYER:
 						result.setUpperLayer(i, j, new PlayerCharacter(i, j));
 						playerPos = new Point(i, j);
-					}
-					case WALL -> result.setUpperLayer(i, j, new Wall(i, j));
+						break;
+					case WALL:
+						result.setUpperLayer(i, j, new Wall(i, j));
+						break;
 				}
 			}
 		}
@@ -264,7 +318,9 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case BUTTON_RELEASED, ENEMY -> {return true;}
+			case BUTTON_RELEASED:
+			case ENEMY:
+				return true;
 		}
 		return false;
 	}
@@ -272,10 +328,10 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case DOOR_CLOSED,PLAYER,MIMIC:
-			{
+			case DOOR_CLOSED:
+			case PLAYER:
+			case MIMIC:
 				return true;
-			}
 		}
 		return false;
 	}
@@ -283,7 +339,11 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case BUTTON, ENEMY, BUTTON_PERMANENT, TELEPORT -> {return true;}
+			case BUTTON:
+			case ENEMY:
+			case BUTTON_PERMANENT:
+			case TELEPORT:
+				return true;
 		}
 		return false;
 	}
@@ -291,10 +351,13 @@ public class MapConverter {
 	{
 		switch (t)
 		{
-			case DOOR,PLAYER,MIMIC,REVERSE,TELEPORT, TOGGLE:
-			{
+			case DOOR:
+			case PLAYER:
+			case MIMIC:
+			case REVERSE:
+			case TELEPORT:
+			case TOGGLE:
 				return true;
-			}
 		}
 		return false;
 	}

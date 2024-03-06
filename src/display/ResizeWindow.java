@@ -134,7 +134,7 @@ public class ResizeWindow {
 		try {
 			// Set System L&F
 			UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
+					UIManager.getCrossPlatformLookAndFeelClassName());
 		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
 				 IllegalAccessException e) {
 		}

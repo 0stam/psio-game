@@ -106,17 +106,10 @@ public class EditorMapDisplay extends JPanel {
                 {
                     for (int j = 0; j < GameManager.getInstance().getMap().getHeight(); j++) {
                         for (int i = 0; i < GameManager.getInstance().getMap().getWidth(); i++) {
-                            switch (path[i][j]) {
-                                //jednak da sie laczyc ale nie tak jak zwykle nie wiem w ogole co to jest XDD to nawet nie jest skladnia laczenia ktora byla wczesniej z przecinkami
-                                case null:
-                                case EMPTY: {
-                                    mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), enums.Graphics.EMPTY, GameManager.getInstance().getMap().getUpperLayer(i, j) == null ? null : (GameManager.getInstance().getMap().getUpperLayer(i, j) == currentEnemy ? enums.Graphics.SMART_SELECTED : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID()));
-                                    break;
-                                }
-                                default: {
-                                    mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), path[i][j].getGraphics(), GameManager.getInstance().getMap().getUpperLayer(i, j) == null ? null : (GameManager.getInstance().getMap().getUpperLayer(i, j) == currentEnemy ? enums.Graphics.SMART_SELECTED : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID()));
-                                    break;
-                                }
+                            if (path[i][j] == null || path[i][j] == EMPTY) {
+                                mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), enums.Graphics.EMPTY, GameManager.getInstance().getMap().getUpperLayer(i, j) == null ? null : (GameManager.getInstance().getMap().getUpperLayer(i, j) == currentEnemy ? enums.Graphics.SMART_SELECTED : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID()));
+                            } else {
+                                mapTiles[i][j].updateGraphics(GameManager.getInstance().getMap().getBottomLayer(i, j).getGraphicsID(), path[i][j].getGraphics(), GameManager.getInstance().getMap().getUpperLayer(i, j) == null ? null : (GameManager.getInstance().getMap().getUpperLayer(i, j) == currentEnemy ? enums.Graphics.SMART_SELECTED : GameManager.getInstance().getMap().getUpperLayer(i, j).getGraphicsID()));
                             }
                         }
                     }

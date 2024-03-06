@@ -24,7 +24,7 @@ public class ImageButton extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		g.drawImage(image.getScaledInstance((int) (32 * scale), (int) (32 * scale), Image.SCALE_AREA_AVERAGING), (int) ((this.getWidth() - 32 * scale) / 2), (int) ((this.getHeight() - 32 * scale) / 2), this);
+		g.drawImage(image, (int) ((this.getWidth() - 32 * scale) / 2), (int) ((this.getHeight() - 32 * scale) / 2), (int) (32 * scale), (int) (32 * scale),this);
 	}
 
 	public float getScale() {

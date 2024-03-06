@@ -76,8 +76,9 @@ public class MessagesPalette extends JPanel{
 			DefaultMutableTreeNode selected = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
 			if (selected == null)
 				return;
-			if (selected.getUserObject() instanceof Sign sign)
+			if (selected.getUserObject() instanceof Sign)
 			{
+				Sign sign = (Sign)selected.getUserObject();
 				EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
 				inputHandler.onEvent(new SignSelectedEvent((Sign)GameManager.getInstance().getMap().getBottomLayer(sign.getX(), sign.getY())));
 			}

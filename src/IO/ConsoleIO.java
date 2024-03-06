@@ -53,19 +53,24 @@ public class ConsoleIO implements IOStrategy {
 			move = inputListener.nextLine().charAt(0);
 
 			switch (move) {
-				case 'w', 'W':
+				case 'w':
+				case 'W':
 					direction = Direction.UP;
 					break;
-                case 'a', 'A':
+                case 'a':
+				case 'A':
 					direction = Direction.LEFT;
 					break;
-                case 's', 'S':
+                case 's':
+				case 'S':
 					direction = Direction.DOWN;
 					break;
-                case 'd', 'D':
+                case 'd':
+				case 'D':
 					direction = Direction.RIGHT;
 					break;
-				case 'r', 'R':
+				case 'r':
+				case 'R':
 					GameManager.getInstance().onEvent(new ResetEvent());
 					return;
                 default:
@@ -111,23 +116,39 @@ public class ConsoleIO implements IOStrategy {
 	}
 
 	public char idToChar(Graphics graphics)	{
-        return switch (graphics) {
-            case FLOOR -> '_';
-			case DANGER -> '~';
-            case WALL -> '#';
-            case BOX -> 'O';
-            case PLAYER -> 'X';
-            case ENEMY -> 'Y';
-			case MIMIC -> 'x';
-			case SMART -> 'S';
-            case BUTTON_PRESSED -> 'v';
-            case BUTTON_RELEASED -> '^';
-			case BUTTON_PERMANENT_PRESSED -> 'v';
-			case BUTTON_PERMANENT_RELEASED -> '^';
-            case DOOR_OPEN -> 'u';
-            case DOOR_CLOSED -> 'n';
-            case GOAL -> 'P';
-            default -> '!';
-        };
+        switch (graphics) {
+			case FLOOR:
+				return '_';
+			case DANGER:
+				return '~';
+			case WALL:
+				return '#';
+			case BOX:
+				return 'O';
+			case PLAYER:
+				return 'X';
+			case ENEMY:
+				return 'Y';
+			case MIMIC:
+				return 'x';
+			case SMART:
+				return 'S';
+			case BUTTON_PRESSED:
+				return 'v';
+			case BUTTON_RELEASED:
+				return '^';
+			case BUTTON_PERMANENT_PRESSED:
+				return 'v';
+			case BUTTON_PERMANENT_RELEASED:
+				return '^';
+			case DOOR_OPEN:
+				return 'u';
+			case DOOR_CLOSED:
+				return 'n';
+			case GOAL:
+				return 'P';
+			default:
+				return '!';
+        }
 	}
 }

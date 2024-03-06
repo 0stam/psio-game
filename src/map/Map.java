@@ -126,4 +126,8 @@ public class Map implements Serializable {
     {
         return currentMapState.checkEnterable(x, y, direction, tile);
     }
+
+    public boolean availableCheckpoints () {
+        return (!checkpoints.empty());
+    }
 }

@@ -80,8 +80,8 @@ class MapTest {
             int steps = Math.max(xMax, yMax);
             for (int i = 0; i < steps; i++) {
                 map.move(playerX, playerY, direction);
-                playerX = Math.clamp(playerX + (long) direction.x, 0, xMax - 1);
-                playerY = Math.clamp(playerY + (long) direction.y, 0, yMax - 1);
+                //playerX = Math.clamp(playerX + (long) direction.x, 0, xMax - 1);
+                //playerY = Math.clamp(playerY + (long) direction.y, 0, yMax - 1);
             }
 
             assertEquals(player, map.getUpperLayer(playerX, playerY));

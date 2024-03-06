@@ -24,12 +24,24 @@ public class GraphicsHashtable {
             images.put(WALL, loadImage("/graphics/wall.png"));
             images.put(BOX, loadImage("/graphics/box.png"));
             switch (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                case Calendar.MONDAY -> images.put(PLAYER, loadImage("/graphics/player_mon.png"));
-                case Calendar.TUESDAY -> images.put(PLAYER, loadImage("/graphics/player_tue.png"));
-                case Calendar.WEDNESDAY -> images.put(PLAYER, loadImage("/graphics/player_wed.png"));
-                case Calendar.THURSDAY -> images.put(PLAYER, loadImage("/graphics/player_thu.png"));
-                case Calendar.FRIDAY -> images.put(PLAYER, loadImage("/graphics/player_fri.png"));
-                default -> images.put(PLAYER, loadImage("/graphics/player_wek.png"));
+                case Calendar.MONDAY :
+                    images.put(PLAYER, loadImage("/graphics/player_mon.png"));
+                    break;
+                case Calendar.TUESDAY :
+                    images.put(PLAYER, loadImage("/graphics/player_tue.png"));
+                    break;
+                case Calendar.WEDNESDAY :
+                    images.put(PLAYER, loadImage("/graphics/player_wed.png"));
+                    break;
+                case Calendar.THURSDAY :
+                    images.put(PLAYER, loadImage("/graphics/player_thu.png"));
+                    break;
+                case Calendar.FRIDAY :
+                    images.put(PLAYER, loadImage("/graphics/player_fri.png"));
+                    break;
+                default :
+                    images.put(PLAYER, loadImage("/graphics/player_wek.png"));
+                    break;
             }
             images.put(ENEMY, loadImage("/graphics/enemy.png"));
             images.put(MIMIC, loadImage("/graphics/mimic.png"));

@@ -104,7 +104,7 @@ public class LevelSelectionDisplay extends JPanel {
 
     private String getLevelName(String fileName) {
         StringBuilder result = new StringBuilder();
-        String[] words = fileName.split("[\s_-]");
+        String[] words = fileName.split("[ _-]");
 
         try {
             int number = Integer.parseInt(words[0]);

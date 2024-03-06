@@ -15,10 +15,8 @@ public class GameEventHandler implements EventObserver {
 	private Popup displayedPopup;
 	@Override
 	public void onEvent(Event event) {
-		switch (event.getClass().getSimpleName()) {
-			case "PopupEvent":
-				onPopupEvent((PopupEvent) event);
-				break;
+		if (event.getClass().getSimpleName().equals("PopupEvent")) {
+			onPopupEvent((PopupEvent) event);
 		}
 	}
 	//ma sens tylko jezeli io strategy to grafika

@@ -20,7 +20,7 @@ public class ChasingEnemy extends ActionTile<Follower> implements Connectable {
 
     @Override
     public HashSet<Tile> getConnections() {
-        HashSet<Tile> result = new HashSet<>();
+        HashSet<Tile> result = new HashSet();
         result.add(getTurnStrategy().getTargetTile());
         return result;
     }

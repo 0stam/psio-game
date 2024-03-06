@@ -14,7 +14,7 @@ public class RawPath implements Serializable {
 
 	RawPath() {
 		enemyPos = null;
-		path = new ArrayList<>();
+		path = new ArrayList();
 	}
 	RawPath(Point enemyPos, ArrayList<PathTile> path)
 	{

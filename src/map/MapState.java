@@ -16,9 +16,9 @@ public class MapState implements Serializable, Cloneable {
     private boolean doUpdate = true;
     private Tile[][] bottomLayer;
     private Tile[][] upperLayer;
-    private List<ActionTile> actionTiles = new ArrayList<>();
-    private List<ActionTile> actionTilesToRemove = new ArrayList<>();
-    private List<ActionTile> actionTilesToAdd = new ArrayList<>();
+    private List<ActionTile> actionTiles = new ArrayList();
+    private List<ActionTile> actionTilesToRemove = new ArrayList();
+    private List<ActionTile> actionTilesToAdd = new ArrayList();
     private PlayerCharacter player;
 
     public MapState(int x, int y) {
@@ -113,8 +113,8 @@ public class MapState implements Serializable, Cloneable {
         actionTiles.removeAll(actionTilesToRemove);
         Collections.sort(actionTiles, Collections.reverseOrder());
 
-        actionTilesToAdd = new ArrayList<>();
-        actionTilesToRemove = new ArrayList<>();
+        actionTilesToAdd = new ArrayList();
+        actionTilesToRemove = new ArrayList();
     }
 
     public void move(int x, int y, Direction direction) {

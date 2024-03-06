@@ -23,7 +23,7 @@ public class PathEditorHelper {
     }
     public static ArrayList<PathTile> pathToList(SmartEnemy currentEnemy, EditorGraphics[][] currentPath)
     {
-        ArrayList<PathTile> toReturn = new ArrayList<>();
+        ArrayList<PathTile> toReturn = new ArrayList();
         for (int i = 0 ; i < currentPath.length ; ++i)
         {
             for (int j = 0 ; j < currentPath[0].length ; ++j)

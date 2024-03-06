@@ -12,6 +12,10 @@ import gamemanager.GameManager;
 import tile.Tile;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.util.Enumeration;
@@ -22,7 +26,7 @@ public class ConnectionsPalette extends JPanel {
     EmittersContainer emittersContainer;
     ConnectablesContainer connectablesContainer;
     Tile lastSelectedTile;
-    HashSet<TreePath> expandedPaths = new HashSet<>();
+    HashSet<TreePath> expandedPaths = new HashSet<TreePath>();
     JSplitPane splitPane;
 
     /**
@@ -177,7 +181,7 @@ public class ConnectionsPalette extends JPanel {
         }
 
         public void refresh(HashSet<Tile> connectedTiles) {
-            listModel = new DefaultListModel<>();
+            listModel = new DefaultListModel();
 
             if (connectedTiles != null) {
                 for (Tile tile : connectedTiles) {
@@ -214,49 +218,55 @@ public class ConnectionsPalette extends JPanel {
 
         this.add(splitPane, BorderLayout.CENTER);
 
-        connectablesContainer.list.addListSelectionListener(listSelectionEvent -> {
-            if (!listSelectionEvent.getValueIsAdjusting()) {
-                int selectedIndex = connectablesContainer.list.getSelectedIndex();
-                if (selectedIndex != -1) {
-                    Tile from = (Tile) connectablesContainer.list.getSelectedValue();
-                    connectablesContainer.listModel.remove(selectedIndex);
-                    EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
-                    inputHandler.onEvent(new ConnectionDeletedEvent(from));
-                }
-            }
+        connectablesContainer.list.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent listSelectionEvent) {
+				if (!listSelectionEvent.getValueIsAdjusting()) {
+					int selectedIndex = connectablesContainer.list.getSelectedIndex();
+					if (selectedIndex != -1) {
+						Tile from = (Tile) connectablesContainer.list.getSelectedValue();
+						connectablesContainer.listModel.remove(selectedIndex);
+						EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+						inputHandler.onEvent(new ConnectionDeletedEvent(from));
+					}
+				}
 
-        });
+			}
+		});
 
 
-        emittersContainer.tree.addTreeSelectionListener(treeSelectionEvent -> {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeSelectionEvent.getPath().getLastPathComponent();
-            // Check if the node is a tile and thus has connections
-            if (node.getUserObject() instanceof Connectable) {
-                EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
+        emittersContainer.tree.addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
+			public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeSelectionEvent.getPath().getLastPathComponent();
+				// Check if the node is a tile and thus has connections
+				if (node.getUserObject() instanceof Connectable) {
+					EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
 
-                HashSet<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
-                inputHandler.onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
-                connectablesContainer.refresh(tileConnections);
-                //emittersContainer.tree.setSelectionPath(new TreePath(node));
+					HashSet<Tile> tileConnections = ((Connectable) node.getUserObject()).getConnections();
+					inputHandler.onEvent(new ConnectableTileSelectedEvent((Tile) node.getUserObject()));
+					connectablesContainer.refresh(tileConnections);
+					//emittersContainer.tree.setSelectionPath(new TreePath(node));
 
-            }
-            if (node.getUserObject() instanceof Tile) {
-                lastSelectedTile = (Tile) node.getUserObject();
-            }
+				}
+				if (node.getUserObject() instanceof Tile) {
+					lastSelectedTile = (Tile) node.getUserObject();
+				}
 
-            // Store the expanded state before refreshing the tree
-            for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
-                TreePath path = emittersContainer.tree.getPathForRow(i);
-                if (emittersContainer.tree.isExpanded(path)) {
-                    expandedPaths.add(path);
-                }
-            }
+				// Store the expanded state before refreshing the tree
+				for (int i = 0; i < emittersContainer.tree.getRowCount(); i++) {
+					TreePath path = emittersContainer.tree.getPathForRow(i);
+					if (emittersContainer.tree.isExpanded(path)) {
+						expandedPaths.add(path);
+					}
+				}
 
-            // Restore the expanded state after refreshing the tree
-            for (TreePath path : expandedPaths) {
-                emittersContainer.tree.expandPath(path);
-            }
-        });
+				// Restore the expanded state after refreshing the tree
+				for (TreePath path : expandedPaths) {
+					emittersContainer.tree.expandPath(path);
+				}
+			}
+		});
 
 
     }

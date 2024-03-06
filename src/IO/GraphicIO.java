@@ -23,8 +23,16 @@ public class GraphicIO implements IOStrategy {
 			UIManager.setLookAndFeel(
 					UIManager.getCrossPlatformLookAndFeelClassName());
 		}
-		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
-			   IllegalAccessException e) {
+		catch (UnsupportedLookAndFeelException e) {
+
+		}
+		catch (ClassNotFoundException e) {
+
+		}
+		catch (InstantiationException e) {
+
+		}
+		catch (IllegalAccessException e) {
 
 		}
 

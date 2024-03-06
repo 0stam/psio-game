@@ -26,7 +26,7 @@ public class StateMachine implements TurnStrategy, Serializable {
     }
     public void setPath(ArrayList<PathTile> path)
     {
-        this.path = new Hashtable<>();
+        this.path = new Hashtable();
         if (path != null) {
             for (PathTile i : path) {
                 this.path.put(new Point(i.getX(), i.getY()), i.getDirection());

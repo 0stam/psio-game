@@ -87,45 +87,43 @@ public class EditorUtils {
                     return ONEWAY_UP;
             }
         } else {
-            switch (tile.getClass().getSimpleName()) {
-                case "Box":
-                    return BOX;
-                case "Button":
-                    return BUTTON;
-                case "ButtonPermanent":
-                    return BUTTON_PERMANENT;
-                case "ChasingEnemy":
-                    return ENEMY;
-                case "MimicEnemy":
-                    return MIMIC;
-                case "SmartEnemy":
-                    return SMART;
-                case "Door":
-                    return DOOR;
-                case "Floor":
-                    return FLOOR;
-                case "DangerFloor":
-                    return DANGER;
-                case "Goal":
-                    return GOAL;
-                case "PlayerCharacter":
-                    return PLAYER;
-                case "Wall":
-                    return WALL;
-                case "Sign":
-                    return SIGN;
-                case "Teleport":
-                    return TELEPORT;
-                case "ReverseDoor":
-                    return REVERSE;
-                case "ToggleDoor":
-                    return TOGGLE;
-                case "Checkpoint":
-                    return CHECKPOINT;
-                default:
-                    return enums.EditableTile.EMPTY;
-            }
-        }
+			if (tile.getClass().getSimpleName().equals("Box")) {
+				return BOX;
+			} else if (tile.getClass().getSimpleName().equals("Button")) {
+				return BUTTON;
+			} else if (tile.getClass().getSimpleName().equals("ButtonPermanent")) {
+				return BUTTON_PERMANENT;
+			} else if (tile.getClass().getSimpleName().equals("ChasingEnemy")) {
+				return ENEMY;
+			} else if (tile.getClass().getSimpleName().equals("MimicEnemy")) {
+				return MIMIC;
+			} else if (tile.getClass().getSimpleName().equals("SmartEnemy")) {
+				return SMART;
+			} else if (tile.getClass().getSimpleName().equals("Door")) {
+				return DOOR;
+			} else if (tile.getClass().getSimpleName().equals("Floor")) {
+				return FLOOR;
+			} else if (tile.getClass().getSimpleName().equals("DangerFloor")) {
+				return DANGER;
+			} else if (tile.getClass().getSimpleName().equals("Goal")) {
+				return GOAL;
+			} else if (tile.getClass().getSimpleName().equals("PlayerCharacter")) {
+				return PLAYER;
+			} else if (tile.getClass().getSimpleName().equals("Wall")) {
+				return WALL;
+			} else if (tile.getClass().getSimpleName().equals("Sign")) {
+				return SIGN;
+			} else if (tile.getClass().getSimpleName().equals("Teleport")) {
+				return TELEPORT;
+			} else if (tile.getClass().getSimpleName().equals("ReverseDoor")) {
+				return REVERSE;
+			} else if (tile.getClass().getSimpleName().equals("ToggleDoor")) {
+				return TOGGLE;
+			} else if (tile.getClass().getSimpleName().equals("Checkpoint")) {
+				return CHECKPOINT;
+			}
+			return EditableTile.EMPTY;
+		}
     }
 
     public static ConnectableTile objectToConnectable(Tile tile)
@@ -133,20 +131,17 @@ public class EditorUtils {
         if (tile == null){
             return ConnectableTile.DEFAULT;
         }
-        switch (tile.getClass().getSimpleName())
-        {
-            case "Button":
-                return ConnectableTile.BUTTON;
-            case "ButtonPermanent":
-                return ConnectableTile.BUTTON_PERMANENT;
-            case "ChasingEnemy":
-                return ConnectableTile.ENEMY;
-            case "Teleport":
-                return ConnectableTile.TELEPORT;
-            default:
-                return ConnectableTile.DEFAULT;
-        }
-    }
+		if (tile.getClass().getSimpleName().equals("Button")) {
+			return ConnectableTile.BUTTON;
+		} else if (tile.getClass().getSimpleName().equals("ButtonPermanent")) {
+			return ConnectableTile.BUTTON_PERMANENT;
+		} else if (tile.getClass().getSimpleName().equals("ChasingEnemy")) {
+			return ConnectableTile.ENEMY;
+		} else if (tile.getClass().getSimpleName().equals("Teleport")) {
+			return ConnectableTile.TELEPORT;
+		}
+		return ConnectableTile.DEFAULT;
+	}
 
     public static void setDefaultMap(int x, int y) {
         Map map = new Map(x, y);

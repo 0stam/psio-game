@@ -27,7 +27,7 @@ public class ToolPalette extends AbstractPalette {
 	public ToolPalette(EditorDisplay parent) {
 		this.parent = parent;
 
-		buttons = new ArrayList<>();
+		buttons = new ArrayList();
 		try {
 			buttons.add(new ImageButton(GraphicsHashtable.loadImage("/graphics/tool_both.png"), "Both"));
 			buttons.get(0).addMouseListener(new layerListener(Layer.BOTH));

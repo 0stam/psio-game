@@ -2,6 +2,8 @@ package display;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import IO.IOManager;
 import event.editor.EditorSelectedEvent;
@@ -40,8 +42,18 @@ public class MenuDisplay extends JPanel {
         editorButton = new JButton("EDITOR");
         stylizeButton(editorButton);
 
-        playButton.addActionListener(e -> onPlayClicked());
-        editorButton.addActionListener(e -> onEditorClicked());
+        playButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MenuDisplay.this.onPlayClicked();
+			}
+		});
+        editorButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MenuDisplay.this.onEditorClicked();
+			}
+		});
 
         container.add(Box.createVerticalGlue());
         container.add(titleLabel);

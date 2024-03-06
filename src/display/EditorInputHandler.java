@@ -41,54 +41,33 @@ public class EditorInputHandler implements EventObserver {
 
     @Override
     public void onEvent(Event event) {
-        switch (event.getClass().getSimpleName()) {
-            case "InteractiveTilePressedEvent":
-                onInteractiveTilePressed((InteractiveTilePressedEvent) event);
-                break;
-
-            case "PalettePressedEvent":
-                onTilePalettePressed((PalettePressedEvent) event);
-                break;
-
-            case "ChangeLayerEvent":
-                onChangeLayer((ChangeLayerEvent) event);
-                break;
-
-            case "ModeChangedEvent":
-                onModeChanged((ModeChangedEvent) event);
-                break;
-
-            case "ModeActiveChangedEvent":
-                onModeActiveChanged((ModeActiveChangedEvent) event);
-                break;
-
-            case "ConnectableTileSelectedEvent":
-                onConnectingTileChanged((ConnectableTileSelectedEvent) event);
-                break;
-
-            case "ConnectionDeletedEvent":
-                onConnectionDeleted((ConnectionDeletedEvent) event);
-                break;
-
-            case "EnemySelectedEvent":
-                onEnemySelected((EnemySelectedEvent) event);
-                break;
-            case "SignSelectedEvent":
-                onSignSelected((SignSelectedEvent) event);
-                break;
-            case "SavePathEvent":
-                onEnemySaved((SavePathEvent) event);
-                break;
-            case "SaveMessageEvent":
-                onSignSaved((SaveMessageEvent) event);
-                break;
-            case "ArrowModifiedEvent":
-                onArrowModified((ArrowModifiedEvent) event);
-                break;
-            case "MapResizedEvent":
-                onMapResized(new MapResizeEvent());
-                break;
-        }
+		if (event.getClass().getSimpleName().equals("InteractiveTilePressedEvent")) {
+			onInteractiveTilePressed((InteractiveTilePressedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("PalettePressedEvent")) {
+			onTilePalettePressed((PalettePressedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("ChangeLayerEvent")) {
+			onChangeLayer((ChangeLayerEvent) event);
+		} else if (event.getClass().getSimpleName().equals("ModeChangedEvent")) {
+			onModeChanged((ModeChangedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("ModeActiveChangedEvent")) {
+			onModeActiveChanged((ModeActiveChangedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("ConnectableTileSelectedEvent")) {
+			onConnectingTileChanged((ConnectableTileSelectedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("ConnectionDeletedEvent")) {
+			onConnectionDeleted((ConnectionDeletedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("EnemySelectedEvent")) {
+			onEnemySelected((EnemySelectedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("SignSelectedEvent")) {
+			onSignSelected((SignSelectedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("SavePathEvent")) {
+			onEnemySaved((SavePathEvent) event);
+		} else if (event.getClass().getSimpleName().equals("SaveMessageEvent")) {
+			onSignSaved((SaveMessageEvent) event);
+		} else if (event.getClass().getSimpleName().equals("ArrowModifiedEvent")) {
+			onArrowModified((ArrowModifiedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("MapResizedEvent")) {
+			onMapResized(new MapResizeEvent());
+		}
     }
 
     private void onTilePalettePressed(PalettePressedEvent event) {

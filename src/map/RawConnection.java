@@ -11,7 +11,7 @@ public class RawConnection implements Serializable {
 
 	public RawConnection () {
 		sourcePos = null;
-		destinationPos = new ArrayList<>();
+		destinationPos = new ArrayList();
 	}
 
 	public Point getSourcePos() {

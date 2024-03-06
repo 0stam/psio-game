@@ -22,7 +22,7 @@ public class RawMap implements Serializable {
 		bottomLayer = new Graphics[this.width][this.height];
 		topLayer = new Graphics[this.width][this.height];
 
-		connections = new Hashtable<>();
+		connections = new Hashtable();
 	}
 
 	public Graphics getBottom (int x, int y) {

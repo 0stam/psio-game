@@ -36,55 +36,38 @@ public class Editor implements EventObserver {
     }
 
     public void onEvent(Event event) {
-        switch (event.getClass().getSimpleName()) {
-            case "TileModifiedEvent":
-                onTileModified((TileModifiedEvent) event);
-                break;
-
-            case "TileConnectionModifiedEvent":
-                onTileConnectionModified((TileConnectionModifiedEvent) event);
-                break;
-
-            case "TilesDisconnectedEvent":
-                onTilesDisconnected((TilesDisconnectedEvent) event);
-                break;
-
-            case "LevelLoadedEvent":
-                EditorUtils.loadLevel(((LevelLoadedEvent) event).getPath());
-                IOManager.getInstance().drawEditor();
-                break;
-
-            case "LevelSavedEvent":
-                GameManager.getInstance().onEvent(new SaveMessageEvent());
-                GameManager.getInstance().onEvent(new SavePathEvent());
-                EditorUtils.saveLevel(((LevelSavedEvent) event).getPath());
-                break;
-            case "EditorChangeEvent":
-                change = true;
-                break;
-            case "ChangeLayerEvent":
-                ChangeLayerEvent chlev = (ChangeLayerEvent) event;
-                IOManager.getInstance().getInputHandler().onEvent((ChangeLayerEvent)event);
-                IOManager.getInstance().drawEditor();
-                break;
-            case "ArrowModifiedEvent":
-                IOManager.getInstance().getInputHandler().onEvent((ArrowModifiedEvent) event);
-                break;
-            case "EnemySelectedEvent":
-                IOManager.getInstance().getInputHandler().onEvent((EnemySelectedEvent)event);
-                break;
-            case "SignSelectedEvent":
-                IOManager.getInstance().getInputHandler().onEvent((SignSelectedEvent)event);
-                break;
-            case "SavePathEvent":
-                IOManager.getInstance().getInputHandler().onEvent((SavePathEvent)event);
-                break;
-            case "SaveMessageEvent":
-                IOManager.getInstance().getInputHandler().onEvent((SaveMessageEvent)event);
-                break;
-
-            default: return;
-        }
+		if (event.getClass().getSimpleName().equals("TileModifiedEvent")) {
+			onTileModified((TileModifiedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("TileConnectionModifiedEvent")) {
+			onTileConnectionModified((TileConnectionModifiedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("TilesDisconnectedEvent")) {
+			onTilesDisconnected((TilesDisconnectedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("LevelLoadedEvent")) {
+			EditorUtils.loadLevel(((LevelLoadedEvent) event).getPath());
+			IOManager.getInstance().drawEditor();
+		} else if (event.getClass().getSimpleName().equals("LevelSavedEvent")) {
+			GameManager.getInstance().onEvent(new SaveMessageEvent());
+			GameManager.getInstance().onEvent(new SavePathEvent());
+			EditorUtils.saveLevel(((LevelSavedEvent) event).getPath());
+		} else if (event.getClass().getSimpleName().equals("EditorChangeEvent")) {
+			change = true;
+		} else if (event.getClass().getSimpleName().equals("ChangeLayerEvent")) {
+			ChangeLayerEvent chlev = (ChangeLayerEvent) event;
+			IOManager.getInstance().getInputHandler().onEvent((ChangeLayerEvent) event);
+			IOManager.getInstance().drawEditor();
+		} else if (event.getClass().getSimpleName().equals("ArrowModifiedEvent")) {
+			IOManager.getInstance().getInputHandler().onEvent((ArrowModifiedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("EnemySelectedEvent")) {
+			IOManager.getInstance().getInputHandler().onEvent((EnemySelectedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("SignSelectedEvent")) {
+			IOManager.getInstance().getInputHandler().onEvent((SignSelectedEvent) event);
+		} else if (event.getClass().getSimpleName().equals("SavePathEvent")) {
+			IOManager.getInstance().getInputHandler().onEvent((SavePathEvent) event);
+		} else if (event.getClass().getSimpleName().equals("SaveMessageEvent")) {
+			IOManager.getInstance().getInputHandler().onEvent((SaveMessageEvent) event);
+		} else {
+			return;
+		}
 
         if (change) {
             IOManager.getInstance().drawEditor();
@@ -203,7 +186,7 @@ public class Editor implements EventObserver {
 
     private void onTileConnectionModified(TileConnectionModifiedEvent event) {
 
-        ArrayList<Tile> potentialConnections = new ArrayList<>();
+        ArrayList<Tile> potentialConnections = new ArrayList();
 
         if (event.getLayer() == Layer.BOTTOM || event.getLayer() == Layer.BOTH) {
             potentialConnections.add(GameManager.getInstance().getMap().getBottomLayer(event.getX(), event.getY()));
@@ -250,7 +233,7 @@ public class Editor implements EventObserver {
  */
 
     public List<Tile> getTilesInConnectableCategory(ConnectableTile category) {
-        ArrayList<Tile> list = new ArrayList<>();
+        ArrayList<Tile> list = new ArrayList();
         for (int i=0;i<GameManager.getInstance().getMap().getWidth();i++)
         {
             for (int j=0;j<GameManager.getInstance().getMap().getHeight();j++)

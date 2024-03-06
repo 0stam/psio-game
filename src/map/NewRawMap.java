@@ -30,9 +30,9 @@ public class NewRawMap implements Serializable {
 		bottomLayer = new EditableTile[this.width][this.height];
 		topLayer = new EditableTile[this.width][this.height];
 
-		connections = new ArrayList<>();
-		paths = new ArrayList<>();
-		messages = new ArrayList<>();
+		connections = new ArrayList();
+		paths = new ArrayList();
+		messages = new ArrayList();
 	}
 
 	public EditableTile getBottom (int x, int y) {

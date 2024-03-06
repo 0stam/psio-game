@@ -13,7 +13,7 @@ import event.EventSource;
 import enums.Direction;
 
 public class Button extends Tile implements EventSource, Connectable {
-    private HashSet<EventObserver> observers = new HashSet<>();
+    private HashSet<EventObserver> observers = new HashSet();
     private boolean isPressed = false;
 
     public Button(int x, int y) {
@@ -31,7 +31,7 @@ public class Button extends Tile implements EventSource, Connectable {
 
     @Override
     public void setConnections(HashSet<Tile> list) {
-        observers = new HashSet<>();
+        observers = new HashSet();
 
         Iterator iter = list.iterator();
         while (iter.hasNext()) {

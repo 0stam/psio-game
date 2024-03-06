@@ -57,7 +57,7 @@ public class ResizeWindow {
 							newMap.setBottomLayer(i, j, GameManager.getInstance().getMap().getBottomLayer(i, j));
 							if (GameManager.getInstance().getMap().getBottomLayer(i, j) != null) {
 								if (GameManager.getInstance().getMap().getBottomLayer(i, j) instanceof Connectable) {
-									connections = new HashSet<>();
+									connections = new HashSet();
 									for (Tile connection : ((Connectable)GameManager.getInstance().getMap().getBottomLayer(i, j)).getConnections()) {
 										if (connection.getX() < newWidth && connection.getY() < newHeight) {
 											connections.add(connection);
@@ -71,7 +71,7 @@ public class ResizeWindow {
 								newMap.setUpperLayer(i, j, GameManager.getInstance().getMap().getUpperLayer(i, j));
 								if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof Connectable) {
 									if (GameManager.getInstance().getMap().getUpperLayer(i, j) instanceof Connectable) {
-										connections = new HashSet<>();
+										connections = new HashSet();
 										for (Tile connection : ((Connectable)GameManager.getInstance().getMap().getUpperLayer(i, j)).getConnections()) {
 											if (connection.getX() < newWidth && connection.getY() < newHeight) {
 												connections.add(connection);
@@ -135,8 +135,10 @@ public class ResizeWindow {
 			// Set System L&F
 			UIManager.setLookAndFeel(
 					UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
-				 IllegalAccessException e) {
+		} catch (UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
 		}
 
 		window = new JFrame("Zmien rozmiar mapy");

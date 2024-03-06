@@ -2,6 +2,8 @@ package display;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import gamemanager.GameManager;
 import levelloader.LevelLoader;
@@ -39,13 +41,16 @@ public class LevelSelectionDisplay extends JPanel {
         int startLevel = currentPage * levelsPerPage;
 
         for (int i = 0; i < levelsPerPage; i++) {
-            int levelNumber = startLevel + i;
+            final int levelNumber = startLevel + i;
             if (levelNumber < totalLevels) {
                 JButton levelButton = new JButton(getLevelName(LevelLoader.getPath(levelNumber, false)));
-                levelButton.addActionListener(e -> {
-                    LevelSelectedEvent levelSelectedEvent = new LevelSelectedEvent(levelNumber);
-                    GameManager.getInstance().onEvent(levelSelectedEvent);
-                });
+                levelButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						LevelSelectedEvent levelSelectedEvent = new LevelSelectedEvent(levelNumber);
+						GameManager.getInstance().onEvent(levelSelectedEvent);
+					}
+				});
 
                 // Button style
                 levelButton.setForeground(Color.white);
@@ -73,11 +78,21 @@ public class LevelSelectionDisplay extends JPanel {
         navigationPanel.setOpaque(false);
 
         JButton prevButton = new JButton("<");
-        prevButton.addActionListener(e -> navigate(-1));
+        prevButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LevelSelectionDisplay.this.navigate(-1);
+			}
+		});
         navigationPanel.add(prevButton);
 
         JButton nextButton = new JButton(">");
-        nextButton.addActionListener(e -> navigate(1));
+        nextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LevelSelectionDisplay.this.navigate(1);
+			}
+		});
         navigationPanel.add(nextButton);
 
         return navigationPanel;

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class TilePalette extends AbstractPalette {
 	public TilePalette (EditorGraphics[] values) {
-		buttons = new ArrayList<>(values.length);
+		buttons = new ArrayList(values.length);
 
 		this.setLayout(new GridLayout(1, values.length, 0, 0));
 

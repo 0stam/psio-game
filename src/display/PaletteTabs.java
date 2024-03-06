@@ -1,6 +1,7 @@
 package display;
 
 import IO.IOManager;
+import enums.Arrow;
 import enums.EditableTile;
 import enums.EditorMode;
 import enums.Layer;
@@ -60,57 +61,38 @@ public class PaletteTabs {
 		public void stateChanged(ChangeEvent e) {
 			String selectedTabTip = tabs.getToolTipTextAt(tabs.getSelectedIndex());
 			EditorInputHandler inputHandler = (EditorInputHandler) IOManager.getInstance().getInputHandler();
-			switch (selectedTabTip)
-			{
-				//FIXME: zrobmy cos z tym pozniej bo to obrzydliwe
-				case "Tiles":
-				{
-					//zrobic cos madrzejszego
-					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
-					GameManager.getInstance().onEvent(new SavePathEvent());
-					resetState(EditorMode.ADD);
-					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
-					//pathEditPalette.getArrows().selectOne(pathEditPalette.getArrows().buttons.get(0));
-					IOManager.getInstance().drawEditor();
-					break;
-				}
-				case "Connections":
-				{
-					//zrobic cos madrzejszego pozniej
-					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
-					GameManager.getInstance().onEvent(new SavePathEvent());
-					resetState(EditorMode.CONNECT);
-					IOManager.getInstance().drawEditor();
-					break;
-				}
-				case "Pathedit":
-				{
-					resetState(EditorMode.PATHEDIT);
-					//zrobic cos madrzejszego pozniej
-					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
-					pathEditPalette.getTree().clearSelection();
-					GameManager.getInstance().onEvent(new PalettePressedEvent(enums.Arrow.ARROW_UP));
-					//tilePalette.selectOne(tilePalette.buttons.get(0));
-					IOManager.getInstance().drawEditor();
-					break;
-				}
-				case "Messages":
-				{
-					resetState(EditorMode.MESSAGES);
-					//zrobic cos madrzejszego pozniej
-					inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
-					messagesPalette.getTree().clearSelection();
-					GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
-					//tilePalette.selectOne(tilePalette.buttons.get(0));
-					IOManager.getInstance().drawEditor();
-					break;
-				}
-				default:
-				{
-					System.out.println("Ustawiono tryb na default - prawdopodobnie nieporzadane\nPaletteTabs line 63");
-					inputHandler.onEvent(new ModeChangedEvent(EditorMode.DEFAULT));
-					break;
-				}
+			//FIXME: zrobmy cos z tym pozniej bo to obrzydliwe
+			if (selectedTabTip.equals("Tiles")) {//zrobic cos madrzejszego
+				inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
+				GameManager.getInstance().onEvent(new SavePathEvent());
+				resetState(EditorMode.ADD);
+				GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
+				//pathEditPalette.getArrows().selectOne(pathEditPalette.getArrows().buttons.get(0));
+				IOManager.getInstance().drawEditor();
+			} else if (selectedTabTip.equals("Connections")) {//zrobic cos madrzejszego pozniej
+				inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
+				GameManager.getInstance().onEvent(new SavePathEvent());
+				resetState(EditorMode.CONNECT);
+				IOManager.getInstance().drawEditor();
+			} else if (selectedTabTip.equals("Pathedit")) {
+				resetState(EditorMode.PATHEDIT);
+				//zrobic cos madrzejszego pozniej
+				inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
+				pathEditPalette.getTree().clearSelection();
+				GameManager.getInstance().onEvent(new PalettePressedEvent(Arrow.ARROW_UP));
+				//tilePalette.selectOne(tilePalette.buttons.get(0));
+				IOManager.getInstance().drawEditor();
+			} else if (selectedTabTip.equals("Messages")) {
+				resetState(EditorMode.MESSAGES);
+				//zrobic cos madrzejszego pozniej
+				inputHandler.onEvent(new ConnectableTileSelectedEvent(null));
+				messagesPalette.getTree().clearSelection();
+				GameManager.getInstance().onEvent(new PalettePressedEvent(EditableTile.EMPTY));
+				//tilePalette.selectOne(tilePalette.buttons.get(0));
+				IOManager.getInstance().drawEditor();
+			} else {
+				System.out.println("Ustawiono tryb na default - prawdopodobnie nieporzadane\nPaletteTabs line 63");
+				inputHandler.onEvent(new ModeChangedEvent(EditorMode.DEFAULT));
 			}
 			toolPalette.selectOne(toolPalette.buttons.get(0));
 		}

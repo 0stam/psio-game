@@ -19,7 +19,7 @@ public class Map implements Serializable {
     public Map(int x, int y) {
         this.x = x;
         this.y = y;
-        checkpoints = new Stack<>();
+        checkpoints = new Stack();
         currentMapState = new MapState(x, y);
     }
 
@@ -73,7 +73,9 @@ public class Map implements Serializable {
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
             ObjectInputStream in = new ObjectInputStream(bis);
             return (MapState) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

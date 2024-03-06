@@ -17,7 +17,7 @@ public class GraphicsHashtable {
     private Hashtable<Graphics, BufferedImage> images;
     private GraphicsHashtable() {
         try {
-            images = new Hashtable<>();
+            images = new Hashtable();
 
             images.put(FLOOR, loadImage("/graphics/floor.png"));
             images.put(DANGER, loadImage("/graphics/danger.png"));

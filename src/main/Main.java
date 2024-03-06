@@ -14,7 +14,7 @@ public class Main {
 
         IOManager io = IOManager.getInstance(new GraphicIO());
 
-        LevelLoader.createUserLevelDirectory();
+        //LevelLoader.createUserLevelDirectory();
         // Wyświetlenie menu głównego
         io.drawMenu();
         //gameManager.startGame();

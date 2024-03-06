@@ -191,7 +191,8 @@ public class EditorUtils {
 
     public static void saveLevel(String path) {
         try {
-            LevelLoader.saveLevel(path,GameManager.getInstance().getMap());
+            //LevelLoader.saveLevel(path,GameManager.getInstance().getMap());
+			throw new LevelNotSaved("a");
         }
         catch (LevelNotSaved e) {
             System.err.println("Błąd zapisywania poziomu");

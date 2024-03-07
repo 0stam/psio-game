@@ -36,6 +36,8 @@ public class InteractiveTile extends JPanel {
 
     @Override
     public void paintComponent(java.awt.Graphics g) {
+        super.paintComponent(g);
+
         this.setPreferredSize(new Dimension((int)(32.0 * EditorMapDisplay.scale ), (int) (32.0 * EditorMapDisplay.scale)));
         this.revalidate();
         g.drawImage(GraphicsHashtable.getInstance().getImage(identifierBottom).getScaledInstance((int) (32.0 * EditorMapDisplay.scale), (int) (32.0 * EditorMapDisplay.scale), Image.SCALE_AREA_AVERAGING), 0, 0, this);

@@ -11,6 +11,7 @@ public class MenuDisplay extends JPanel {
     private JPanel container;
     private JButton playButton;
     private JButton editorButton;
+    private JButton exitButton;
     private JLabel titleLabel;
     private Image backgroundImage;
 
@@ -40,8 +41,12 @@ public class MenuDisplay extends JPanel {
         editorButton = new JButton("EDITOR");
         stylizeButton(editorButton);
 
+        exitButton = new JButton("EXIT");
+        stylizeButton(exitButton);
+
         playButton.addActionListener(e -> onPlayClicked());
         editorButton.addActionListener(e -> onEditorClicked());
+        exitButton.addActionListener(e -> onExitClicked());
 
         container.add(Box.createVerticalGlue());
         container.add(titleLabel);
@@ -49,6 +54,8 @@ public class MenuDisplay extends JPanel {
         container.add(playButton);
         container.add(Box.createRigidArea(new Dimension(0, 30)));
         container.add(editorButton);
+        container.add(Box.createRigidArea(new Dimension(0, 30)));
+        container.add(exitButton);
         container.add(Box.createVerticalGlue());
     }
 
@@ -70,6 +77,10 @@ public class MenuDisplay extends JPanel {
     private void onEditorClicked() {
         // Obsługa przycisku EDITOR
         GameManager.getInstance().onEvent(new EditorSelectedEvent());
+    }
+
+    private void onExitClicked () {
+        System.exit(0);
     }
 
     private void stylizeButton(JButton button) {

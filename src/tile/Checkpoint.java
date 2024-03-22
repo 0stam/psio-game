@@ -8,12 +8,14 @@ import gamemanager.GameManager;
 
 public class Checkpoint extends Tile {
     private boolean activated;
+    private boolean destroyed;
 
     public Checkpoint(int x, int y) {
         super(x, y);
         setEnterableStrategy(new Empty());
         setGraphicsID(Graphics.CHECKPOINT_UNUSED);
         activated = false;
+        destroyed = false;
     }
 
     @Override
@@ -25,5 +27,10 @@ public class Checkpoint extends Tile {
             setGraphicsID(Graphics.CHECKPOINT_USED);
             GameManager.getInstance().onEvent(new CheckpointActivatedEvent());
         }
+    }
+
+    public void setDestroyed (boolean d) {
+        destroyed = d;
+        setGraphicsID(d ? Graphics.CHECKPOINT_DESTROYED : (activated ? Graphics.CHECKPOINT_USED : Graphics.CHECKPOINT_UNUSED));
     }
 }

@@ -119,6 +119,10 @@ public class Map implements Serializable {
         if (!checkpoints.empty()) {
             currentMapState = deserializeMapState(checkpoints.pop());
             moveCancelAvailable = false;
+
+            if (currentMapState.getBottomLayer(getPlayer().getX(), getPlayer().getY()) instanceof Checkpoint) {
+                ((Checkpoint)currentMapState.getBottomLayer(getPlayer().getX(), getPlayer().getY())).setDestroyed(true);
+            }
         }
     }
 

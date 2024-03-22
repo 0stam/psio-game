@@ -113,28 +113,6 @@ public class GraphicIO implements IOStrategy {
 		} else {
 			menuDisplay.repaint();
 		}
-
-		showVersionWarning();
-	}
-
-	private static int getJavaVersion() {
-		String version = System.getProperty("java.version");
-		if(version.startsWith("1.")) {
-			version = version.substring(2, 3);
-		} else {
-			int dot = version.indexOf(".");
-			if(dot != -1) { version = version.substring(0, dot); }
-		} return Integer.parseInt(version);
-	}
-
-	private void showVersionWarning() {
-		if (!versionWarningShown && getJavaVersion() < 21) {
-			JOptionPane.showMessageDialog(null, "It looks like you are using an old Java " +
-					"version. If you encounter any bugs, especially graphical artifacts, consider upgrading to at least Java 21.",
-					"Old Java version", JOptionPane.WARNING_MESSAGE);
-		}
-
-		versionWarningShown = true;
 	}
 
 	public JFrame getWindow() {

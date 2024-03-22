@@ -75,6 +75,7 @@ public class GraphicsHashtable {
             images.put(MINUS, loadImage("/graphics/minus.png"));
             images.put(CHECKPOINT_UNUSED, loadImage("/graphics/checkpoint_unused.png"));
             images.put(CHECKPOINT_USED, loadImage("/graphics/checkpoint_used.png"));
+            images.put(CHECKPOINT_DESTROYED, loadImage("/graphics/checkpoint_destroyed.png"));
         } catch (IOException e) {
             System.out.println("Couldn't load graphics");
         }

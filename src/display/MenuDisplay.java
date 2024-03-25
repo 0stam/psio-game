@@ -14,6 +14,7 @@ public class MenuDisplay extends JPanel {
     private JButton exitButton;
     private JLabel titleLabel;
     private Image backgroundImage;
+    private double time = 0.0;
 
     public MenuDisplay() {
         // Ładowanie obrazu tła
@@ -57,6 +58,12 @@ public class MenuDisplay extends JPanel {
         container.add(Box.createRigidArea(new Dimension(0, 30)));
         container.add(exitButton);
         container.add(Box.createVerticalGlue());
+
+        Runnable backgroundAnimator = new AnimateBackground(this);
+        Thread animationThread = new Thread(backgroundAnimator);
+
+        animationThread.start();
+
     }
 
     private void onPlayClicked() {
@@ -114,20 +121,42 @@ public class MenuDisplay extends JPanel {
 
             // Dostosuj rozmiar obrazu do proporcji kontenera
             if (containerRatio > aspectRatio) {
-                newWidth = width;
-                newHeight = (int) (width / aspectRatio);
+                newWidth = (int) (width * 1.2f);
+                newHeight = (int) (1.2f * width / aspectRatio);
             } else {
-                newHeight = height;
-                newWidth = (int) (height * aspectRatio);
+                newHeight = (int) (height * 1.2f);
+                newWidth = (int) (1.2f * height * aspectRatio);
             }
 
             // Wycentrowanie obrazu
-            int x = (width - newWidth) / 2;
-            int y = (height - newHeight) / 2;
+            int x = (int) ((width - newWidth) / 2 * (Math.cos(0.83 * time) + 1));
+            int y = (int) ((height - newHeight) / 2 * (Math.cos(0.27 * time) + 1));
 
             // Rysowanie przeskalowanego obrazu
             g.drawImage(backgroundImage, x, y, newWidth, newHeight, this);
         }
     }
 
+    private class AnimateBackground implements Runnable {
+        MenuDisplay parent;
+
+        AnimateBackground (MenuDisplay parent) {
+            this.parent = parent;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                //Thread.currentThread().run();
+                try {
+                    parent.time += 0.0025;
+                    parent.repaint();
+                    Thread.currentThread().sleep(5);
+                } catch (Exception e) {
+                    break;
+                }
+            }
+
+        }
+    }
 }
